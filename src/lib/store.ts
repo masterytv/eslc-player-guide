@@ -1,6 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { Pool } from "pg";
+import { attachDatabasePool } from "@vercel/functions";
+import { Pool, type QueryResultRow } from "pg";
 
 // Where the guide's content lives:
 //   DATABASE_URL set      → Postgres (Neon on Vercel)
@@ -38,9 +39,49 @@ export class StorageNotConfigured extends Error {
 
 const globalForPg = globalThis as unknown as { guidePool?: Pool; guideSchema?: Promise<void> };
 
+/**
+ * node-postgres already treats Neon's "sslmode=require" as full certificate
+ * checking; saying so explicitly stops it logging a warning on every cold start.
+ */
+export function withExplicitSsl(url: string | undefined): string | undefined {
+  return url?.replace(/([?&]sslmode=)(?:require|prefer|verify-ca)(?=&|$)/, "$1verify-full");
+}
+
 function pool(): Pool {
-  globalForPg.guidePool ??= new Pool({ connectionString: process.env.DATABASE_URL, max: 3, idleTimeoutMillis: 10_000 });
+  if (!globalForPg.guidePool) {
+    const p = new Pool({ connectionString: withExplicitSsl(process.env.DATABASE_URL), max: 3, idleTimeoutMillis: 5_000 });
+    // The database closing an idle connection is reported here instead of crashing the function.
+    p.on("error", (err) => console.warn("Idle database connection closed:", err.message));
+    // On Vercel, closes idle connections before the function is suspended. Does nothing elsewhere.
+    attachDatabasePool(p);
+    globalForPg.guidePool = p;
+  }
   return globalForPg.guidePool;
+}
+
+const DROPPED = /Connection terminated|ECONNRESET|EPIPE|connection error|terminating connection/i;
+
+export function isDroppedConnection(err: unknown): boolean {
+  return err instanceof Error && (DROPPED.test(err.message) || (err as { code?: string }).code === "57P01");
+}
+
+/**
+ * Runs once more on a fresh connection when the first try finds its connection
+ * already closed. Safe for writes too: a versioned save that did land the first
+ * time comes back as a clash rather than saving twice, and a repeated photo
+ * insert is ignored.
+ */
+export async function retryDropped<T>(run: () => Promise<T>): Promise<T> {
+  try {
+    return await run();
+  } catch (err) {
+    if (!isDroppedConnection(err)) throw err;
+    return run();
+  }
+}
+
+function query<R extends QueryResultRow>(text: string, values?: unknown[]) {
+  return retryDropped(() => pool().query<R>(text, values));
 }
 
 async function ensureSchema(): Promise<void> {
@@ -59,10 +100,10 @@ async function ensureSchema(): Promise<void> {
         created_at timestamptz not null default now()
       );`;
     try {
-      await pool().query(sql);
+      await query(sql);
     } catch {
       // Two cold starts creating the tables at once can collide; the second try sees them.
-      await pool().query(sql);
+      await query(sql);
     }
   })().catch((err) => {
     globalForPg.guideSchema = undefined;
@@ -75,7 +116,7 @@ const postgresStore: Store = {
   kind: "postgres",
   async readAll() {
     await ensureSchema();
-    const res = await pool().query<{ key: string; data: unknown; version: number; updated_at: Date }>(
+    const res = await query<{ key: string; data: unknown; version: number; updated_at: Date }>(
       "select key, data, version, updated_at from guide_section",
     );
     return new Map(res.rows.map((r) => [r.key, { data: r.data, version: r.version, updatedAt: r.updated_at.toISOString() }]));
@@ -85,20 +126,20 @@ const postgresStore: Store = {
     const json = JSON.stringify(data);
     let res;
     if (expectedVersion === FORCE) {
-      res = await pool().query<{ version: number; updated_at: Date }>(
+      res = await query<{ version: number; updated_at: Date }>(
         `insert into guide_section (key, data, version) values ($1, $2, 1)
          on conflict (key) do update set data = excluded.data, version = guide_section.version + 1, updated_at = now()
          returning version, updated_at`,
         [key, json],
       );
     } else if (expectedVersion === 0) {
-      res = await pool().query<{ version: number; updated_at: Date }>(
+      res = await query<{ version: number; updated_at: Date }>(
         `insert into guide_section (key, data, version) values ($1, $2, 1)
          on conflict (key) do nothing returning version, updated_at`,
         [key, json],
       );
     } else {
-      res = await pool().query<{ version: number; updated_at: Date }>(
+      res = await query<{ version: number; updated_at: Date }>(
         `update guide_section set data = $2, version = version + 1, updated_at = now()
          where key = $1 and version = $3 returning version, updated_at`,
         [key, json, expectedVersion],
@@ -109,11 +150,11 @@ const postgresStore: Store = {
   },
   async putImage(id, mime, bytes) {
     await ensureSchema();
-    await pool().query("insert into guide_image (id, mime, bytes) values ($1, $2, $3)", [id, mime, bytes]);
+    await query("insert into guide_image (id, mime, bytes) values ($1, $2, $3) on conflict (id) do nothing", [id, mime, bytes]);
   },
   async getImage(id) {
     await ensureSchema();
-    const res = await pool().query<{ mime: string; bytes: Buffer }>("select mime, bytes from guide_image where id = $1", [id]);
+    const res = await query<{ mime: string; bytes: Buffer }>("select mime, bytes from guide_image where id = $1", [id]);
     return res.rows[0] ?? null;
   },
 };

@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, before, test } from "node:test";
-import { FORCE, getStore } from "../../src/lib/store.ts";
+import { FORCE, getStore, isDroppedConnection, retryDropped, withExplicitSsl } from "../../src/lib/store.ts";
 
 // Runs against local files, and also against Postgres when TEST_DATABASE_URL is set.
 const targets: Array<{ name: string; env: Record<string, string | undefined> }> = [{ name: "files", env: { DATABASE_URL: undefined } }];
@@ -49,6 +49,41 @@ for (const target of targets) {
     assert.equal(await store.getImage("00000000-0000-0000-0000-000000000000"), null);
   });
 }
+
+test("retries once when the database had already closed the connection", async () => {
+  let calls = 0;
+  const flaky = async () => {
+    calls += 1;
+    if (calls === 1) throw new Error("Connection terminated unexpectedly");
+    return "ok";
+  };
+  assert.equal(await retryDropped(flaky), "ok");
+  assert.equal(calls, 2);
+
+  // Real errors (bad SQL, constraint violations) are not retried.
+  let sqlCalls = 0;
+  await assert.rejects(
+    retryDropped(async () => {
+      sqlCalls += 1;
+      throw new Error('relation "guide_sections" does not exist');
+    }),
+    /does not exist/,
+  );
+  assert.equal(sqlCalls, 1);
+
+  assert.ok(isDroppedConnection(Object.assign(new Error("terminating connection due to administrator command"), { code: "57P01" })));
+  assert.ok(isDroppedConnection(new Error("read ECONNRESET")));
+  assert.ok(!isDroppedConnection("Connection terminated"));
+});
+
+test("spells out full certificate checks in the connection string", () => {
+  const neon = "postgresql://u:p@ep-x-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require";
+  assert.equal(withExplicitSsl(neon), "postgresql://u:p@ep-x-pooler.us-east-1.aws.neon.tech/neondb?sslmode=verify-full");
+  assert.equal(withExplicitSsl("postgresql://h/db?sslmode=require&channel_binding=require"), "postgresql://h/db?sslmode=verify-full&channel_binding=require");
+  assert.equal(withExplicitSsl("postgresql://guide@127.0.0.1:5432/guide"), "postgresql://guide@127.0.0.1:5432/guide");
+  assert.equal(withExplicitSsl("postgresql://h/db?sslmode=disable"), "postgresql://h/db?sslmode=disable");
+  assert.equal(withExplicitSsl(undefined), undefined);
+});
 
 test("read-only when deployed without a database", async () => {
   delete process.env.DATABASE_URL;
