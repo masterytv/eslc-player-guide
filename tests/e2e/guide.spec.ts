@@ -106,6 +106,29 @@ test("the editor explains what needs fixing", async () => {
   await expect(viewer.getByRole("link", { name: /Team photos/ })).toHaveAttribute("href", "https://photos.example/ireland");
 });
 
+test("the guide opens at once from the phone's saved copy, then shows the latest", async () => {
+  await expect
+    .poll(() => viewer.evaluate(async () => !!(await (await caches.open("pages-v1")).match("/more/links"))), { timeout: 20_000 })
+    .toBe(true);
+
+  await admin.goto("/admin/links");
+  await admin.getByRole("button", { name: "Add a link" }).click();
+  await admin.getByLabel(/^Label/).last().fill("Kit order form");
+  await admin.getByLabel(/^Link/).last().fill("https://kit.example/ireland");
+  await save(admin);
+
+  const res = await viewer.goto("/more/links");
+  // The page arrives from the saved copy, from before the change...
+  expect(res?.fromServiceWorker()).toBe(true);
+  const html = await res!.text();
+  expect(html).toContain("data-saved-copy");
+  expect(html).not.toContain("Kit order form");
+  // ...then refreshes itself in place.
+  await expect(viewer.getByRole("link", { name: /Kit order form/ })).toBeVisible();
+  await expect(viewer.locator(".sync")).toContainText("Updated");
+  await expect(viewer.locator("html")).not.toHaveAttribute("data-saved-copy");
+});
+
 test("staff are warned before leaving unsaved changes", async () => {
   await admin.goto("/admin/anthem");
   await admin.getByLabel("Credit").fill("Edited but not saved");
@@ -143,8 +166,8 @@ test("staff can replace a map photo from their phone", async () => {
 
   await viewer.goto("/venue");
   const img = viewer.getByRole("img", { name: "Field map" });
+  await expect(img).toHaveAttribute("src", /^\/img\//);
   const src = await img.getAttribute("src");
-  expect(src).toMatch(/^\/img\//);
   const res = await viewer.request.get(src!);
   expect(res.status()).toBe(200);
   // Small images upload untouched; only large phone photos are shrunk to JPEG first.

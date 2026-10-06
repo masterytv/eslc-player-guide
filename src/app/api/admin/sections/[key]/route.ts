@@ -1,3 +1,4 @@
+import { contentChanged } from "@/lib/content";
 import { issuesOf, isSectionKey, normalizeSection, sectionSchemas, type Guide, type SectionKey } from "@/lib/schema";
 import { adminOrError } from "@/lib/session";
 import { FORCE, getStore, StorageNotConfigured } from "@/lib/store";
@@ -28,6 +29,7 @@ export async function PUT(req: Request, ctx: { params: Promise<{ key: string }> 
     if (!result.ok) {
       return Response.json({ error: "Someone else saved this section while you were editing." }, { status: 409 });
     }
+    contentChanged();
     return Response.json({ data, version: result.version, updatedAt: result.updatedAt });
   } catch (err) {
     if (err instanceof StorageNotConfigured) return Response.json({ error: err.message }, { status: 503 });

@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import { revalidateTag, unstable_cache } from "next/cache";
 import { cache } from "react";
 import { ACCESS_KEY, accessSchema, SECTION_KEYS, sectionSchemas, type Access, type Guide, type SectionKey } from "./schema";
 import { SEED } from "./seed";
@@ -17,13 +19,34 @@ export interface LoadedGuide {
   access: { passcode: string; version: number; stored: Access | null; storedVersion: number };
 }
 
+const TAG = "guide";
+// Different databases (production, a test database, local files) never share cache entries.
+const SOURCE = createHash("sha256")
+  .update(process.env.DATABASE_URL ?? `files:${process.env.GUIDE_DATA_DIR ?? ""}`)
+  .digest("hex")
+  .slice(0, 16);
+
+/**
+ * Everything saved, kept between requests so most page loads don't touch the database (and a
+ * sleeping one isn't woken). Every save clears it; the hour is only a safety net.
+ */
+const readSaved = unstable_cache(async () => [...(await getStore().readAll())], ["guide-content-v1", SOURCE], {
+  tags: [TAG],
+  revalidate: 3600,
+});
+
+/** Call after every save, so the next page load shows it. */
+export function contentChanged(): void {
+  revalidateTag(TAG, { expire: 0 });
+}
+
 function clone<T>(v: T): T {
   return JSON.parse(JSON.stringify(v));
 }
 
 /** Loads every section once per request. Sections never saved fall back to the starting content. */
 export const loadGuide = cache(async (): Promise<LoadedGuide> => {
-  const rows = await getStore().readAll();
+  const rows = new Map(await readSaved());
   const guide = {} as Record<SectionKey, unknown>;
   const meta = {} as Record<SectionKey, SectionMeta>;
   let lastUpdated: string | null = null;

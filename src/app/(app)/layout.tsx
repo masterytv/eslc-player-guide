@@ -1,3 +1,4 @@
+import { Freshness } from "@/components/Freshness";
 import { TabBar } from "@/components/TabBar";
 import { requireViewer } from "@/lib/session";
 
@@ -9,6 +10,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div className="shell">
       {children}
       <TabBar />
+      {/* Rendered once per request on the server: the time tells the page a refresh has landed. */}
+      {/* eslint-disable-next-line react-hooks/purity */}
+      <Freshness renderedAt={Date.now()} />
     </div>
   );
 }

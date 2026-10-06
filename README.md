@@ -53,7 +53,7 @@ Log in with the staff password. You'll see an orange **Staff** badge in the head
 *More → Edit the guide* for the full list.
 
 - Tap an item to open it, change the fields, then **Save** at the bottom. Players see the
-  change the next time they open or refresh a page.
+  change the next time they open a page or come back to the app.
 - **Daily notes** open on today's date. Add the next day's plan the night before.
 - Leave a time blank while it's not set; players see *TBC*.
 - **Pages** (conduct, tournament rules, activities) use a simple text format:
@@ -115,7 +115,13 @@ set, nobody can log in, so put at least `ADMIN_PASSWORD` and `VIEWER_PASSWORD` i
 - **Photos** uploaded by staff are stored in the same database and served from `/img/…`.
 - **Logins** are signed cookies (`src/lib/auth.ts`). `src/proxy.ts` turns away anyone without
   one and keeps players out of `/admin`; the server also checks the team passcode version.
-- **Offline**: `public/sw.js` keeps the last copy of each page and photo on the phone.
+- **Caching**: the guide's content is cached on the server (`unstable_cache` in
+  `src/lib/content.ts`) and cleared on every save, so ordinary page loads don't touch the
+  database and don't wake a sleeping Neon database.
+- **Offline and weak signal**: `public/sw.js` keeps the last copy of each page and photo on the
+  phone. Pages open straight from that copy while a fresh one downloads, then
+  `src/components/Freshness.tsx` swaps in the latest content in place. The header says
+  *Saved copy* until it has. Reopening the app after a few minutes checks for changes too.
 - All dates and times are Spain time (`Europe/Madrid`).
 
 ### Reusing it for another event

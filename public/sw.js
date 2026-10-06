@@ -1,8 +1,11 @@
-// Keeps the last copy of the guide on the phone for when there's no signal.
-// Pages: network first, falling back to the saved copy. Static files and photos: saved copy first.
+// Keeps the last copy of the guide on the phone, so it opens at once and still works with no signal.
+// Pages: the saved copy straight away while a fresh one downloads; the page then swaps in the
+// fresh content itself (src/components/Freshness.tsx). Static files and photos: saved copy first.
 const VERSION = "v1";
 const PAGES = `pages-${VERSION}`;
 const ASSETS = `assets-${VERSION}`;
+// How long to wait for the network before showing a nearby saved page instead.
+const SLOW_MS = 4000;
 
 self.addEventListener("install", () => self.skipWaiting());
 
@@ -32,24 +35,68 @@ const isAsset = (url) =>
 
 const pageKey = (url) => url.pathname + url.search;
 
+// Fresh copies still downloading, by page, so a page reloaded meanwhile waits for it.
+const downloading = new Map();
+
 async function savePage(url, res) {
   // A redirect means the login has lapsed: never store the login page as the guide.
   if (!res.ok || res.redirected || res.type === "opaqueredirect") return;
+  const headers = new Headers(res.headers);
+  headers.set("x-saved-at", String(Date.now()));
+  const body = await res.arrayBuffer();
   const cache = await caches.open(PAGES);
-  await cache.put(pageKey(url), res);
+  await cache.put(pageKey(url), new Response(body, { status: res.status, statusText: res.statusText, headers }));
 }
 
-async function networkFirst(request) {
-  const url = new URL(request.url);
+/** Marks a page answered from the saved copy, with when it was saved, so it can refresh itself. */
+async function asSavedCopy(res) {
+  const at = Number(res.headers.get("x-saved-at")) || 0;
+  const html = await res.text();
+  const headers = new Headers(res.headers);
+  headers.delete("content-length");
+  headers.delete("content-encoding");
+  return new Response(html.replace(/<html\b/i, `<html data-saved-copy="${at}"`), {
+    status: res.status,
+    statusText: res.statusText,
+    headers,
+  });
+}
+
+const slow = () => new Promise((_, reject) => setTimeout(() => reject(new Error("slow")), SLOW_MS));
+
+async function openPage(event) {
+  const url = new URL(event.request.url);
+  const key = pageKey(url);
+  const cache = await caches.open(PAGES);
+
+  // Reloaded while the fresh copy is still on its way (e.g. right after the app updated): wait for it.
+  const pending = downloading.get(key);
+  if (pending) {
+    await Promise.race([pending, slow()]).catch(() => undefined);
+    const fresh = await cache.match(key);
+    if (fresh && Date.now() - (Number(fresh.headers.get("x-saved-at")) || 0) < 15_000) return fresh;
+  }
+
+  const network = fetch(event.request);
+  const saving = network.then((res) => savePage(url, res.clone())).catch(() => undefined);
+  downloading.set(key, saving);
+  saving.finally(() => {
+    if (downloading.get(key) === saving) downloading.delete(key);
+  });
+  event.waitUntil(saving);
+
+  const saved = await cache.match(key);
+  if (saved) {
+    network.catch(() => undefined);
+    return asSavedCopy(saved);
+  }
+  // Never opened this exact page: wait for it, but show a nearby saved page if the signal is too weak.
   try {
-    const res = await fetch(request);
-    savePage(url, res.clone());
-    return res;
-  } catch (err) {
-    const cache = await caches.open(PAGES);
-    const hit = (await cache.match(pageKey(url))) || (await cache.match(url.pathname)) || (await cache.match("/"));
-    if (hit) return hit;
-    throw err;
+    return await Promise.race([network, slow()]);
+  } catch {
+    const near = (await cache.match(url.pathname)) || (await cache.match("/"));
+    if (near) return asSavedCopy(near);
+    return network;
   }
 }
 
@@ -68,7 +115,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin || skip(url)) return;
   if (request.mode === "navigate") {
-    event.respondWith(networkFirst(request));
+    event.respondWith(openPage(event));
     return;
   }
   // In-app navigation data: when it fails offline, Next.js falls back to a full

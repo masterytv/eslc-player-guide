@@ -1,4 +1,4 @@
-import { loadGuide } from "@/lib/content";
+import { contentChanged, loadGuide } from "@/lib/content";
 import { sameSecret } from "@/lib/passwords";
 import { ACCESS_KEY } from "@/lib/schema";
 import { adminOrError } from "@/lib/session";
@@ -25,6 +25,7 @@ export async function POST(req: Request) {
   try {
     const result = await getStore().write(ACCESS_KEY, { passcode, version: access.version + 1 }, access.storedVersion);
     if (!result.ok) return Response.json({ error: "Someone else changed the passcode just now. Reload to see it." }, { status: 409 });
+    contentChanged();
   } catch (err) {
     if (err instanceof StorageNotConfigured) return Response.json({ error: err.message }, { status: 503 });
     console.error("Changing the passcode failed", err);
