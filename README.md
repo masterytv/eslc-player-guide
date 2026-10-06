@@ -29,6 +29,8 @@ signed in. Logins last 30 days on each phone.
 2. **Add a database.** In the project, open *Storage → Create → Neon (Postgres)* and connect it
    to the project. This sets `DATABASE_URL` for you. Neon's free plan is plenty: the guide's
    text and photos come to a few megabytes. The tables are created on first use.
+   Keep the app next to the database: this project's Neon database is in US East, so the
+   Functions region (*Settings → Functions*) is Washington, D.C. (`iad1`).
 3. **Set three environment variables** (*Settings → Environment Variables*):
    - `ADMIN_PASSWORD`: the staff password.
    - `VIEWER_PASSWORD`: the starting team passcode. A few words is easier to share than a
@@ -102,6 +104,9 @@ set, nobody can log in, so put at least `ADMIN_PASSWORD` and `VIEWER_PASSWORD` i
 ### How it fits together
 
 - **Next.js 16** (App Router). Every page is rendered on request from the latest content.
+- **Database connections** are handed to Vercel with `attachDatabasePool`, so idle ones are
+  closed before a function sleeps, and a query that finds its connection already closed is
+  retried once (`src/lib/store.ts`).
 - **Content** lives in one Postgres table, one row of JSON per section (`daily`, `schedule`,
   `staff`, …). Each section has a schema in `src/lib/schema.ts` and an editor definition in
   `src/lib/sections.ts`. To add a field, add it to both. Sections never saved read from
