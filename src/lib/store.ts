@@ -1,0 +1,198 @@
+import { promises as fs } from "node:fs";
+import path from "node:path";
+import { Pool } from "pg";
+
+// Where the guide's content lives:
+//   DATABASE_URL set      → Postgres (Neon on Vercel)
+//   on Vercel without one → read-only: the app shows the starting content and
+//                           saving explains what to set up
+//   locally without one   → JSON files in ./.data, so the app runs with no setup
+
+export interface StoredSection {
+  data: unknown;
+  version: number;
+  updatedAt: string;
+}
+
+export type WriteResult = { ok: true; version: number; updatedAt: string } | { ok: false; reason: "conflict" };
+
+/** Pass as expectedVersion to overwrite whatever is stored. */
+export const FORCE = -1;
+
+export interface Store {
+  readonly kind: "postgres" | "file" | "readonly";
+  readAll(): Promise<Map<string, StoredSection>>;
+  /** Saves only if the stored version still equals expectedVersion (0 = never saved). */
+  write(key: string, data: unknown, expectedVersion: number): Promise<WriteResult>;
+  putImage(id: string, mime: string, bytes: Buffer): Promise<void>;
+  getImage(id: string): Promise<{ mime: string; bytes: Buffer } | null>;
+}
+
+export class StorageNotConfigured extends Error {
+  constructor() {
+    super("Saving needs a database. Add the Neon integration in Vercel (Storage → Neon) so DATABASE_URL is set, then redeploy.");
+  }
+}
+
+/* ---------- Postgres ---------- */
+
+const globalForPg = globalThis as unknown as { guidePool?: Pool; guideSchema?: Promise<void> };
+
+function pool(): Pool {
+  globalForPg.guidePool ??= new Pool({ connectionString: process.env.DATABASE_URL, max: 3, idleTimeoutMillis: 10_000 });
+  return globalForPg.guidePool;
+}
+
+async function ensureSchema(): Promise<void> {
+  globalForPg.guideSchema ??= (async () => {
+    const sql = `
+      create table if not exists guide_section (
+        key text primary key,
+        data jsonb not null,
+        version integer not null,
+        updated_at timestamptz not null default now()
+      );
+      create table if not exists guide_image (
+        id text primary key,
+        mime text not null,
+        bytes bytea not null,
+        created_at timestamptz not null default now()
+      );`;
+    try {
+      await pool().query(sql);
+    } catch {
+      // Two cold starts creating the tables at once can collide; the second try sees them.
+      await pool().query(sql);
+    }
+  })().catch((err) => {
+    globalForPg.guideSchema = undefined;
+    throw err;
+  });
+  return globalForPg.guideSchema;
+}
+
+const postgresStore: Store = {
+  kind: "postgres",
+  async readAll() {
+    await ensureSchema();
+    const res = await pool().query<{ key: string; data: unknown; version: number; updated_at: Date }>(
+      "select key, data, version, updated_at from guide_section",
+    );
+    return new Map(res.rows.map((r) => [r.key, { data: r.data, version: r.version, updatedAt: r.updated_at.toISOString() }]));
+  },
+  async write(key, data, expectedVersion) {
+    await ensureSchema();
+    const json = JSON.stringify(data);
+    let res;
+    if (expectedVersion === FORCE) {
+      res = await pool().query<{ version: number; updated_at: Date }>(
+        `insert into guide_section (key, data, version) values ($1, $2, 1)
+         on conflict (key) do update set data = excluded.data, version = guide_section.version + 1, updated_at = now()
+         returning version, updated_at`,
+        [key, json],
+      );
+    } else if (expectedVersion === 0) {
+      res = await pool().query<{ version: number; updated_at: Date }>(
+        `insert into guide_section (key, data, version) values ($1, $2, 1)
+         on conflict (key) do nothing returning version, updated_at`,
+        [key, json],
+      );
+    } else {
+      res = await pool().query<{ version: number; updated_at: Date }>(
+        `update guide_section set data = $2, version = version + 1, updated_at = now()
+         where key = $1 and version = $3 returning version, updated_at`,
+        [key, json, expectedVersion],
+      );
+    }
+    const row = res.rows[0];
+    return row ? { ok: true, version: row.version, updatedAt: row.updated_at.toISOString() } : { ok: false, reason: "conflict" };
+  },
+  async putImage(id, mime, bytes) {
+    await ensureSchema();
+    await pool().query("insert into guide_image (id, mime, bytes) values ($1, $2, $3)", [id, mime, bytes]);
+  },
+  async getImage(id) {
+    await ensureSchema();
+    const res = await pool().query<{ mime: string; bytes: Buffer }>("select mime, bytes from guide_image where id = $1", [id]);
+    return res.rows[0] ?? null;
+  },
+};
+
+/* ---------- local files ---------- */
+
+const dataDir = () => process.env.GUIDE_DATA_DIR || path.join(process.cwd(), ".data");
+const sectionsFile = () => path.join(dataDir(), "sections.json");
+let fileLock: Promise<unknown> = Promise.resolve();
+
+async function readFileSections(): Promise<Record<string, StoredSection>> {
+  try {
+    return JSON.parse(await fs.readFile(sectionsFile(), "utf8"));
+  } catch {
+    return {};
+  }
+}
+
+const EXT: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
+
+const fileStore: Store = {
+  kind: "file",
+  async readAll() {
+    return new Map(Object.entries(await readFileSections()));
+  },
+  write(key, data, expectedVersion) {
+    const run = fileLock.then(async (): Promise<WriteResult> => {
+      const all = await readFileSections();
+      const current = all[key]?.version ?? 0;
+      if (expectedVersion !== FORCE && current !== expectedVersion) return { ok: false, reason: "conflict" };
+      const next = { data, version: current + 1, updatedAt: new Date().toISOString() };
+      all[key] = next;
+      await fs.mkdir(dataDir(), { recursive: true });
+      const tmp = `${sectionsFile()}.${process.pid}.tmp`;
+      await fs.writeFile(tmp, JSON.stringify(all, null, 2));
+      await fs.rename(tmp, sectionsFile());
+      return { ok: true, version: next.version, updatedAt: next.updatedAt };
+    });
+    fileLock = run.catch(() => undefined);
+    return run;
+  },
+  async putImage(id, mime, bytes) {
+    const dir = path.join(dataDir(), "images");
+    await fs.mkdir(dir, { recursive: true });
+    await fs.writeFile(path.join(dir, `${id}.${EXT[mime] ?? "bin"}`), bytes);
+  },
+  async getImage(id) {
+    const dir = path.join(dataDir(), "images");
+    for (const [mime, ext] of Object.entries(EXT)) {
+      try {
+        return { mime, bytes: await fs.readFile(path.join(dir, `${id}.${ext}`)) };
+      } catch {
+        // try the next extension
+      }
+    }
+    return null;
+  },
+};
+
+/* ---------- read-only (deployed without a database) ---------- */
+
+const readonlyStore: Store = {
+  kind: "readonly",
+  async readAll() {
+    return new Map();
+  },
+  async write() {
+    throw new StorageNotConfigured();
+  },
+  async putImage() {
+    throw new StorageNotConfigured();
+  },
+  async getImage() {
+    return null;
+  },
+};
+
+export function getStore(): Store {
+  if (process.env.DATABASE_URL) return postgresStore;
+  if (process.env.VERCEL) return readonlyStore;
+  return fileStore;
+}

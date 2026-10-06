@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: guide
+          POSTGRES_PASSWORD: guide
+          POSTGRES_DB: guide
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - name: Unit tests (local files and Postgres)
+        run: npm run test:unit
+        env:
+          TEST_DATABASE_URL: postgresql://guide:guide@localhost:5432/guide
+      - run: npx playwright install --with-deps chromium
+      - name: End-to-end tests (local files)
+        run: npm run test:e2e
+      - name: End-to-end tests (Postgres)
+        run: npm run test:e2e
+        env:
+          E2E_DATABASE_URL: postgresql://guide:guide@localhost:5432/guide
