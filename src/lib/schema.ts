@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isDate, isTime } from "./time";
+import { DEFAULT_TZ, isDate, isTime, isTimeZone } from "./time";
 
 // One schema per editable section of the guide. Stored data is parsed through
 // these on every read, so a field added later simply takes its default.
@@ -55,6 +55,7 @@ export const sectionSchemas = {
     location: text(120),
     startDate: date,
     endDate: date,
+    timeZone: z.string().trim().refine(isTimeZone, "Pick the tournament's time zone").default(DEFAULT_TZ),
     poolName: text(80),
     scheduleUrl: url,
     alert: long(600),
@@ -183,6 +184,12 @@ export const SECTION_KEYS = Object.keys(sectionSchemas) as SectionKey[];
 export type Guide = { [K in SectionKey]: z.output<(typeof sectionSchemas)[K]> };
 export type Row<K extends SectionKey> = Guide[K] extends Array<infer R> ? R : never;
 
+/** A section with nothing in it yet: an empty list, or every field blank. */
+export function emptySection<K extends SectionKey>(key: K): Guide[K] {
+  const schema = sectionSchemas[key];
+  return schema.parse(schema instanceof z.ZodArray ? [] : {}) as Guide[K];
+}
+
 export function isSectionKey(v: string): v is SectionKey {
   return Object.prototype.hasOwnProperty.call(sectionSchemas, v);
 }
@@ -236,4 +243,14 @@ export const accessSchema = z.object({
   version: z.number().int().min(0),
 });
 export type Access = z.infer<typeof accessSchema>;
+/** Each tournament's team passcode is saved alongside its sections under this key. */
 export const ACCESS_KEY = "_access";
+
+/** Content saved before the guide had tournaments belongs to this one. */
+export const FIRST_TOURNAMENT = "eslc-2026";
+/** Where the app's own settings are saved, beside the tournaments. */
+export const APP_SCOPE = "_app";
+/** The app setting naming the tournament players see. */
+export const LIVE_KEY = "live";
+export const liveSchema = z.object({ id: z.string() });
+export const TOURNAMENT_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;

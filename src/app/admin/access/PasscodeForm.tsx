@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function PasscodeForm() {
+export function PasscodeForm({ tournament }: { tournament: string }) {
   const router = useRouter();
   const [value, setValue] = useState("");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -17,7 +17,7 @@ export function PasscodeForm() {
       const res = await fetch("/api/admin/passcode", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ passcode: value }),
+        body: JSON.stringify({ passcode: value, tournament }),
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {

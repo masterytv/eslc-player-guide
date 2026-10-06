@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { safeNext, SESSION_COOKIE, SESSION_DAYS, sessionSecretConfigured, signSession, type Session } from "@/lib/auth";
-import { loadGuide } from "@/lib/content";
-import { clearFailures, recordFailure, sameSecret, tooManyAttempts } from "@/lib/passwords";
+import { loadLiveGuide } from "@/lib/content";
+import { clearFailures, passcodeFingerprint, recordFailure, sameSecret, tooManyAttempts } from "@/lib/passwords";
 
 export async function POST(req: NextRequest) {
   if (!sessionSecretConfigured()) {
@@ -23,11 +23,12 @@ export async function POST(req: NextRequest) {
     body = {};
   }
   const passcode = typeof body.passcode === "string" ? body.passcode.trim() : "";
-  const { access } = await loadGuide();
+  // Players log in to the live tournament.
+  const { access } = await loadLiveGuide();
 
   let session: Session | null = null;
-  if (passcode && sameSecret(passcode, process.env.ADMIN_PASSWORD ?? "")) session = { role: "admin", pv: access.version };
-  else if (passcode && sameSecret(passcode, access.passcode)) session = { role: "viewer", pv: access.version };
+  if (passcode && sameSecret(passcode, process.env.ADMIN_PASSWORD ?? "")) session = { role: "admin" };
+  else if (passcode && sameSecret(passcode, access.passcode)) session = { role: "viewer", fp: passcodeFingerprint(access.passcode), pv: access.version };
 
   if (!session) {
     recordFailure(ip);

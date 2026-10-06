@@ -34,6 +34,56 @@ export function useOnline(): boolean {
   );
 }
 
+/* ---------- saved copy ---------- */
+
+// public/sw.js answers from the phone's saved copy at once and marks such a page with
+// data-saved-copy="<when it was saved>" on <html>. Freshness then refreshes it in place.
+
+export interface SavedCopy {
+  /** When the copy was saved (ms), or 0 if unknown. */
+  at: number;
+  updating: boolean;
+}
+
+let savedCopy: SavedCopy | null | undefined;
+const savedListeners = new Set<() => void>();
+
+function readSavedCopy(): SavedCopy | null {
+  if (savedCopy === undefined) {
+    const at = document.documentElement.dataset.savedCopy;
+    savedCopy = at == null ? null : { at: Number(at) || 0, updating: false };
+  }
+  return savedCopy;
+}
+
+function setSavedCopy(next: SavedCopy | null): void {
+  savedCopy = next;
+  if (!next) delete document.documentElement.dataset.savedCopy;
+  savedListeners.forEach((l) => l());
+}
+
+export function markSavedCopyUpdating(): void {
+  const current = readSavedCopy();
+  if (current && !current.updating) setSavedCopy({ ...current, updating: true });
+}
+
+/** The page now shows the latest content. */
+export function clearSavedCopy(): void {
+  if (readSavedCopy()) setSavedCopy(null);
+}
+
+/** Set while the page on screen came from the saved copy and hasn't been refreshed yet. */
+export function useSavedCopy(): SavedCopy | null {
+  return useSyncExternalStore(
+    (cb) => {
+      savedListeners.add(cb);
+      return () => savedListeners.delete(cb);
+    },
+    readSavedCopy,
+    () => null,
+  );
+}
+
 /* ---------- per-phone storage ---------- */
 
 const listeners = new Set<() => void>();

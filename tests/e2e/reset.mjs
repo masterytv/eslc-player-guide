@@ -3,6 +3,8 @@ import { rm } from "node:fs/promises";
 import pg from "pg";
 
 await rm(".data-e2e", { recursive: true, force: true });
+// Content the last run left in Next.js's data cache.
+await rm(".next/cache/fetch-cache", { recursive: true, force: true });
 
 if (process.env.DATABASE_URL) {
   const client = new pg.Client({ connectionString: process.env.DATABASE_URL });

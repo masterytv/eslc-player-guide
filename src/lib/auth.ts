@@ -4,12 +4,19 @@ import { jwtVerify, SignJWT } from "jose";
 
 export const SESSION_COOKIE = "guide_session";
 export const SESSION_DAYS = 30;
+/** Which tournament a staff member is working on, when it isn't the live one. */
+export const VIEW_COOKIE = "guide_view";
 
 export type Role = "viewer" | "admin";
 export interface Session {
   role: Role;
-  /** The team passcode version the viewer logged in with; changing the passcode bumps it. */
-  pv: number;
+  /** Players: a fingerprint of the team passcode they logged in with (see passwords.ts). */
+  fp?: string;
+  /**
+   * The passcode's version number, which is how logins were checked before tournaments existed.
+   * Still written so a rollback to that version keeps everyone logged in.
+   */
+  pv?: number;
 }
 
 const DEV_SECRET = "local-development-secret-not-for-production";
@@ -25,10 +32,15 @@ export function sessionSecretConfigured(): boolean {
   return secret() !== null;
 }
 
+/** The signing key, also used to fingerprint team passcodes. Null when it isn't set up. */
+export function sessionKey(): Uint8Array | null {
+  return secret();
+}
+
 export async function signSession(session: Session): Promise<string> {
   const key = secret();
   if (!key) throw new Error("SESSION_SECRET must be set to at least 32 characters.");
-  return new SignJWT({ role: session.role, pv: session.pv })
+  return new SignJWT({ role: session.role, pv: session.pv ?? 0, ...(session.fp ? { fp: session.fp } : {}) })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(`${SESSION_DAYS}d`)
@@ -41,9 +53,11 @@ export async function verifySession(token: string | undefined): Promise<Session 
   try {
     const { payload } = await jwtVerify(token, key, { algorithms: ["HS256"] });
     const role = payload.role;
-    const pv = payload.pv;
-    if ((role !== "viewer" && role !== "admin") || typeof pv !== "number") return null;
-    return { role, pv };
+    const fp = typeof payload.fp === "string" ? payload.fp : undefined;
+    const pv = typeof payload.pv === "number" ? payload.pv : undefined;
+    if (role === "admin") return { role };
+    if (role !== "viewer" || (fp === undefined && pv === undefined)) return null;
+    return { role, fp, pv };
   } catch {
     return null;
   }

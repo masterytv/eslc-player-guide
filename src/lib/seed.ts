@@ -1,9 +1,10 @@
 import type { Guide } from "./schema";
 
-// Starting content, taken from the ESLC 2026 player guide Google Doc.
-// Admins replace any of it from the app; a section reads from here only until
-// it is first saved. Staff phone numbers are deliberately not in source
-// control: admins add them under Team → Staff.
+// Starting content for the first tournament, taken from the ESLC 2026 player guide
+// Google Doc. Admins replace any of it from the app; a section reads from here only
+// until it is first saved. Later tournaments start from a copy of an earlier one.
+// Staff phone numbers are deliberately not in source control: admins add them under
+// Team → Staff.
 
 const conduct = `## Be on time
 Arrive 10 minutes before the actual meeting time.
@@ -71,6 +72,7 @@ export const SEED: Guide = {
     location: "Salou, Spain",
     startDate: "2026-10-31",
     endDate: "2026-11-09",
+    timeZone: "Europe/Madrid",
     poolName: "Pool play B",
     scheduleUrl: "https://docs.google.com/spreadsheets/d/1w1AZLKIqm7Hn1UoOrIJrpYPv0AghAMeA/edit?usp=sharing",
     alert: "",

@@ -15,6 +15,11 @@ export function LogoutButton() {
       if ("caches" in window) {
         for (const k of await caches.keys()) await caches.delete(k);
       }
+      try {
+        localStorage.removeItem("guide:warmed");
+      } catch {
+        // nothing stored
+      }
     } finally {
       router.replace("/login");
       router.refresh();

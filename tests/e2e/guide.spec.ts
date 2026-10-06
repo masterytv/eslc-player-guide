@@ -106,6 +106,29 @@ test("the editor explains what needs fixing", async () => {
   await expect(viewer.getByRole("link", { name: /Team photos/ })).toHaveAttribute("href", "https://photos.example/ireland");
 });
 
+test("the guide opens at once from the phone's saved copy, then shows the latest", async () => {
+  await expect
+    .poll(() => viewer.evaluate(async () => !!(await (await caches.open("pages-v1")).match("/more/links"))), { timeout: 20_000 })
+    .toBe(true);
+
+  await admin.goto("/admin/links");
+  await admin.getByRole("button", { name: "Add a link" }).click();
+  await admin.getByLabel(/^Label/).last().fill("Kit order form");
+  await admin.getByLabel(/^Link/).last().fill("https://kit.example/ireland");
+  await save(admin);
+
+  const res = await viewer.goto("/more/links");
+  // The page arrives from the saved copy, from before the change...
+  expect(res?.fromServiceWorker()).toBe(true);
+  const html = await res!.text();
+  expect(html).toContain("data-saved-copy");
+  expect(html).not.toContain("Kit order form");
+  // ...then refreshes itself in place.
+  await expect(viewer.getByRole("link", { name: /Kit order form/ })).toBeVisible();
+  await expect(viewer.locator(".sync")).toContainText("Updated");
+  await expect(viewer.locator("html")).not.toHaveAttribute("data-saved-copy");
+});
+
 test("staff are warned before leaving unsaved changes", async () => {
   await admin.goto("/admin/anthem");
   await admin.getByLabel("Credit").fill("Edited but not saved");
@@ -143,8 +166,8 @@ test("staff can replace a map photo from their phone", async () => {
 
   await viewer.goto("/venue");
   const img = viewer.getByRole("img", { name: "Field map" });
+  await expect(img).toHaveAttribute("src", /^\/img\//);
   const src = await img.getAttribute("src");
-  expect(src).toMatch(/^\/img\//);
   const res = await viewer.request.get(src!);
   expect(res.status()).toBe(200);
   // Small images upload untouched; only large phone photos are shrunk to JPEG first.
@@ -200,4 +223,67 @@ test("changing the team passcode signs players out", async () => {
   // Staff stay signed in.
   await admin.goto("/admin");
   await expect(admin.getByRole("heading", { level: 1, name: "Edit the guide" })).toBeVisible();
+});
+
+test("staff start the next tournament, get it ready, then switch players over", async () => {
+  await admin.goto("/admin/tournaments");
+  await admin.getByRole("link", { name: "Start the next tournament" }).click();
+  await admin.getByLabel("Tournament name", { exact: true }).fill("World Sixes 2027");
+  await admin.getByLabel("Where", { exact: true }).fill("Toronto, Canada");
+  await admin.getByLabel("First day", { exact: true }).fill("2027-07-08");
+  await admin.getByLabel("Last day", { exact: true }).fill("2027-07-14");
+  await admin.getByLabel("Time zone", { exact: true }).selectOption("America/Toronto");
+  await expect(admin.getByLabel("Team passcode", { exact: true })).toHaveValue("blue-socks-2026");
+  await admin.getByLabel("Team passcode", { exact: true }).fill("maple-leaf-2027");
+  await expect(admin.locator("#carry-staff")).toBeChecked();
+  await expect(admin.locator("#carry-schedule")).not.toBeChecked();
+  await admin.getByRole("button", { name: "Start the tournament" }).click();
+  await admin.waitForURL(/\/admin$/);
+  await expect(admin.locator(".preview-bar")).toContainText("You’re working on World Sixes 2027. Players see ESLC 2026.");
+
+  // Staff carried over; the schedule starts empty.
+  await admin.goto("/team");
+  await expect(admin.getByRole("heading", { name: "Maddy Morrissey Buss" })).toBeVisible();
+  await admin.goto("/schedule");
+  await expect(admin.getByText("Nothing here yet")).toBeVisible();
+
+  await admin.goto("/admin/schedule");
+  await admin.getByRole("button", { name: "Add an event" }).click();
+  await admin.getByLabel(/^Day/).fill("2027-07-10");
+  await admin.getByLabel("Opponent", { exact: true }).fill("Canada");
+  await admin.getByLabel("Start time").fill("10:00");
+  await save(admin);
+
+  // Players still see ESLC.
+  await viewer.goto("/schedule");
+  await expect(viewer.getByRole("heading", { name: "vs Finland" })).toBeVisible();
+  await expect(viewer.getByRole("heading", { name: "vs Canada" })).toHaveCount(0);
+
+  await admin.goto("/admin/tournaments");
+  const worlds = admin.locator(".card", { hasText: "World Sixes 2027" });
+  admin.once("dialog", (d) => d.accept());
+  await worlds.getByRole("button", { name: "Make live" }).click();
+  await expect(worlds.locator(".chip.live-now")).toHaveText("Live");
+  await expect(admin.locator(".preview-bar")).toHaveCount(0);
+
+  // A new passcode signs players out, and lets them into the new tournament.
+  await viewer.goto("/schedule");
+  await expect(viewer).toHaveURL(/\/login\?expired=1/);
+  await login(viewer, "maple-leaf-2027");
+  await viewer.goto("/schedule");
+  const add = viewer.getByRole("link", { name: "Add the Canada game to your calendar" });
+  await expect(add).toBeVisible();
+  // Times are Toronto time: 10:00 in July is 14:00 UTC.
+  const ics = await (await viewer.request.get((await add.getAttribute("href"))!)).text();
+  expect(ics).toContain("DTSTART:20270710T140000Z");
+  await viewer.goto("/");
+  await expect(viewer.getByText("All times are Canada Eastern time.")).toBeVisible();
+
+  // Staff can still open the old tournament without changing what players see.
+  await admin.goto("/admin/tournaments");
+  await admin.locator(".card", { hasText: "ESLC 2026" }).getByRole("button", { name: "Work on this one" }).click();
+  await admin.waitForURL(/\/admin$/);
+  await expect(admin.locator(".preview-bar")).toContainText("You’re working on ESLC 2026. Players see World Sixes 2027.");
+  await viewer.goto("/schedule");
+  await expect(viewer.getByRole("heading", { name: "vs Canada" })).toBeVisible();
 });

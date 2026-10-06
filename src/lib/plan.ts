@@ -103,7 +103,7 @@ export function nextGame(guide: Guide, nowMs: number): { game: Row<"schedule">; 
   let best: { game: Row<"schedule">; at: Date } | null = null;
   for (const s of guide.schedule) {
     if (s.type !== "game" || !s.time) continue;
-    const at = zonedToUtc(s.date, s.time);
+    const at = zonedToUtc(s.date, s.time, guide.event.timeZone);
     if (at.getTime() <= nowMs) continue;
     if (!best || at < best.at) best = { game: s, at };
   }

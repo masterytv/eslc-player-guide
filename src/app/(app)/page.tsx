@@ -6,7 +6,7 @@ import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
 import { loadGuide } from "@/lib/content";
 import { defaultDay, entriesFor, isGameDay, nextGame, tripDays, TYPE_LABEL } from "@/lib/plan";
-import { clock, clockLabel, countdown, dayLabel, dayParts, daysBetween, toMinutes, zonedNow } from "@/lib/time";
+import { clock, clockLabel, countdown, dayLabel, dayParts, daysBetween, timeZoneLabel, toMinutes, zonedNow } from "@/lib/time";
 
 type Search = Promise<Record<string, string | string[] | undefined>>;
 
@@ -14,7 +14,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
   const sp = await searchParams;
   const { guide } = await loadGuide();
   const now = new Date();
-  const { date: today, minutes } = zonedNow(now);
+  const { date: today, minutes } = zonedNow(now, guide.event.timeZone);
   const days = tripDays(guide);
   const home = defaultDay(days, today);
   const day = typeof sp.day === "string" && days.includes(sp.day) ? sp.day : home;
@@ -203,7 +203,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
             </Link>
           </div>
         </section>
-        <p className="foot">All times are Spain time.</p>
+        <p className="foot">All times are {timeZoneLabel(guide.event.timeZone)} time.</p>
       </main>
     </>
   );

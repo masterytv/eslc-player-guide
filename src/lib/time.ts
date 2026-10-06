@@ -1,5 +1,68 @@
-// Every date and time in the guide is local to the tournament, in Spain.
-export const TZ = "Europe/Madrid";
+// Every date and time in the guide is local to the tournament: each has its own time zone.
+
+/** The time zone of tournaments saved before each had its own: ESLC 2026, in Spain. */
+export const DEFAULT_TZ = "Europe/Madrid";
+
+/** Time zones offered when setting up a tournament, named the way the team would say them. */
+export const TIME_ZONES: ReadonlyArray<{ id: string; label: string }> = [
+  { id: "Europe/Dublin", label: "Irish" },
+  { id: "Europe/London", label: "UK" },
+  { id: "Europe/Lisbon", label: "Portugal" },
+  { id: "Europe/Madrid", label: "Spain" },
+  { id: "Europe/Paris", label: "France" },
+  { id: "Europe/Brussels", label: "Belgium" },
+  { id: "Europe/Amsterdam", label: "Netherlands" },
+  { id: "Europe/Berlin", label: "Germany" },
+  { id: "Europe/Zurich", label: "Switzerland" },
+  { id: "Europe/Rome", label: "Italy" },
+  { id: "Europe/Vienna", label: "Austria" },
+  { id: "Europe/Prague", label: "Czech" },
+  { id: "Europe/Warsaw", label: "Poland" },
+  { id: "Europe/Budapest", label: "Hungary" },
+  { id: "Europe/Copenhagen", label: "Denmark" },
+  { id: "Europe/Oslo", label: "Norway" },
+  { id: "Europe/Stockholm", label: "Sweden" },
+  { id: "Europe/Helsinki", label: "Finland" },
+  { id: "Europe/Tallinn", label: "Estonia" },
+  { id: "Europe/Riga", label: "Latvia" },
+  { id: "Europe/Athens", label: "Greece" },
+  { id: "Europe/Istanbul", label: "Turkey" },
+  { id: "Asia/Jerusalem", label: "Israel" },
+  { id: "America/New_York", label: "US Eastern" },
+  { id: "America/Chicago", label: "US Central" },
+  { id: "America/Denver", label: "US Mountain" },
+  { id: "America/Los_Angeles", label: "US Pacific" },
+  { id: "America/Toronto", label: "Canada Eastern" },
+  { id: "America/Vancouver", label: "Canada Pacific" },
+  { id: "Asia/Tokyo", label: "Japan" },
+  { id: "Asia/Seoul", label: "Korea" },
+  { id: "Asia/Hong_Kong", label: "Hong Kong" },
+  { id: "Australia/Perth", label: "Western Australia" },
+  { id: "Australia/Sydney", label: "Eastern Australia" },
+  { id: "Pacific/Auckland", label: "New Zealand" },
+];
+
+export function isTimeZone(v: string): boolean {
+  if (!v) return false;
+  try {
+    new Intl.DateTimeFormat("en-GB", { timeZone: v });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** "Spain", "US Eastern", or the city for a zone not in the list: as in "All times are Spain time". */
+export function timeZoneLabel(tz: string): string {
+  return TIME_ZONES.find((z) => z.id === tz)?.label ?? (tz.split("/").pop() ?? tz).replace(/_/g, " ");
+}
+
+/** "Spain (Madrid)", for picking a zone. */
+export function timeZoneOption(tz: string): string {
+  const city = (tz.split("/").pop() ?? tz).replace(/_/g, " ");
+  const label = timeZoneLabel(tz);
+  return label === city ? city : `${label} (${city})`;
+}
 
 const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
 const TIME_RE = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -22,7 +85,7 @@ export function toMinutes(t: string): number | null {
 }
 
 /** The current date and minute in the tournament's time zone. */
-export function zonedNow(now: Date = new Date(), tz: string = TZ): { date: string; minutes: number } {
+export function zonedNow(now: Date, tz: string): { date: string; minutes: number } {
   const p = parts(now, tz);
   return { date: `${p.year}-${p.month}-${p.day}`, minutes: +p.hour * 60 + +p.minute };
 }
@@ -45,7 +108,7 @@ function parts(at: Date, tz: string) {
 }
 
 /** Converts a wall-clock date and time in `tz` to the absolute instant. */
-export function zonedToUtc(date: string, time: string, tz: string = TZ): Date {
+export function zonedToUtc(date: string, time: string, tz: string): Date {
   const [y, mo, d] = date.split("-").map(Number);
   const [h, mi] = (time || "00:00").split(":").map(Number);
   const wall = Date.UTC(y, mo - 1, d, h, mi);

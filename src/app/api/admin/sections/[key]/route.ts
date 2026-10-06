@@ -1,3 +1,4 @@
+import { contentChanged, requestedTournament } from "@/lib/content";
 import { issuesOf, isSectionKey, normalizeSection, sectionSchemas, type Guide, type SectionKey } from "@/lib/schema";
 import { adminOrError } from "@/lib/session";
 import { FORCE, getStore, StorageNotConfigured } from "@/lib/store";
@@ -9,12 +10,15 @@ export async function PUT(req: Request, ctx: { params: Promise<{ key: string }> 
   const { key } = await ctx.params;
   if (!isSectionKey(key)) return Response.json({ error: "That part of the guide doesn't exist." }, { status: 404 });
 
-  let body: { data?: unknown; version?: unknown; force?: unknown };
+  let body: { data?: unknown; version?: unknown; force?: unknown; tournament?: unknown };
   try {
     body = await req.json();
   } catch {
     return Response.json({ error: "The changes didn't arrive in one piece. Try saving again." }, { status: 400 });
   }
+
+  const tournament = await requestedTournament(body.tournament);
+  if (!tournament) return Response.json({ error: "That tournament no longer exists. Reload the page." }, { status: 404 });
 
   const parsed = sectionSchemas[key].safeParse(body.data);
   if (!parsed.success) {
@@ -24,10 +28,11 @@ export async function PUT(req: Request, ctx: { params: Promise<{ key: string }> 
   const version = typeof body.version === "number" && Number.isInteger(body.version) && body.version >= 0 ? body.version : 0;
 
   try {
-    const result = await getStore().write(key, data, body.force === true ? FORCE : version);
+    const result = await getStore().write(tournament, key, data, body.force === true ? FORCE : version);
     if (!result.ok) {
       return Response.json({ error: "Someone else saved this section while you were editing." }, { status: 409 });
     }
+    contentChanged();
     return Response.json({ data, version: result.version, updatedAt: result.updatedAt });
   } catch (err) {
     if (err instanceof StorageNotConfigured) return Response.json({ error: err.message }, { status: 503 });

@@ -2,9 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "ESLC 2026 Player Guide",
-    short_name: "ESLC Guide",
-    description: "Ireland Sixes Lacrosse player guide for ESLC 2026.",
+    // The same app on the home screen from one tournament to the next.
+    name: "Ireland Lacrosse Player Guide",
+    short_name: "Player Guide",
+    description: "The Ireland Lacrosse player guide: schedule, team, venue and travel for each tournament.",
     start_url: "/",
     scope: "/",
     display: "standalone",
