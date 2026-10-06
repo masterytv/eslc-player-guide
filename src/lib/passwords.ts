@@ -1,4 +1,6 @@
-import { createHash, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, timingSafeEqual } from "node:crypto";
+import { sessionKey, type Session } from "./auth";
+import { FIRST_TOURNAMENT } from "./schema";
 
 /** Constant-time comparison that doesn't leak the length of the stored value. */
 export function sameSecret(given: string, expected: string): boolean {
@@ -6,6 +8,24 @@ export function sameSecret(given: string, expected: string): boolean {
   const a = createHash("sha256").update(given).digest();
   const b = createHash("sha256").update(expected).digest();
   return timingSafeEqual(a, b);
+}
+
+/**
+ * Stands in for the team passcode inside a player's login cookie without revealing it. A login
+ * lasts while the live tournament's passcode still matches: changing the passcode, or making a
+ * tournament with a different one live, signs players out; one with the same passcode doesn't.
+ */
+export function passcodeFingerprint(passcode: string): string {
+  const key = sessionKey();
+  if (!key || !passcode) return "";
+  return createHmac("sha256", key).update(`team-passcode:${passcode}`).digest("base64url").slice(0, 22);
+}
+
+export function viewerMayStay(session: Session, live: { id: string; passcode: string; version: number }): boolean {
+  if (!live.passcode) return false;
+  if (session.fp) return session.fp === passcodeFingerprint(live.passcode);
+  // Logins from before tournaments carry the passcode's version number instead.
+  return live.id === FIRST_TOURNAMENT && session.pv === live.version;
 }
 
 // A small per-instance brake on guessing. Serverless instances don't share

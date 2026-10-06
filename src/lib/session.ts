@@ -2,19 +2,20 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import { SESSION_COOKIE, verifySession, type Session } from "./auth";
-import { loadGuide } from "./content";
+import { loadLiveGuide } from "./content";
+import { viewerMayStay } from "./passwords";
 
 /**
- * The signed-in session, or null. A viewer whose passcode has since been changed
- * by an admin counts as signed out.
+ * The signed-in session, or null. A player counts as signed out once the live tournament's
+ * passcode is no longer the one they logged in with.
  */
 export const currentSession = cache(async (): Promise<Session | null> => {
   const jar = await cookies();
   const session = await verifySession(jar.get(SESSION_COOKIE)?.value);
   if (!session) return null;
   if (session.role === "viewer") {
-    const { access } = await loadGuide();
-    if (session.pv !== access.version) return null;
+    const live = await loadLiveGuide();
+    if (!viewerMayStay(session, { id: live.id, ...live.access })) return null;
   }
   return session;
 });

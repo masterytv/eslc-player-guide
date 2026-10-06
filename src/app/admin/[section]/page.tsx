@@ -22,9 +22,9 @@ export default async function EditSectionPage({ params, searchParams }: { params
   const def = sectionDef(section);
   if (!def || !isSectionKey(section)) notFound();
 
-  const { guide, meta } = await loadGuide();
+  const { id, guide, meta } = await loadGuide();
   const days = tripDays(guide);
-  const today = zonedNow().date;
+  const today = zonedNow(new Date(), guide.event.timeZone).date;
   const wanted = typeof sp.day === "string" && isDate(sp.day) ? sp.day : null;
   // Daily notes open on the day being planned; the schedule opens on everything.
   const startDay = wanted ?? (def.key === "daily" && days.length ? defaultDay(days, today) : null);
@@ -34,6 +34,7 @@ export default async function EditSectionPage({ params, searchParams }: { params
       <Header title={def.title} eyebrow="Edit the guide" back="/admin" />
       <main className="main no-tabs">
         <SectionEditor
+          tournament={id}
           sectionKey={def.key}
           initial={guide[def.key] as never}
           version={meta[def.key].version}

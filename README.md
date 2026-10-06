@@ -1,8 +1,10 @@
-# ESLC 2026 Player Guide
+# Player Guide
 
-The Ireland Sixes Lacrosse player guide for ESLC 2026, as a phone-first web app.
+The Ireland Lacrosse player guide, as a phone-first web app, starting with ESLC 2026.
 Players open a link and enter the **team passcode**. Staff log in with the
 **staff password** and can change anything players see, from their own phones.
+Each tournament gets its own guide at the same address; staff prepare the next one while
+the current one is live, then switch players over.
 
 - **Today**: the day's plan, the next game with a countdown, and alerts.
 - **Schedule**: games, practices, ceremonies and meetings, with add-to-calendar.
@@ -16,11 +18,12 @@ The guide keeps a saved copy on each phone, so it still opens with no signal abr
 
 | Login | What it unlocks | Where it's set |
 |---|---|---|
-| Team passcode | Reading the guide | `VIEWER_PASSWORD` to start; staff can change it in the app (More → Team passcode) |
-| Staff password | Reading and editing everything | `ADMIN_PASSWORD` in Vercel |
+| Team passcode | Reading the live tournament's guide | Each tournament has its own. `VIEWER_PASSWORD` is the first one's starting passcode; staff change it in the app (More → Team passcode) |
+| Staff password | Reading and editing every tournament | `ADMIN_PASSWORD` in Vercel |
 
-Changing the team passcode signs every player out; they enter the new one once. Staff stay
-signed in. Logins last 30 days on each phone.
+Changing the team passcode signs every player out; they enter the new one once. So does
+making a tournament with a different passcode live. Staff stay signed in. Logins last
+30 days on each phone.
 
 ## Put it live on Vercel
 
@@ -63,6 +66,23 @@ Log in with the staff password. You'll see an orange **Staff** badge in the head
   instead of silently overwriting the first person's changes.
 - Photos and maps can be replaced from the phone's camera roll. Large photos are shrunk
   before upload.
+
+## The next tournament
+
+Open *More → Tournaments → Start the next tournament*. Give it a name, dates, where it is
+and its time zone, then tick what to copy from an earlier tournament. Staff, the roster, the
+packing list, pages, the anthem and links are ticked by default. The schedule, daily notes,
+venue, travel and rooming start empty. Then:
+
+1. The new tournament is a draft: only staff see it. An orange bar on every page says which
+   tournament you're working on, and what players see.
+2. Fill it in through the usual editors. The live guide doesn't change.
+3. When it's ready, open *Tournaments* and tap **Make live**. Players see it the next time
+   they open the app. If its team passcode is different, they're asked for the new one.
+
+Past tournaments stay under *Tournaments*. Tap **Work on this one** to look back at or reuse
+one; players keep seeing the live one. Each tournament keeps its own time zone, so countdowns,
+"Today" and calendar files are in local time wherever it is.
 
 ## Before sharing it
 
@@ -107,25 +127,25 @@ set, nobody can log in, so put at least `ADMIN_PASSWORD` and `VIEWER_PASSWORD` i
 - **Database connections** are handed to Vercel with `attachDatabasePool`, so idle ones are
   closed before a function sleeps, and a query that finds its connection already closed is
   retried once (`src/lib/store.ts`).
-- **Content** lives in one Postgres table, one row of JSON per section (`daily`, `schedule`,
-  `staff`, …). Each section has a schema in `src/lib/schema.ts` and an editor definition in
-  `src/lib/sections.ts`. To add a field, add it to both. Sections never saved read from
-  `src/lib/seed.ts`.
+- **Content** lives in one Postgres table, one row of JSON per section per tournament,
+  keyed `<tournament>/<section>` (`world-sixes-2027/schedule`). The first tournament,
+  `eslc-2026`, keeps the plain keys (`schedule`) it had before tournaments existed. The live
+  tournament is the `_app/live` row. Each section has a schema in `src/lib/schema.ts` and an
+  editor definition in `src/lib/sections.ts`. To add a field, add it to both. The first
+  tournament's never-saved sections read from `src/lib/seed.ts`; later tournaments start from
+  a copy of an earlier one (`src/lib/tournaments.ts`).
 - **Saving** checks a version number per section, which is how clashing edits are caught.
 - **Photos** uploaded by staff are stored in the same database and served from `/img/…`.
 - **Logins** are signed cookies (`src/lib/auth.ts`). `src/proxy.ts` turns away anyone without
-  one and keeps players out of `/admin`; the server also checks the team passcode version.
+  one and keeps players out of `/admin`. A player's cookie holds a fingerprint of the passcode
+  they used, and the server checks it against the live tournament's passcode. Which tournament
+  a staff member is working on is a second cookie.
 - **Caching**: the guide's content is cached on the server (`unstable_cache` in
   `src/lib/content.ts`) and cleared on every save, so ordinary page loads don't touch the
-  database and don't wake a sleeping Neon database.
+  database and don't wake a sleeping Neon database. Preview deployments share the production
+  database, so they skip the cache and always read it directly.
 - **Offline and weak signal**: `public/sw.js` keeps the last copy of each page and photo on the
   phone. Pages open straight from that copy while a fresh one downloads, then
   `src/components/Freshness.tsx` swaps in the latest content in place. The header says
   *Saved copy* until it has. Reopening the app after a few minutes checks for changes too.
-- All dates and times are Spain time (`Europe/Madrid`).
-
-### Reusing it for another event
-
-Update *Event & alert* (names and dates), then replace the schedule, daily notes and the rest
-through the editors. For a clean start, connect a new Neon database: everything falls back
-to the starting content in `src/lib/seed.ts`.
+- Dates and times are local to each tournament, in the time zone set under *Event & alert*.

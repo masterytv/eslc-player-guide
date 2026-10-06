@@ -28,7 +28,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
   const sp = await searchParams;
   const filter = FILTERS.some((f) => f.key === sp.filter) ? (sp.filter as string) : "all";
   const { guide } = await loadGuide();
-  const { date: today } = zonedNow();
+  const { date: today } = zonedNow(new Date(), guide.event.timeZone);
   const rows = guide.schedule.filter((r) => matches(r, filter));
   const dates = [...new Set(rows.map((r) => r.date))].sort();
 

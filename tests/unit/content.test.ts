@@ -43,6 +43,9 @@ test("finds the next game and the day Today opens on", () => {
   // 15:00 in Spain: Finland has started, Italy is next.
   assert.equal(nextGame(SEED, Date.parse("2026-11-02T14:00:00Z"))?.game.opponent, "Italy");
   assert.equal(nextGame(SEED, Date.parse("2026-11-06T10:00:00Z")), null);
+  // The same schedule in Toronto (UTC-5 by November): Finland's 14:30 start is 19:30 UTC.
+  const toronto = { ...SEED, event: { ...SEED.event, timeZone: "America/Toronto" } };
+  assert.equal(nextGame(toronto, Date.parse("2026-11-02T14:00:00Z"))?.at.toISOString(), "2026-11-02T19:30:00.000Z");
 
   const days = tripDays(SEED);
   assert.equal(days.length, 10);

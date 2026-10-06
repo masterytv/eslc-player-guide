@@ -14,6 +14,8 @@ type Obj = Record<string, unknown>;
 type Status = { kind: "idle" | "saving" | "saved" | "error" | "conflict"; msg?: string };
 
 interface Props {
+  /** The tournament being edited. Saves go to it even if staff switch tournaments in another tab. */
+  tournament: string;
   sectionKey: SectionKey;
   initial: Row[] | Obj;
   version: number;
@@ -327,7 +329,7 @@ export function SectionEditor(props: Props) {
       const res = await fetch(`/api/admin/sections/${props.sectionKey}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: sent, version, force }),
+        body: JSON.stringify({ data: sent, version, force, tournament: props.tournament }),
       });
       const body = await res.json().catch(() => ({}));
       if (res.ok) {

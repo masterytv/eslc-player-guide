@@ -1,18 +1,52 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { ago, clockLabel, countdown, dateRange, dayLabel, isDate, rangeLabel, toMinutes, zonedNow, zonedToUtc } from "../../src/lib/time.ts";
+import {
+  ago,
+  clockLabel,
+  countdown,
+  dateRange,
+  dayLabel,
+  isDate,
+  isTimeZone,
+  rangeLabel,
+  TIME_ZONES,
+  timeZoneLabel,
+  timeZoneOption,
+  toMinutes,
+  zonedNow,
+  zonedToUtc,
+} from "../../src/lib/time.ts";
+
+const SPAIN = "Europe/Madrid";
 
 test("converts Spain wall-clock time to UTC across the October clock change", () => {
   // Spain is UTC+1 in November (after 25 Oct 2026) and UTC+2 before it.
-  assert.equal(zonedToUtc("2026-11-02", "14:30").toISOString(), "2026-11-02T13:30:00.000Z");
-  assert.equal(zonedToUtc("2026-10-24", "14:30").toISOString(), "2026-10-24T12:30:00.000Z");
-  assert.equal(zonedToUtc("2026-10-31", "").toISOString(), "2026-10-30T23:00:00.000Z");
+  assert.equal(zonedToUtc("2026-11-02", "14:30", SPAIN).toISOString(), "2026-11-02T13:30:00.000Z");
+  assert.equal(zonedToUtc("2026-10-24", "14:30", SPAIN).toISOString(), "2026-10-24T12:30:00.000Z");
+  assert.equal(zonedToUtc("2026-10-31", "", SPAIN).toISOString(), "2026-10-30T23:00:00.000Z");
+});
+
+test("uses each tournament's own time zone", () => {
+  // Toronto is UTC-4 in July, Tokyo UTC+9 all year.
+  assert.equal(zonedToUtc("2027-07-10", "10:00", "America/Toronto").toISOString(), "2027-07-10T14:00:00.000Z");
+  assert.equal(zonedToUtc("2027-07-10", "10:00", "Asia/Tokyo").toISOString(), "2027-07-10T01:00:00.000Z");
+  assert.deepEqual(zonedNow(new Date("2027-07-10T02:30:00Z"), "America/Toronto"), { date: "2027-07-09", minutes: 22 * 60 + 30 });
 });
 
 test("reads the current date and minute in Spain", () => {
-  assert.deepEqual(zonedNow(new Date("2026-11-02T10:20:00Z")), { date: "2026-11-02", minutes: 11 * 60 + 20 });
+  assert.deepEqual(zonedNow(new Date("2026-11-02T10:20:00Z"), SPAIN), { date: "2026-11-02", minutes: 11 * 60 + 20 });
   // Just after midnight UTC is already the next day in Spain.
-  assert.deepEqual(zonedNow(new Date("2026-11-02T23:30:00Z")), { date: "2026-11-03", minutes: 30 });
+  assert.deepEqual(zonedNow(new Date("2026-11-02T23:30:00Z"), SPAIN), { date: "2026-11-03", minutes: 30 });
+});
+
+test("names time zones the way the team says them", () => {
+  for (const z of TIME_ZONES) assert.ok(isTimeZone(z.id), z.id);
+  assert.ok(!isTimeZone("Spain"));
+  assert.ok(!isTimeZone(""));
+  assert.equal(timeZoneLabel(SPAIN), "Spain");
+  assert.equal(timeZoneLabel("Asia/Kolkata"), "Kolkata");
+  assert.equal(timeZoneOption("America/New_York"), "US Eastern (New York)");
+  assert.equal(timeZoneOption("Asia/Hong_Kong"), "Hong Kong");
 });
 
 test("formats clock times and days the way the guide shows them", () => {

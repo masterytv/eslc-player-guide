@@ -22,7 +22,7 @@ function fold(line: string): string {
 function event(row: Row<"schedule">, guide: Guide, now: Date): string[] {
   const lines = ["BEGIN:VEVENT", `UID:${row.id}@eslc-player-guide`, `DTSTAMP:${stamp(now)}`];
   if (row.time) {
-    const start = zonedToUtc(row.date, row.time);
+    const start = zonedToUtc(row.date, row.time, guide.event.timeZone);
     lines.push(`DTSTART:${stamp(start)}`, `DTEND:${stamp(new Date(start.getTime() + 60 * 60_000))}`);
   } else {
     lines.push(`DTSTART;VALUE=DATE:${row.date.replace(/-/g, "")}`, `DTEND;VALUE=DATE:${addDays(row.date, 1).replace(/-/g, "")}`);
@@ -41,7 +41,7 @@ export function calendar(rows: Row<"schedule">[], guide: Guide, now = new Date()
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Ireland Lacrosse//ESLC Player Guide//EN",
+    "PRODID:-//Ireland Lacrosse//Player Guide//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     `X-WR-CALNAME:${esc(`${guide.event.team} ${guide.event.eventName}`.trim())}`,

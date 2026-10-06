@@ -1,5 +1,5 @@
 import type { Guide, SectionKey } from "./schema";
-import { clockLabel } from "./time";
+import { clockLabel, TIME_ZONES, timeZoneOption } from "./time";
 
 // How each section appears in the admin editor. Client-safe: no server imports.
 
@@ -47,6 +47,8 @@ export interface SectionDef {
   /** Items are listed by date in the app, so the editor filters by day instead of reordering. */
   byDate?: boolean;
   newItem?: () => AnyRow;
+  /** Copied into the next tournament unless staff untick it (staff, packing list…). */
+  carryOver?: boolean;
 }
 
 const s = (v: unknown) => (typeof v === "string" ? v : "");
@@ -60,7 +62,7 @@ export const SECTIONS: SectionDef[] = [
   {
     key: "event",
     title: "Event & alert",
-    description: "Event name, dates, and an alert banner on Today",
+    description: "Event name, dates, time zone, and an alert banner on Today",
     group: "Today & schedule",
     kind: "object",
     viewHref: "/",
@@ -72,6 +74,13 @@ export const SECTIONS: SectionDef[] = [
       { key: "location", label: "Location", type: "text" },
       { key: "startDate", label: "First day", type: "date" },
       { key: "endDate", label: "Last day", type: "date", help: "Today's day strip runs from the first day to the last." },
+      {
+        key: "timeZone",
+        label: "Time zone",
+        type: "select",
+        options: TIME_ZONES.map((z) => ({ value: z.id, label: timeZoneOption(z.id) })),
+        help: "Where the tournament is. Every time in the guide is local time there.",
+      },
       { key: "poolName", label: "Pool", type: "text", placeholder: "Pool play B" },
       { key: "scheduleUrl", label: "Full schedule link", type: "url", placeholder: "https://" },
     ],
@@ -137,6 +146,7 @@ export const SECTIONS: SectionDef[] = [
   },
   {
     key: "staff",
+    carryOver: true,
     title: "Staff",
     description: "Names, roles and phone numbers",
     group: "Team",
@@ -148,13 +158,14 @@ export const SECTIONS: SectionDef[] = [
     fields: [
       { key: "name", label: "Name", type: "text", required: true },
       { key: "role", label: "Role", type: "text", placeholder: "Head Coach" },
-      { key: "phone", label: "Mobile", type: "tel", placeholder: "+1 315 555 0123", help: "Include the country code so Call and WhatsApp work from Spain." },
+      { key: "phone", label: "Mobile", type: "tel", placeholder: "+1 315 555 0123", help: "Include the country code so Call and WhatsApp work abroad." },
       { key: "whatsapp", label: "Show a WhatsApp button", type: "checkbox" },
       { key: "email", label: "Email", type: "email" },
     ],
   },
   {
     key: "roster",
+    carryOver: true,
     title: "Roster",
     description: "Players, numbers and positions",
     group: "Team",
@@ -293,6 +304,7 @@ export const SECTIONS: SectionDef[] = [
   },
   {
     key: "packing",
+    carryOver: true,
     title: "Packing list",
     description: "Items players tick off before they travel",
     group: "More",
@@ -308,6 +320,7 @@ export const SECTIONS: SectionDef[] = [
   },
   {
     key: "packingNotes",
+    carryOver: true,
     title: "Packing warnings",
     description: "Notes and warnings shown with the packing list",
     group: "More",
@@ -332,6 +345,7 @@ export const SECTIONS: SectionDef[] = [
   },
   {
     key: "packingInfo",
+    carryOver: true,
     title: "Supplied kit",
     description: "What players get at training camp",
     group: "More",
@@ -344,6 +358,7 @@ export const SECTIONS: SectionDef[] = [
   },
   {
     key: "pages",
+    carryOver: true,
     title: "Pages",
     description: "Conduct, tournament rules, activities, and any new page",
     group: "More",
@@ -370,6 +385,7 @@ export const SECTIONS: SectionDef[] = [
   },
   {
     key: "anthem",
+    carryOver: true,
     title: "Anthem",
     description: "Lyrics and video",
     group: "More",
@@ -387,6 +403,7 @@ export const SECTIONS: SectionDef[] = [
   },
   {
     key: "links",
+    carryOver: true,
     title: "Useful links",
     description: "Schedule, forms, taxis",
     group: "More",

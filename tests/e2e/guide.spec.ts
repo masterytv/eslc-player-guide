@@ -224,3 +224,66 @@ test("changing the team passcode signs players out", async () => {
   await admin.goto("/admin");
   await expect(admin.getByRole("heading", { level: 1, name: "Edit the guide" })).toBeVisible();
 });
+
+test("staff start the next tournament, get it ready, then switch players over", async () => {
+  await admin.goto("/admin/tournaments");
+  await admin.getByRole("link", { name: "Start the next tournament" }).click();
+  await admin.getByLabel("Tournament name", { exact: true }).fill("World Sixes 2027");
+  await admin.getByLabel("Where", { exact: true }).fill("Toronto, Canada");
+  await admin.getByLabel("First day", { exact: true }).fill("2027-07-08");
+  await admin.getByLabel("Last day", { exact: true }).fill("2027-07-14");
+  await admin.getByLabel("Time zone", { exact: true }).selectOption("America/Toronto");
+  await expect(admin.getByLabel("Team passcode", { exact: true })).toHaveValue("blue-socks-2026");
+  await admin.getByLabel("Team passcode", { exact: true }).fill("maple-leaf-2027");
+  await expect(admin.locator("#carry-staff")).toBeChecked();
+  await expect(admin.locator("#carry-schedule")).not.toBeChecked();
+  await admin.getByRole("button", { name: "Start the tournament" }).click();
+  await admin.waitForURL(/\/admin$/);
+  await expect(admin.locator(".preview-bar")).toContainText("You’re working on World Sixes 2027. Players see ESLC 2026.");
+
+  // Staff carried over; the schedule starts empty.
+  await admin.goto("/team");
+  await expect(admin.getByRole("heading", { name: "Maddy Morrissey Buss" })).toBeVisible();
+  await admin.goto("/schedule");
+  await expect(admin.getByText("Nothing here yet")).toBeVisible();
+
+  await admin.goto("/admin/schedule");
+  await admin.getByRole("button", { name: "Add an event" }).click();
+  await admin.getByLabel(/^Day/).fill("2027-07-10");
+  await admin.getByLabel("Opponent", { exact: true }).fill("Canada");
+  await admin.getByLabel("Start time").fill("10:00");
+  await save(admin);
+
+  // Players still see ESLC.
+  await viewer.goto("/schedule");
+  await expect(viewer.getByRole("heading", { name: "vs Finland" })).toBeVisible();
+  await expect(viewer.getByRole("heading", { name: "vs Canada" })).toHaveCount(0);
+
+  await admin.goto("/admin/tournaments");
+  const worlds = admin.locator(".card", { hasText: "World Sixes 2027" });
+  admin.once("dialog", (d) => d.accept());
+  await worlds.getByRole("button", { name: "Make live" }).click();
+  await expect(worlds.locator(".chip.live-now")).toHaveText("Live");
+  await expect(admin.locator(".preview-bar")).toHaveCount(0);
+
+  // A new passcode signs players out, and lets them into the new tournament.
+  await viewer.goto("/schedule");
+  await expect(viewer).toHaveURL(/\/login\?expired=1/);
+  await login(viewer, "maple-leaf-2027");
+  await viewer.goto("/schedule");
+  const add = viewer.getByRole("link", { name: "Add the Canada game to your calendar" });
+  await expect(add).toBeVisible();
+  // Times are Toronto time: 10:00 in July is 14:00 UTC.
+  const ics = await (await viewer.request.get((await add.getAttribute("href"))!)).text();
+  expect(ics).toContain("DTSTART:20270710T140000Z");
+  await viewer.goto("/");
+  await expect(viewer.getByText("All times are Canada Eastern time.")).toBeVisible();
+
+  // Staff can still open the old tournament without changing what players see.
+  await admin.goto("/admin/tournaments");
+  await admin.locator(".card", { hasText: "ESLC 2026" }).getByRole("button", { name: "Work on this one" }).click();
+  await admin.waitForURL(/\/admin$/);
+  await expect(admin.locator(".preview-bar")).toContainText("You’re working on ESLC 2026. Players see World Sixes 2027.");
+  await viewer.goto("/schedule");
+  await expect(viewer.getByRole("heading", { name: "vs Canada" })).toBeVisible();
+});

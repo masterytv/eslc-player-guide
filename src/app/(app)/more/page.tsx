@@ -60,6 +60,7 @@ export default async function MorePage() {
             <ul className="list menu">
               <Item href="/admin" icon="pencil" title="Edit the guide" sub="Change anything players see" admin />
               <Item href="/admin/access" icon="key" title="Team passcode" sub="See it, share it, or change it" admin />
+              <Item href="/admin/tournaments" icon="schedule" title="Tournaments" sub="Start the next one, choose which one players see" admin />
             </ul>
           </section>
         ) : null}

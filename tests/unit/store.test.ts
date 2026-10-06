@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, before, test } from "node:test";
-import { FORCE, getStore, isDroppedConnection, retryDropped, withExplicitSsl } from "../../src/lib/store.ts";
+import pg from "pg";
+import { FIRST_TOURNAMENT } from "../../src/lib/schema.ts";
+import { FORCE, getStore, isDroppedConnection, retryDropped, splitKey, storageKey, withExplicitSsl } from "../../src/lib/store.ts";
 
 // Runs against local files, and also against Postgres when TEST_DATABASE_URL is set.
 const targets: Array<{ name: string; env: Record<string, string | undefined> }> = [{ name: "files", env: { DATABASE_URL: undefined } }];
@@ -17,27 +19,44 @@ before(() => {
 });
 after(() => rmSync(dir, { recursive: true, force: true }));
 
+function use(target: (typeof targets)[number]) {
+  for (const [k, v] of Object.entries(target.env)) {
+    if (v === undefined) delete process.env[k];
+    else process.env[k] = v;
+  }
+  return getStore();
+}
+
+/** Keys as they sit in storage, to check what older code would read. */
+async function rawKeys(target: (typeof targets)[number]): Promise<string[]> {
+  if (target.name === "files") return Object.keys(JSON.parse(readFileSync(path.join(dir, "sections.json"), "utf8")));
+  const client = new pg.Client({ connectionString: process.env.TEST_DATABASE_URL });
+  await client.connect();
+  try {
+    return (await client.query<{ key: string }>("select key from guide_section")).rows.map((r) => r.key);
+  } finally {
+    await client.end();
+  }
+}
+
 for (const target of targets) {
   test(`${target.name}: saves with version checks so two editors can't silently overwrite each other`, async () => {
-    for (const [k, v] of Object.entries(target.env)) {
-      if (v === undefined) delete process.env[k];
-      else process.env[k] = v;
-    }
-    const store = getStore();
-    const key = `test-${target.name}-${Date.now()}`;
+    const store = use(target);
+    const scope = `t-${target.name}-${Date.now().toString(36)}`;
+    const key = "daily";
 
-    const first = await store.write(key, { n: 1 }, 0);
+    const first = await store.write(scope, key, { n: 1 }, 0);
     assert.ok(first.ok && first.version === 1);
     // A second "first save" (version 0) loses: someone already saved.
-    assert.deepEqual(await store.write(key, { n: 2 }, 0), { ok: false, reason: "conflict" });
-    const second = await store.write(key, { n: 2 }, 1);
+    assert.deepEqual(await store.write(scope, key, { n: 2 }, 0), { ok: false, reason: "conflict" });
+    const second = await store.write(scope, key, { n: 2 }, 1);
     assert.ok(second.ok && second.version === 2);
     // An editor still holding version 1 is told about the clash.
-    assert.deepEqual(await store.write(key, { n: 3 }, 1), { ok: false, reason: "conflict" });
-    const forced = await store.write(key, { n: 4 }, FORCE);
+    assert.deepEqual(await store.write(scope, key, { n: 3 }, 1), { ok: false, reason: "conflict" });
+    const forced = await store.write(scope, key, { n: 4 }, FORCE);
     assert.ok(forced.ok && forced.version === 3);
 
-    const all = await store.readAll();
+    const all = await store.readScope(scope);
     assert.deepEqual(all.get(key)?.data, { n: 4 });
     assert.equal(all.get(key)?.version, 3);
 
@@ -48,7 +67,44 @@ for (const target of targets) {
     assert.equal(img?.bytes.length, 4);
     assert.equal(await store.getImage("00000000-0000-0000-0000-000000000000"), null);
   });
+
+  test(`${target.name}: keeps tournaments apart, the first one on the keys it had before tournaments`, async () => {
+    const store = use(target);
+    const stamp = Date.now().toString(36);
+    const probe = `probe${stamp}`;
+    const other = `worlds-${target.name}-${stamp}`;
+
+    assert.ok((await store.write(FIRST_TOURNAMENT, probe, { first: true }, 0)).ok);
+    assert.ok(await store.create(other, { [probe]: { first: false }, event: { eventName: "Worlds" } }));
+    // Starting the same tournament twice, or the first one at all, is refused.
+    assert.equal(await store.create(other, { event: {} }), false);
+    await assert.rejects(async () => store.create(FIRST_TOURNAMENT, {}));
+
+    assert.deepEqual((await store.readScope(FIRST_TOURNAMENT)).get(probe)?.data, { first: true });
+    const theirs = await store.readScope(other);
+    assert.deepEqual(theirs.get(probe)?.data, { first: false });
+    assert.equal(theirs.get(probe)?.version, 1);
+    assert.deepEqual([...theirs.keys()].sort(), ["event", probe].sort());
+
+    const everywhere = await store.readEverywhere(probe);
+    assert.deepEqual(everywhere.get(FIRST_TOURNAMENT)?.data, { first: true });
+    assert.deepEqual(everywhere.get(other)?.data, { first: false });
+    assert.equal(everywhere.size, 2);
+
+    assert.ok((await store.write(other, probe, { first: false, edited: true }, 1)).ok);
+    const keys = await rawKeys(target);
+    assert.ok(keys.includes(probe), "the first tournament keeps plain keys");
+    assert.ok(keys.includes(`${other}/${probe}`));
+  });
 }
+
+test("maps scopes to storage keys and back", () => {
+  assert.equal(storageKey(FIRST_TOURNAMENT, "daily"), "daily");
+  assert.equal(storageKey("worlds-2027", "daily"), "worlds-2027/daily");
+  assert.equal(storageKey("_app", "live"), "_app/live");
+  assert.deepEqual(splitKey("_access"), { scope: FIRST_TOURNAMENT, key: "_access" });
+  assert.deepEqual(splitKey("worlds-2027/_access"), { scope: "worlds-2027", key: "_access" });
+});
 
 test("retries once when the database had already closed the connection", async () => {
   let calls = 0;
@@ -91,7 +147,9 @@ test("read-only when deployed without a database", async () => {
   try {
     const store = getStore();
     assert.equal(store.kind, "readonly");
-    await assert.rejects(store.write("event", {}, 0), /Neon/);
+    await assert.rejects(store.write(FIRST_TOURNAMENT, "event", {}, 0), /Neon/);
+    await assert.rejects(store.create("worlds-2027", {}), /Neon/);
+    assert.equal((await store.readScope(FIRST_TOURNAMENT)).size, 0);
   } finally {
     delete process.env.VERCEL;
   }
