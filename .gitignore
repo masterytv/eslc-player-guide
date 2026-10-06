@@ -1,0 +1,29 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# local content store used when DATABASE_URL is not set
+/.data/
+/.data-e2e/
+
+# env files
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# tests
+/test-results/
+/playwright-report/
+/blob-report/
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
