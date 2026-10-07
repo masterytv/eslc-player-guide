@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "test:unit": "tsx --test tests/unit/*.test.ts",
     "test:e2e": "playwright test",
-    "test": "npm run test:unit && npm run test:e2e"
+    "test": "npm run test:unit && npm run test:e2e",
+    "guide:screenshots": "node docs/coach-guide/screenshots.mjs",
+    "guide:pdf": "node docs/coach-guide/render.mjs"
   },
   "dependencies": {
     "@fontsource/barlow": "^5.3.0",

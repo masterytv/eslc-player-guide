@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<title>Player Guide: how it works</title>
+<style>
+@font-face { font-family: "Barlow"; font-weight: 400; src: url("../../node_modules/@fontsource/barlow/files/barlow-latin-400-normal.woff2"); }
+@font-face { font-family: "Barlow"; font-weight: 500; src: url("../../node_modules/@fontsource/barlow/files/barlow-latin-500-normal.woff2"); }
+@font-face { font-family: "Barlow"; font-weight: 600; src: url("../../node_modules/@fontsource/barlow/files/barlow-latin-600-normal.woff2"); }
+@font-face { font-family: "Barlow"; font-weight: 700; src: url("../../node_modules/@fontsource/barlow/files/barlow-latin-700-normal.woff2"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url("../../node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff2"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url("../../node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2"); }
+
+@page { size: A4; margin: 0; }
+:root {
+  --navy: #1a2744; --navy-muted: #b4bed3; --green: #21653b; --green-soft: #ddefe3;
+  --orange: #f0852a; --orange-soft: #fde9d7; --orange-strong: #9a4a08;
+  --ink: #131a2b; --muted: #586176; --line: #dce1ea; --bg: #f2f4f8;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font: 400 10.5pt/1.45 "Barlow", sans-serif; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+.page { width: 210mm; height: 297mm; padding: 16mm 17mm 14mm; position: relative; overflow: hidden; page-break-after: always; display: flex; flex-direction: column; }
+.page:last-child { page-break-after: auto; }
+.foot { position: absolute; left: 17mm; right: 17mm; bottom: 8mm; display: flex; justify-content: space-between; font-size: 8pt; color: var(--muted); border-top: 1px solid var(--line); padding-top: 2.5mm; }
+
+h1, h2 { font-family: "Barlow Condensed", sans-serif; font-weight: 800; text-transform: uppercase; letter-spacing: .01em; margin: 0; line-height: 1; }
+h2 { font-size: 24pt; color: var(--navy); display: flex; align-items: center; gap: 3mm; margin-bottom: 4mm; }
+h2 .num { display: inline-flex; align-items: center; justify-content: center; width: 9mm; height: 9mm; border-radius: 2.5mm; background: var(--green); color: #fff; font-size: 16pt; }
+h3 { font-size: 12pt; font-weight: 700; margin: 5mm 0 1.5mm; color: var(--navy); }
+p { margin: 0 0 2.5mm; }
+ul, ol { margin: 0 0 3mm; padding-left: 5mm; }
+li { margin-bottom: 1.3mm; }
+b, strong { font-weight: 700; }
+.lead { font-size: 12pt; line-height: 1.45; color: var(--ink); margin-bottom: 4mm; }
+.muted { color: var(--muted); }
+.ui { font-weight: 700; color: var(--green); white-space: nowrap; }
+.staffui { font-weight: 700; color: var(--orange-strong); white-space: nowrap; }
+.url { font-weight: 700; color: var(--navy); }
+
+/* cover */
+.cover { padding: 0; }
+.cover-top { background: var(--navy); color: #fff; padding: 22mm 18mm 16mm; }
+.crest { width: 22mm; height: 22mm; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; margin-bottom: 9mm; }
+.crest img { height: 15mm; }
+.eyebrow { font: 600 9pt/1.2 "Barlow", sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--navy-muted); margin-bottom: 3mm; }
+.cover h1 { font-size: 46pt; line-height: .95; }
+.cover h1 span { color: var(--orange); }
+.cover-sub { font-size: 14pt; margin-top: 5mm; color: #dfe4ef; max-width: 140mm; }
+.cover-body { padding: 12mm 18mm 0; display: grid; grid-template-columns: 1fr 52mm; gap: 10mm; align-items: start; }
+.addr { border: 2px solid var(--green); border-radius: 4mm; padding: 4mm 5mm; margin-bottom: 6mm; }
+.addr .k { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 700; }
+.addr .v { font-size: 15pt; font-weight: 700; color: var(--green); }
+.toc { list-style: none; padding: 0; margin: 0; }
+.toc li { display: flex; gap: 3mm; padding: 2mm 0; border-bottom: 1px solid var(--line); margin: 0; font-size: 11pt; }
+.toc li b { color: var(--green); width: 5mm; }
+.help { background: var(--orange-soft); border-radius: 4mm; padding: 4mm 5mm; margin-top: 6mm; }
+.help .k { font-weight: 700; color: var(--orange-strong); text-transform: uppercase; letter-spacing: .08em; font-size: 8.5pt; }
+.help .v { font-size: 13pt; font-weight: 700; }
+
+/* phones */
+.phone { width: 100%; border-radius: 4.5mm; border: 1.2mm solid #11182a; overflow: hidden; background: #11182a; box-shadow: 0 1.5mm 4mm rgba(19,26,43,.18); }
+.phone img { display: block; width: 100%; }
+figure { margin: 0; }
+figcaption { font-size: 8.5pt; color: var(--muted); margin-top: 2mm; line-height: 1.35; text-align: center; }
+figcaption b { color: var(--ink); }
+.phones { display: grid; gap: 5mm; margin: 2mm 0 4mm; }
+.phones.c5 { grid-template-columns: repeat(5, 1fr); gap: 3.5mm; }
+.phones.c4 { grid-template-columns: repeat(4, 1fr); }
+.phones.c3 { grid-template-columns: repeat(3, 1fr); gap: 8mm; padding: 0 6mm; }
+.side { display: grid; grid-template-columns: 1fr 50mm; gap: 8mm; align-items: start; }
+.side.wide { grid-template-columns: 1fr 56mm; }
+.side.narrow { grid-template-columns: 1fr 44mm; }
+
+/* boxes */
+.box { border-radius: 3.5mm; padding: 3.5mm 4.5mm; margin: 2mm 0 4mm; }
+.box p:last-child, .box ul:last-child { margin-bottom: 0; }
+.box.green { background: var(--green-soft); }
+.box.orange { background: var(--orange-soft); }
+.box.grey { background: var(--bg); }
+.box .t { font-weight: 700; margin-bottom: 1mm; display: block; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+
+.steps { list-style: none; padding: 0; counter-reset: s; }
+.steps > li { counter-increment: s; position: relative; padding-left: 10mm; margin-bottom: 3.2mm; }
+.steps > li::before { content: counter(s); position: absolute; left: 0; top: .2mm; width: 6.5mm; height: 6.5mm; border-radius: 1.8mm; background: var(--green); color: #fff; font-weight: 700; font-size: 10pt; display: flex; align-items: center; justify-content: center; }
+.steps > li > b:first-child { display: block; color: var(--navy); font-size: 11pt; }
+
+table { width: 100%; border-collapse: collapse; font-size: 10pt; margin: 1mm 0 4mm; }
+th { text-align: left; font-size: 8.5pt; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 1.5mm 2mm; border-bottom: 2px solid var(--line); }
+td { padding: 2mm 2mm; border-bottom: 1px solid var(--line); vertical-align: top; }
+td:first-child { font-weight: 600; width: 46%; }
+code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 9pt; background: #fff; border: 1px solid var(--line); border-radius: 1mm; padding: .2mm 1.2mm; white-space: nowrap; }
+.fmt td:first-child { width: 34%; font-weight: 400; }
+
+.tabs { list-style: none; padding: 0; margin: 0 0 3mm; }
+.tabs li { display: grid; grid-template-columns: 24mm 1fr; gap: 3mm; padding: 2mm 0; border-bottom: 1px solid var(--line); margin: 0; }
+.tabs li b { color: var(--green); }
+
+.qa h3 { margin-top: 4mm; }
+.contact { margin-top: auto; margin-bottom: 8mm; background: var(--navy); color: #fff; border-radius: 4mm; padding: 6mm 7mm; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 6mm; }
+.contact .k { font-size: 9pt; letter-spacing: .12em; text-transform: uppercase; color: var(--navy-muted); font-weight: 700; }
+.contact .n { font: 800 22pt/1.1 "Barlow Condensed", sans-serif; text-transform: uppercase; }
+.contact .e { font-size: 15pt; font-weight: 700; color: var(--orange); }
+.contact p { color: #dfe4ef; margin: 2mm 0 0; font-size: 10pt; }
+</style>
+</head>
+<body>
+
+<!-- 1. Cover -->
+<section class="page cover">
+  <div class="cover-top">
+    <div class="crest"><img src="../../public/crest.png" alt=""></div>
+    <div class="eyebrow">Ireland Lacrosse · For coaches and staff</div>
+    <h1>The Player Guide<br><span>How it works</span></h1>
+    <p class="cover-sub">The team handbook on everyone&rsquo;s phone: what it does, how to get in, and how to change anything in it.</p>
+  </div>
+  <div class="cover-body">
+    <div>
+      <div class="addr">
+        <div class="k">Open it on your phone</div>
+        <div class="v">eslc-player-guide.vercel.app</div>
+      </div>
+      <ul class="toc">
+        <li><b>1</b>What the app is</li>
+        <li><b>2</b>Getting in</li>
+        <li><b>3</b>What players see</li>
+        <li><b>4</b>Making changes (staff)</li>
+        <li><b>5</b>Starting a new tournament</li>
+        <li><b>6</b>Good to know, and who to ask</li>
+      </ul>
+      <div class="help">
+        <div class="k">Questions or problems</div>
+        <div class="v">Tom · tom@awetomatic.com</div>
+      </div>
+    </div>
+    <figure><div class="phone"><img src="shots/today.png" alt=""></div></figure>
+  </div>
+</section>
+
+<!-- 2. What it is + getting in -->
+<section class="page">
+  <h2><span class="num">1</span>What the app is</h2>
+  <p class="lead">The Player Guide is the team handbook, on everyone&rsquo;s phone. It replaces the Google Doc: everything a player needs for a tournament is in one place, and it&rsquo;s always up to date.</p>
+  <ul>
+    <li><b>Players</b> use it to check the day&rsquo;s plan, the schedule, who to call, where to go, what to pack, and the coaches&rsquo; game plan.</li>
+    <li><b>Staff</b> can change anything in it from their phone. Players see the change the next time they open a page. Nobody has to download anything.</li>
+    <li><b>It works with no signal.</b> Each phone keeps a copy, so the guide still opens on a plane or abroad without data.</li>
+    <li><b>One guide per tournament.</b> When a tournament ends, staff start the next one and copy over what stays the same, like staff, the roster and the packing list.</li>
+  </ul>
+
+  <h2 style="margin-top:7mm"><span class="num">2</span>Getting in</h2>
+  <div class="side">
+    <div>
+      <p>Open <span class="url">eslc-player-guide.vercel.app</span> in your phone&rsquo;s web browser. You&rsquo;ll see one box to type into. What you type decides what you can do:</p>
+      <div class="two">
+        <div class="box green">
+          <span class="t">Team passcode</span>
+          <p>For players. They can read everything, but can&rsquo;t change anything. It&rsquo;s shared in the team group chat.</p>
+        </div>
+        <div class="box orange">
+          <span class="t">Staff password</span>
+          <p>For coaches and staff. Lets you edit the guide. Tom sends it to you privately. Please never post it in the group chat.</p>
+        </div>
+      </div>
+      <h3>Put it on your home screen</h3>
+      <p>Then it opens like an app:</p>
+      <ul>
+        <li><b>iPhone (Safari):</b> tap Share, then <span class="ui">Add to Home Screen</span>.</li>
+        <li><b>Android (Chrome):</b> tap the ⋮ menu, then <span class="ui">Add to home screen</span>.</li>
+      </ul>
+      <h3>You only log in once</h3>
+      <p>The phone remembers you. Players are only asked again if staff change the team passcode.</p>
+    </div>
+    <figure><div class="phone"><img src="shots/login.png" alt=""></div><figcaption>The login screen. Type the team passcode or the staff password.</figcaption></figure>
+  </div>
+  <div class="foot"><span>Player Guide · How it works</span><span>2</span></div>
+</section>
+
+<!-- 3. What players see -->
+<section class="page">
+  <h2><span class="num">3</span>What players see</h2>
+  <p class="lead">There are five tabs along the bottom of the screen. All times are local time where the tournament is.</p>
+  <div class="phones c5">
+    <figure><div class="phone"><img src="shots/today.png" alt=""></div><figcaption><b>Today</b></figcaption></figure>
+    <figure><div class="phone"><img src="shots/schedule.png" alt=""></div><figcaption><b>Schedule</b></figcaption></figure>
+    <figure><div class="phone"><img src="shots/team.png" alt=""></div><figcaption><b>Team</b></figcaption></figure>
+    <figure><div class="phone"><img src="shots/venue.png" alt=""></div><figcaption><b>Venue</b></figcaption></figure>
+    <figure><div class="phone"><img src="shots/more.png" alt=""></div><figcaption><b>More</b></figcaption></figure>
+  </div>
+  <ul class="tabs">
+    <li><b>Today</b><span>A countdown, the next game, and the day&rsquo;s plan (buses, meals, meetings). An alert banner shows at the top when staff post one. Tap the days along the top to see another day. <b>Quick links</b> below the plan include <b>Offence</b> and <b>Defence</b>.</span></li>
+    <li><b>Schedule</b><span>Every game, practice, ceremony and meeting. Players can add one game, or <span class="ui">Add every game to my calendar</span>.</span></li>
+    <li><b>Team</b><span>Staff, with <span class="ui">Call</span> and <span class="ui">WhatsApp</span> buttons once a number is added, plus the roster and the rooming list.</span></li>
+    <li><b>Venue</b><span>The airport bus and other ways to get there, the villas, the fields, maps and meals.</span></li>
+    <li><b>More</b><span>Packing list, flight details, the <b>Game plan</b> (offence and defence), tournament rules, conduct, the anthem and useful links.</span></li>
+  </ul>
+  <div class="side narrow">
+    <div>
+      <h3>The game plan</h3>
+      <p>Each coach&rsquo;s philosophy, in their own words, laid out as short cards. Players can open it from Quick links on Today or from <span class="ui">More → Game plan</span>, and it works offline. That means they can read it on the flight.</p>
+      <h3>Packing list</h3>
+      <p>Players tick items off as they pack. Ticks are saved on their own phone only, so nobody else sees them.</p>
+      <h3>&ldquo;Saved copy&rdquo; and &ldquo;Offline&rdquo;</h3>
+      <p>Sometimes a note at the top right says <b>Saved copy</b> or <b>Offline</b>. It means the phone is showing its saved copy. It updates by itself as soon as there&rsquo;s signal, and players don&rsquo;t need to do anything.</p>
+    </div>
+    <figure><div class="phone"><img src="shots/gameplan.png" alt=""></div><figcaption>More → Game plan → Defence</figcaption></figure>
+  </div>
+  <div class="foot"><span>Player Guide · How it works</span><span>3</span></div>
+</section>
+
+<!-- 4. Making changes -->
+<section class="page">
+  <h2><span class="num">4</span>Making changes</h2>
+  <p class="lead">Log in with the <b>staff password</b>. An orange <span class="staffui">STAFF</span> badge shows at the top, and orange <span class="staffui">Edit</span> buttons appear on anything you can change.</p>
+  <div class="phones c3">
+    <figure><div class="phone"><img src="shots/staff-gameplan.png" alt=""></div><figcaption><b>Edit</b> buttons appear on pages for staff only.</figcaption></figure>
+    <figure><div class="phone"><img src="shots/admin-home.png" alt=""></div><figcaption><b>More → Edit the guide</b> lists everything you can change.</figcaption></figure>
+    <figure><div class="phone"><img src="shots/admin-schedule.png" alt=""></div><figcaption>Tap an item to open it, change it, then <b>Save</b>.</figcaption></figure>
+  </div>
+  <h3>Two ways in</h3>
+  <ol>
+    <li>Tap <span class="staffui">Edit</span> next to the thing you want to change. It opens straight to that item.</li>
+    <li>Or go to <span class="ui">More → Edit the guide</span> for the full list, grouped as Today &amp; schedule, Team, Venue &amp; stay, and More.</li>
+  </ol>
+  <h3>In the editor</h3>
+  <ul>
+    <li>Tap an item to open it, change the boxes, and tap <span class="ui">Save</span> at the bottom. When it says <b>Saved</b>, players will see the change the next time they open a page.</li>
+    <li>To add something, use the <span class="ui">Add a …</span> button under the list. To remove something, open it and tap <span class="ui">Delete</span>; it asks you to confirm. Use the arrows to change the order.</li>
+    <li>A box outlined in red needs fixing, and the message under it says what to do.</li>
+    <li>If two staff edit the same thing at once, the second person gets a warning instead of wiping out the first person&rsquo;s work.</li>
+    <li>No signal? Your changes stay on screen. Tap Save again once you have signal.</li>
+  </ul>
+  <div class="foot"><span>Player Guide · How it works</span><span>4</span></div>
+</section>
+
+<!-- 5. Common jobs + text format -->
+<section class="page">
+  <h2><span class="num">4</span>Making changes: common jobs</h2>
+  <table>
+    <tr><th>To…</th><th>In Edit the guide, open…</th></tr>
+    <tr><td>Post tomorrow&rsquo;s plan (buses, meals, meetings)</td><td><b>Daily notes</b>. Pick the day, then <span class="ui">Add a note</span>. Leave the time blank if it isn&rsquo;t set; players see <i>TBC</i>.</td></tr>
+    <tr><td>Change a game time, field or opponent</td><td><b>Schedule</b></td></tr>
+    <tr><td>Put an urgent message at the top of Today</td><td><b>Event &amp; alert → Alert banner</b>. Clear the box to hide it again.</td></tr>
+    <tr><td>Update the offence or defence</td><td><b>Game plan</b>, or tap <span class="staffui">Edit</span> on the page itself. <span class="ui">Add a page</span> adds another topic, like draws or clears.</td></tr>
+    <tr><td>Add a staff phone number</td><td><b>Staff</b>. Include the country code (+353, +1…) so Call and WhatsApp work abroad.</td></tr>
+    <tr><td>Add or change players</td><td><b>Roster</b>, and <b>Rooming list</b> for who&rsquo;s in which villa</td></tr>
+    <tr><td>Replace a map or photo</td><td><b>Maps &amp; photos</b>. You can pick from your camera roll.</td></tr>
+    <tr><td>Change rules, conduct or activities, or add a new page</td><td><b>Pages</b></td></tr>
+    <tr><td>See, share or change the team passcode</td><td><span class="ui">More → Team passcode</span>. Changing it asks every player for the new one, so share it in the group chat. Staff stay logged in.</td></tr>
+  </table>
+
+  <div class="side wide">
+    <div>
+      <h3>Writing pages and the game plan</h3>
+      <p>Pages (rules, conduct, activities) and the game plan use a simple text format. A reminder is shown under the text box:</p>
+      <table class="fmt">
+        <tr><td><code>## Heading</code></td><td>Starts a new card</td></tr>
+        <tr><td><code>- item</code></td><td>A bullet point</td></tr>
+        <tr><td><code>1. step</code></td><td>A numbered step</td></tr>
+        <tr><td><code>**words**</code></td><td><b>Bold</b></td></tr>
+        <tr><td><code>!! text</code></td><td>A red warning</td></tr>
+        <tr><td><code>&gt; text</code></td><td>A grey note</td></tr>
+        <tr><td><code>[label](https://…)</code></td><td>A link</td></tr>
+      </table>
+      <p class="muted">Leave an empty line between paragraphs.</p>
+    </div>
+    <figure><div class="phone"><img src="shots/admin-gameplan.png" alt=""></div><figcaption>Editing the Defence page</figcaption></figure>
+  </div>
+  <div class="foot"><span>Player Guide · How it works</span><span>5</span></div>
+</section>
+
+<!-- 6. New tournament -->
+<section class="page">
+  <h2><span class="num">5</span>Starting a new tournament</h2>
+  <p class="lead">Each tournament gets its own guide. You get the new one ready while players still see the current one, then switch everyone over in one tap.</p>
+  <div class="phones c4">
+    <figure><div class="phone"><img src="shots/new-tournament.png" alt=""></div><figcaption><b>Step 1</b> · the details</figcaption></figure>
+    <figure><div class="phone"><img src="shots/new-tournament-copy.png" alt=""></div><figcaption><b>Step 2</b> · what to copy</figcaption></figure>
+    <figure><div class="phone"><img src="shots/draft-admin.png" alt=""></div><figcaption><b>Step 3</b> · the orange bar while you work</figcaption></figure>
+    <figure><div class="phone"><img src="shots/tournaments-draft.png" alt=""></div><figcaption><b>Step 4</b> · Make live</figcaption></figure>
+  </div>
+  <ol class="steps">
+    <li><b>Fill in the details</b>Go to <span class="ui">More → Tournaments → Start the next tournament</span>. Add the name, where it is, the first and last day, and the <b>time zone</b>: every time in the guide is shown in local time there. Choose the <b>team passcode</b>. If you keep the current one, players stay logged in; a new one signs everyone out.</li>
+    <li><b>Choose what to copy</b>Pick a tournament to start from. Ticked parts are copied over for you to edit: staff, roster, packing list, pages, game plan, anthem and links. Everything else starts empty: schedule, daily notes, travel, villas, venue, maps, meals and rooming. Tap <span class="ui">Start the tournament</span>.</li>
+    <li><b>Get it ready</b>The new tournament is a draft that only staff can see. An <b>orange bar</b> at the top says which one you&rsquo;re working on and which one players see. Edit everything as usual; players still see the current guide. Tap <span class="ui">Switch</span> on the bar to move between tournaments.</li>
+    <li><b>Make it live</b>When it&rsquo;s ready, open <span class="ui">More → Tournaments</span> and tap <span class="ui">Make live</span> on the new one. Players see it the next time they open the guide. If the passcode changed, post the new one in the group chat first.</li>
+  </ol>
+  <div class="box grey"><span class="t">Old tournaments stay</span><p>Past tournaments stay in the Tournaments list, so you can look back at them or copy from them later. Players only ever see the live one.</p></div>
+  <div class="foot"><span>Player Guide · How it works</span><span>6</span></div>
+</section>
+
+<!-- 7. Good to know + contact -->
+<section class="page qa">
+  <h2><span class="num">6</span>Good to know</h2>
+  <h3>Do players need to update or refresh anything?</h3>
+  <p>No. The guide updates itself whenever they open it with signal.</p>
+  <h3>Who can see what?</h3>
+  <p>Anyone with the team passcode can read the whole guide, including staff phone numbers. Don&rsquo;t put anything private in it, like passport numbers or medical details. Only people with the staff password can make changes.</p>
+  <h3>Can I see which players have read something?</h3>
+  <p>Not yet. Everyone shares one team passcode, so the app can&rsquo;t tell players apart. To check, ask in the group chat.</p>
+  <h3>I made a mistake. Can I undo it?</h3>
+  <p>Before you save, just leave the page. It asks first, then drops your changes. After you save, change it back and save again.</p>
+  <h3>Someone forgot the passcode</h3>
+  <p>Staff can always see it under <span class="ui">More → Team passcode</span>, with a button to copy it.</p>
+  <h3>Can the staff password be changed?</h3>
+  <p>Yes, but only Tom can change it. Ask him if you think it has been shared too widely.</p>
+  <h3>A player says the guide looks wrong or old</h3>
+  <p>Ask them to open it with signal and wait a few seconds. If the top right still says <b>Offline</b>, their phone has no connection. If something still looks wrong, contact Tom.</p>
+
+  <div class="contact">
+    <div>
+      <div class="k">Help, problems and ideas</div>
+      <div class="n">Tom</div>
+      <div class="e">tom@awetomatic.com</div>
+      <p>Get in touch if something isn&rsquo;t working, you need the staff password, or you&rsquo;d like the app to do something new.</p>
+    </div>
+    <div class="crest" style="margin:0"><img src="../../public/crest.png" alt=""></div>
+  </div>
+  <div class="foot"><span>Player Guide · How it works</span><span>7</span></div>
+</section>
+
+</body>
+</html>
