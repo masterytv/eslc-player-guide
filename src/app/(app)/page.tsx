@@ -202,6 +202,16 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
               Anthem lyrics
             </Link>
           </div>
+          {guide.playbook.length ? (
+            <div className={["quick", guide.playbook.length < 3 && `cols-${guide.playbook.length}`].filter(Boolean).join(" ")}>
+              {guide.playbook.map((p) => (
+                <Link key={p.id} className="qt" href={`/more/game-plan/${p.slug}`}>
+                  <Icon name="board" />
+                  {p.title}
+                </Link>
+              ))}
+            </div>
+          ) : null}
         </section>
         <p className="foot">All times are {timeZoneLabel(guide.event.timeZone)} time.</p>
       </main>

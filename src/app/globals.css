@@ -176,6 +176,9 @@ img { max-width: 100%; }
 .tl-body p { font-size: 14px; white-space: pre-line; }
 
 .quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.quick.cols-1 { grid-template-columns: minmax(0, 1fr); }
+.quick.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.quick + .quick { margin-top: -2px; }
 .qt { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 10px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; font-size: 13px; font-weight: 600; line-height: 1.2; text-decoration: none; }
 .qt .ic { color: var(--green); }
 
