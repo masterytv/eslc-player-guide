@@ -15,6 +15,10 @@ the current one is live, then switch players over.
 
 The guide keeps a saved copy on each phone, so it still opens with no signal abroad.
 
+**For coaches and staff:** [docs/coach-guide/Player-Guide-How-it-works.pdf](docs/coach-guide/Player-Guide-How-it-works.pdf)
+explains the app in seven pages. When the app changes, update it as described in
+[docs/coach-guide](docs/coach-guide/README.md).
+
 ## Who can do what
 
 | Login | What it unlocks | Where it's set |
