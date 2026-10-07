@@ -163,6 +163,13 @@ export const sectionSchemas = {
     summary: text(120),
     body: long(12000),
   }),
+  playbook: list({
+    title: req("Add a title", 80),
+    slug,
+    coach: text(80),
+    summary: text(120),
+    body: long(20000),
+  }),
   anthem: z.object({
     title: text(80),
     requirement: text(160),
@@ -207,7 +214,7 @@ export function slugify(v: string): string {
 }
 
 // Slugs that would collide with the app's own routes under /more.
-const RESERVED_SLUGS = new Set(["packing", "anthem", "links"]);
+const RESERVED_SLUGS = new Set(["packing", "anthem", "links", "game-plan"]);
 
 /** Fixes up data after validation: unique ids, page slugs. */
 export function normalizeSection<K extends SectionKey>(key: K, data: Guide[K]): Guide[K] {
@@ -220,11 +227,12 @@ export function normalizeSection<K extends SectionKey>(key: K, data: Guide[K]): 
       seen.add(rid);
     }
   }
-  if (key === "pages") {
+  if (key === "pages" || key === "playbook") {
     const used = new Set<string>();
-    for (const page of data as Guide["pages"]) {
+    for (const page of data as Array<{ title: string; slug: string }>) {
       const base = page.slug || slugify(page.title) || "page";
-      let s = RESERVED_SLUGS.has(base) ? `${base}-page` : base;
+      // Game plan pages have their own address (/more/game-plan/…), so only pages can clash with the app's.
+      let s = key === "pages" && RESERVED_SLUGS.has(base) ? `${base}-page` : base;
       for (let n = 2; used.has(s); n++) s = `${base}-${n}`;
       page.slug = s;
       used.add(s);

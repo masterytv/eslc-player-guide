@@ -61,6 +61,12 @@ test("players see the guide but no editing tools", async () => {
   await viewer.goto("/more/conduct");
   await expect(viewer.getByRole("heading", { name: "Lights out" })).toBeVisible();
 
+  await viewer.goto("/more");
+  await viewer.getByRole("link", { name: /^Defence/ }).click();
+  await expect(viewer).toHaveURL(/\/more\/game-plan\/defence$/);
+  await expect(viewer.getByText("From Ashley O’Brien, Defensive Coordinator")).toBeVisible();
+  await expect(viewer.getByRole("heading", { name: "Forcing Angles: House Pattern" })).toBeVisible();
+
   await viewer.goto("/admin");
   await expect(viewer).toHaveURL(/\/login\?.*admin=1/);
   await expect(viewer.getByText("That page is for staff")).toBeVisible();
@@ -189,11 +195,17 @@ test("the guide still opens with no signal", async () => {
   await expect
     .poll(() => viewer.evaluate(async () => !!(await (await caches.open("pages-v1")).match("/schedule"))), { timeout: 20_000 })
     .toBe(true);
+  // The game plan is saved too, without opening it first.
+  await expect
+    .poll(() => viewer.evaluate(async () => !!(await (await caches.open("pages-v1")).match("/more/game-plan/offence"))), { timeout: 20_000 })
+    .toBe(true);
   await viewer.context().setOffline(true);
   try {
     await viewer.goto("/schedule");
     await expect(viewer.getByRole("heading", { level: 1, name: "Schedule" })).toBeVisible();
     await expect(viewer.locator(".sync.off")).toContainText("Offline");
+    await viewer.goto("/more/game-plan/offence");
+    await expect(viewer.getByRole("heading", { name: "Wheel motion" })).toBeVisible();
   } finally {
     await viewer.context().setOffline(false);
   }

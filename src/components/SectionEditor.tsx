@@ -112,7 +112,7 @@ function ImageInput({ id, value, onChange }: { id: string; value: string; onChan
 function FieldInput({ f, id, value, onChange, error }: { f: FieldDef; id: string; value: unknown; onChange: (v: unknown) => void; error?: string }) {
   const str = typeof value === "string" ? value : "";
   const cls = error ? "bad" : undefined;
-  const describedBy = [f.help && `${id}-help`, error && `${id}-err`].filter(Boolean).join(" ") || undefined;
+  const describedBy = [(f.help || f.type === "markdown") && `${id}-help`, error && `${id}-err`].filter(Boolean).join(" ") || undefined;
   let control: React.ReactNode;
 
   switch (f.type) {
@@ -198,8 +198,8 @@ function FieldInput({ f, id, value, onChange, error }: { f: FieldDef; id: string
       {control}
       {f.type === "markdown" ? (
         <p className="md-help" id={`${id}-help`}>
-          <code>## Heading</code> starts a new card · <code>- item</code> bullet · <code>!! text</code> red warning · <code>&gt; text</code> grey note ·{" "}
-          <code>**bold**</code> · <code>[label](https://…)</code>
+          <code>## Heading</code> starts a new card · <code>- item</code> bullet · <code>1. step</code> numbered · <code>!! text</code> red warning ·{" "}
+          <code>&gt; text</code> grey note · <code>**bold**</code> · <code>[label](https://…)</code>
         </p>
       ) : f.help ? (
         <p className="help" id={`${id}-help`}>

@@ -10,7 +10,8 @@ the current one is live, then switch players over.
 - **Schedule**: games, practices, ceremonies and meetings, with add-to-calendar.
 - **Team**: staff with call and WhatsApp buttons, the roster, the rooming list.
 - **Venue & stay**: airport bus, ride options, villas, fields, maps and meals.
-- **More**: packing checklist, conduct and tournament rules, the anthem, links.
+- **More**: packing checklist, conduct and tournament rules, the coaches' game plan
+  (offence and defence), the anthem, links.
 
 The guide keeps a saved copy on each phone, so it still opens with no signal abroad.
 
@@ -59,9 +60,10 @@ Log in with the staff password. You'll see an orange **Staff** badge in the head
   change the next time they open a page or come back to the app.
 - **Daily notes** open on today's date. Add the next day's plan the night before.
 - Leave a time blank while it's not set; players see *TBC*.
-- **Pages** (conduct, tournament rules, activities) use a simple text format:
-  `## Heading` starts a card, `- item` makes a bullet, `!! text` is a red warning,
-  `> text` is a grey note, `**bold**`, and `[label](https://link)`.
+- **Pages** (conduct, tournament rules, activities) and the **Game plan** (the coaches'
+  offence and defence) use a simple text format: `## Heading` starts a card, `- item`
+  makes a bullet, `1. step` a numbered step, `!! text` is a red warning, `> text` is a grey
+  note, `**bold**`, and `[label](https://link)`.
 - If two staff edit the same section at once, the second person to save is warned
   instead of silently overwriting the first person's changes.
 - Photos and maps can be replaced from the phone's camera roll. Large photos are shrunk
@@ -71,7 +73,7 @@ Log in with the staff password. You'll see an orange **Staff** badge in the head
 
 Open *More → Tournaments → Start the next tournament*. Give it a name, dates, where it is
 and its time zone, then tick what to copy from an earlier tournament. Staff, the roster, the
-packing list, pages, the anthem and links are ticked by default. The schedule, daily notes,
+packing list, pages, the game plan, the anthem and links are ticked by default. The schedule, daily notes,
 venue, travel and rooming start empty. Then:
 
 1. The new tournament is a draft: only staff see it. An orange bar on every page says which

@@ -1,6 +1,7 @@
 // A deliberately small text format for the editable pages, easy to type on a phone:
 //   ## Heading       starts a new card
 //   - item           bullet list
+//   1. step          numbered list
 //   !! text          red warning
 //   > text           grey note
 //   **bold**, [label](https://link)
@@ -10,6 +11,7 @@ export type Inline = { t: "text"; v: string } | { t: "bold"; v: string } | { t: 
 export type Block =
   | { kind: "p"; inline: Inline[] }
   | { kind: "ul"; items: Inline[][] }
+  | { kind: "ol"; start: number; items: Inline[][] }
   | { kind: "warn"; inline: Inline[] }
   | { kind: "note"; inline: Inline[] };
 export type Section =
@@ -39,6 +41,7 @@ export function parsePage(src: string): Section[] {
   let card: Extract<Section, { kind: "card" }> | null = null;
   let para: string[] = [];
   let list: Inline[][] | null = null;
+  let steps: { start: number; items: Inline[][] } | null = null;
 
   const flushPara = () => {
     if (para.length) {
@@ -50,6 +53,10 @@ export function parsePage(src: string): Section[] {
     if (list) {
       ensureCard().blocks.push({ kind: "ul", items: list });
       list = null;
+    }
+    if (steps) {
+      ensureCard().blocks.push({ kind: "ol", ...steps });
+      steps = null;
     }
   };
   const ensureCard = () => {
@@ -91,8 +98,18 @@ export function parsePage(src: string): Section[] {
     }
     if (/^[-*•]\s+/.test(trimmed)) {
       flushPara();
+      if (steps) flushList();
       list ??= [];
       list.push(parseInline(trimmed.replace(/^[-*•]\s+/, "")));
+      continue;
+    }
+    const step = /^(\d{1,3})[.)]\s+/.exec(trimmed);
+    if (step) {
+      flushPara();
+      if (list) flushList();
+      // Numbering carries on from the number typed, so steps split by a blank line still read 1, 2, 3.
+      steps ??= { start: Number(step[1]), items: [] };
+      steps.items.push(parseInline(trimmed.slice(step[0].length)));
       continue;
     }
     flushList();

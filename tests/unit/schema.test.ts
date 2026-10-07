@@ -67,6 +67,19 @@ test("gives pages unique web addresses", () => {
     ["conduct-and-rules", "conduct-and-rules-2", "packing-page", "rules"],
   );
   assert.equal(slugify("Équipe — Barcelona trip!"), "equipe-barcelona-trip");
+
+  // Game plan pages live under /more/game-plan/, so they can use names the app keeps for itself under /more.
+  const plays = sectionSchemas.playbook.parse([
+    { id: "a", title: "Offence" },
+    { id: "b", title: "Offence" },
+    { id: "c", title: "Links" },
+  ]) as Guide["playbook"];
+  assert.deepEqual(
+    normalizeSection("playbook", plays).map((p) => p.slug),
+    ["offence", "offence-2", "links"],
+  );
+  const clash = sectionSchemas.pages.parse([{ id: "a", title: "Game plan" }]) as Guide["pages"];
+  assert.equal(normalizeSection("pages", clash)[0].slug, "game-plan-page");
 });
 
 test("makes duplicate item ids unique", () => {
