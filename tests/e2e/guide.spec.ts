@@ -54,6 +54,8 @@ test("players see the guide but no editing tools", async () => {
   await viewer.goto("/?day=2026-11-02");
   await expect(viewer.getByText("Ireland vs Finland").first()).toBeVisible();
   await expect(viewer.locator(".edit-link")).toHaveCount(0);
+  await expect(viewer.locator(".quick").getByRole("link", { name: "Offence" })).toHaveAttribute("href", "/more/game-plan/offence");
+  await expect(viewer.locator(".quick").getByRole("link", { name: "Defence" })).toHaveAttribute("href", "/more/game-plan/defence");
 
   await viewer.getByRole("link", { name: "Team" }).click();
   await expect(viewer.getByRole("heading", { name: "Maddy Morrissey Buss" })).toBeVisible();
