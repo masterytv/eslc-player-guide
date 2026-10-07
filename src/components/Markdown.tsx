@@ -38,6 +38,21 @@ function BlockView({ block }: { block: Block }) {
           ))}
         </ul>
       );
+    case "ol":
+      return (
+        <ol className="steps" start={block.start}>
+          {block.items.map((item, i) => (
+            <li key={i}>
+              <span className="n" aria-hidden="true">
+                {block.start + i}
+              </span>
+              <span>
+                <Inlines parts={item} />
+              </span>
+            </li>
+          ))}
+        </ol>
+      );
     default:
       return null;
   }

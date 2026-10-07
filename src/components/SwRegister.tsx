@@ -18,19 +18,30 @@ function dueForWarming(): boolean {
   return true;
 }
 
+const enabled = () => process.env.NODE_ENV === "production" && "serviceWorker" in navigator;
+
 export function SwRegister() {
   useEffect(() => {
-    if (process.env.NODE_ENV !== "production" || !("serviceWorker" in navigator)) return;
-    if (window.location.pathname.startsWith("/login")) return;
-    navigator.serviceWorker
-      .register("/sw.js", { scope: "/" })
-      .then(() => navigator.serviceWorker.ready)
+    if (!enabled() || window.location.pathname.startsWith("/login")) return;
+    navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {
+      // Offline support is a bonus; the guide works without it.
+    });
+  }, []);
+  return null;
+}
+
+/** Saves the guide's pages on the phone ahead of time: the fixed ones, plus `pages` (pages staff added, the game plan). */
+export function WarmPages({ pages }: { pages: string[] }) {
+  const extra = pages.join("\n");
+  useEffect(() => {
+    if (!enabled()) return;
+    navigator.serviceWorker.ready
       .then((reg) => {
-        if (dueForWarming()) reg.active?.postMessage({ type: "warm", urls: WARM });
+        if (dueForWarming()) reg.active?.postMessage({ type: "warm", urls: [...WARM, ...extra.split("\n").filter(Boolean)] });
       })
       .catch(() => {
-        // Offline support is a bonus; the guide works without it.
+        // no service worker: nothing to save into
       });
-  }, []);
+  }, [extra]);
   return null;
 }

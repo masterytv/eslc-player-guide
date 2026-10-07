@@ -94,6 +94,9 @@ img { max-width: 100%; }
 .bul { display: flex; flex-direction: column; gap: 6px; }
 .bul li { position: relative; padding-left: 16px; }
 .bul li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.steps { display: flex; flex-direction: column; gap: 8px; list-style: none; }
+.steps li { display: flex; gap: 10px; align-items: flex-start; }
+.steps .n { flex: none; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 6px; background: var(--green); color: var(--green-ink); font: 700 12px/22px var(--font-body); text-align: center; }
 .chip { display: inline-flex; align-items: center; gap: 4px; font: 700 11px/1 var(--font-body); letter-spacing: .07em; text-transform: uppercase; padding: 5px 8px; border-radius: 999px; width: fit-content; background: var(--c-other-bg); color: var(--c-other-fg); }
 .chip.game { background: var(--c-game-bg); color: var(--c-game-fg); }
 .chip.practice { background: var(--c-practice-bg); color: var(--c-practice-fg); }

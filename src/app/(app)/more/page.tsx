@@ -46,6 +46,16 @@ export default async function MorePage() {
             {pages("before")}
           </ul>
         </section>
+        {guide.playbook.length ? (
+          <section className="sec" id="game-plan">
+            <h2 className="sec-h">Game plan</h2>
+            <ul className="list menu">
+              {guide.playbook.map((p) => (
+                <Item key={p.id} href={`/more/game-plan/${p.slug}`} icon="board" title={p.title} sub={p.summary || p.coach} />
+              ))}
+            </ul>
+          </section>
+        ) : null}
         <section className="sec">
           <h2 className="sec-h">Team</h2>
           <ul className="list menu">
