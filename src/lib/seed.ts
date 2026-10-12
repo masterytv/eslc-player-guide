@@ -621,6 +621,35 @@ export const SEED: Guide = {
     { id: "l3", label: "Salou taxis", url: "https://www.mapilife.com/en/listings/salou-taxis/", note: "Mapilife" },
     { id: "l4", label: "About the anthem", url: "https://en.wikipedia.org/wiki/Amhr%C3%A1n_na_bhFiann", note: "Wikipedia" },
   ],
+  nearby: [
+    { id: "nb1", category: "groceries", name: "Mercadona", town: "Cambrils", walk: "7 min", hours: "Closed Sun and Mon", rating: "", note: "" },
+    { id: "nb2", category: "groceries", name: "Plusfresc", town: "Cambrils", walk: "7 min", hours: "", rating: "", note: "" },
+    { id: "nb3", category: "groceries", name: "Mi Alcampo", town: "Cambrils", walk: "9 min", hours: "Daily 8am–11pm", rating: "", note: "" },
+    { id: "nb4", category: "groceries", name: "Michelangelo VII", town: "Cambrils", walk: "11 min", hours: "Daily 8:30am–11pm", rating: "", note: "" },
+    { id: "nb5", category: "groceries", name: "Supermarket Max", town: "Cambrils", walk: "14 min", hours: "", rating: "", note: "" },
+    { id: "nb6", category: "coffee", name: "O'Clock Brunch", town: "Cambrils", walk: "12 min", hours: "Closed Wed", rating: "4.8", note: "" },
+    { id: "nb7", category: "coffee", name: "Forn Sant Salvador", town: "Cambrils", walk: "16 min", hours: "", rating: "", note: "" },
+    { id: "nb8", category: "coffee", name: "La Granja de Vilafortuny", town: "Cambrils", walk: "16 min", hours: "", rating: "", note: "" },
+    { id: "nb9", category: "coffee", name: "Coffee Break Salou", town: "Salou", walk: "32 min", hours: "", rating: "4.7", note: "" },
+    { id: "nb10", category: "coffee", name: "jacaranda.coffee", town: "Cambrils", walk: "About 1 hr", hours: "Closed Tue", rating: "4.5", note: "" },
+    { id: "nb11", category: "restaurants", name: "Tulsi", town: "Cambrils", walk: "11 min", hours: "", rating: "5.0", note: "Indian" },
+    { id: "nb12", category: "restaurants", name: "Liam's Gastrobar", town: "Cambrils", walk: "10 min", hours: "Closed Wed", rating: "", note: "" },
+    { id: "nb13", category: "restaurants", name: "Les Barques", town: "Cambrils", walk: "11 min", hours: "", rating: "3.9", note: "" },
+    { id: "nb14", category: "restaurants", name: "Brisas de Mar", town: "Cambrils", walk: "25 min", hours: "", rating: "4.6", note: "" },
+    { id: "nb15", category: "things", name: "Platja de Vilafortuny", town: "Cambrils", walk: "9 min", hours: "", rating: "", note: "Beach" },
+    { id: "nb16", category: "things", name: "Passeig Jaume I", town: "Salou", walk: "41 min", hours: "", rating: "", note: "Seafront promenade in Salou" },
+    { id: "nb17", category: "things", name: "Reserva Marina del Cavet", town: "Cambrils", walk: "48 min", hours: "", rating: "", note: "" },
+    { id: "nb18", category: "things", name: "Jumpland and Saltapark", town: "Cambrils", walk: "50–60 min", hours: "", rating: "", note: "Trampoline and activity parks. Taxi advised." },
+    { id: "nb19", category: "pharmacy", name: "Farmàcia Vilafortuny", town: "Cambrils", walk: "25 min", hours: "Daily 9am–10pm", rating: "", note: "" },
+  ],
+  nearbyInfo: {
+    notes: [
+      "Walking times are estimates, not routed. Check Google Maps.",
+      "Opening hours can change. Check before you go.",
+      "Sunday 1 Nov is a public holiday in Spain, so many shops may be closed.",
+      "The seafront path toward Salou is narrow and shared with bikes.",
+    ],
+  },
 };
 
 /**

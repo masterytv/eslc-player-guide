@@ -196,7 +196,11 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
 
         <section className="sec">
           <h3 className="sec-h">Quick links</h3>
-          <div className="quick">
+          <div className="quick cols-2">
+            <Link className="qt" href="/weather">
+              <Icon name="wx-cloudsun" />
+              Weather
+            </Link>
             <Link className="qt" href="/venue#fields">
               <Icon name="walk" />
               Walk to the fields

@@ -56,6 +56,7 @@ test("players see the guide but no editing tools", async () => {
   await expect(viewer.locator(".edit-link")).toHaveCount(0);
   // The day's notes come first, above the countdown and the next game.
   await expect(viewer.locator("main .sec-h").first()).toContainText("Daily notes");
+  await expect(viewer.locator(".quick").getByRole("link", { name: "Weather" })).toHaveAttribute("href", "/weather");
   await expect(viewer.locator(".quick").getByRole("link", { name: "Offence" })).toHaveAttribute("href", "/more/game-plan/offence");
   await expect(viewer.locator(".quick").getByRole("link", { name: "Defence" })).toHaveAttribute("href", "/more/game-plan/defence");
 
@@ -64,6 +65,18 @@ test("players see the guide but no editing tools", async () => {
 
   await viewer.goto("/more/conduct");
   await expect(viewer.getByRole("heading", { name: "Lights out" })).toBeVisible();
+
+  await viewer.goto("/more");
+  await viewer.getByRole("link", { name: /^Around the Resort/ }).click();
+  await expect(viewer).toHaveURL(/\/more\/around-the-resort$/);
+  await expect(viewer.locator("main h2")).toHaveText(["Groceries", "Coffee", "Restaurants", "Things to do", "Pharmacy"]);
+  await expect(viewer.locator("#coffee .card").filter({ hasText: "O'Clock Brunch" })).toContainText("★ 4.8");
+  await expect(viewer.locator("#groceries .card").first().getByRole("link", { name: "Open in Google Maps" })).toHaveAttribute(
+    "href",
+    "https://www.google.com/maps/search/?api=1&query=Mercadona%2C%20Cambrils",
+  );
+  // Long names and the jump links wrap: nothing scrolls sideways on a phone.
+  expect(await viewer.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 
   await viewer.goto("/more");
   await viewer.getByRole("link", { name: /^Defence/ }).click();

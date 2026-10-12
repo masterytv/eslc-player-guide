@@ -44,6 +44,17 @@ function list<T extends z.ZodRawShape>(shape: T, max = 400) {
   return z.array(z.object({ id, ...shape })).max(max, `Keep this to ${max} items`);
 }
 
+/** Kinds of place on the Around the Resort page, in the order players see them. */
+export const NEARBY_CATEGORIES = ["groceries", "coffee", "restaurants", "things", "pharmacy"] as const;
+export type NearbyCategory = (typeof NEARBY_CATEGORIES)[number];
+export const NEARBY_LABEL: Record<NearbyCategory, string> = {
+  groceries: "Groceries",
+  coffee: "Coffee",
+  restaurants: "Restaurants",
+  things: "Things to do",
+  pharmacy: "Pharmacy",
+};
+
 export const SCHEDULE_TYPES = ["game", "practice", "ceremony", "meeting", "other"] as const;
 export type ScheduleType = (typeof SCHEDULE_TYPES)[number];
 
@@ -185,6 +196,22 @@ export const sectionSchemas = {
     url: urlReq,
     note: text(120),
   }),
+  nearby: list({
+    category: z.enum(NEARBY_CATEGORIES).default("groceries"),
+    name: req("Add the name", 80),
+    town: text(60),
+    walk: text(60),
+    hours: text(120),
+    rating: z
+      .string()
+      .trim()
+      .refine((v) => v === "" || /^[0-5](\.\d)?$/.test(v), "Use a rating from 0 to 5, like 4.8")
+      .default(""),
+    note: text(160),
+  }),
+  nearbyInfo: z.object({
+    notes: lines(20, 300),
+  }),
 };
 
 export type SectionKey = keyof typeof sectionSchemas;
@@ -215,7 +242,7 @@ export function slugify(v: string): string {
 }
 
 // Slugs that would collide with the app's own routes under /more.
-const RESERVED_SLUGS = new Set(["packing", "anthem", "links", "game-plan"]);
+const RESERVED_SLUGS = new Set(["packing", "anthem", "links", "game-plan", "around-the-resort"]);
 
 /** Fixes up data after validation: unique ids, page slugs. */
 export function normalizeSection<K extends SectionKey>(key: K, data: Guide[K]): Guide[K] {
