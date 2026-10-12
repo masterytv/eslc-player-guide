@@ -182,6 +182,40 @@ img { max-width: 100%; }
 .qt { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 10px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; font-size: 13px; font-weight: 600; line-height: 1.2; text-decoration: none; }
 .qt .ic { color: var(--green); }
 
+/* ---------- weather ---------- */
+.wx-card { text-decoration: none; color: inherit; }
+.wx-head { display: flex; align-items: center; gap: 14px; }
+.ic.wx-big { width: 44px; height: 44px; color: var(--green); stroke-width: 1.5; }
+.wx-temp { font: 700 32px/1 var(--font-display); }
+.wx-low { color: var(--muted); font-size: 22px; }
+.wx-strip { display: flex; gap: 4px; border-top: 1px solid var(--line); padding-top: 12px; }
+.wx-strip li { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; }
+.wx-strip .ic { color: var(--green); }
+.wx-strip .t { color: var(--muted); white-space: nowrap; }
+.wx-strip b { font-size: 15px; }
+.wx-strip .p { color: var(--c-meeting-fg); font-weight: 600; min-height: 1.2em; }
+.wx-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.wx-facts dt { font: 700 11px/1.2 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.wx-facts dd { margin: 3px 0 0; font-size: 14px; font-weight: 600; }
+.dayhead .wx-units { margin: 0; padding: 0; overflow: visible; }
+.wx-units button { padding: 6px 12px; }
+.wx-hours { padding: 2px 16px; gap: 0; }
+.wx-hour { display: grid; grid-template-columns: 50px 24px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.wx-hour:last-child { border-bottom: 0; }
+.wx-hour .t { font-size: 14px; font-weight: 600; white-space: nowrap; }
+.wx-hour > .ic { color: var(--green); }
+.wx-hour .d { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.wx-hour .d b { font-size: 17px; }
+.wx-hour .l { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wx-hour .r { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-size: 12px; }
+.wx-hour .p { display: inline-flex; align-items: center; gap: 2px; color: var(--c-meeting-fg); font-weight: 600; }
+.wx-hour .p .ic { width: 12px; height: 12px; }
+.wx-hour .w { color: var(--muted); white-space: nowrap; }
+.wx-on { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
+.wx-on span { font-size: 12px; font-weight: 600; background: var(--green-soft); color: var(--green-strong); border-radius: 999px; padding: 3px 10px; }
+.wx-radar { display: block; width: 100%; height: 380px; border: 0; border-radius: 12px; background: var(--surface-2); }
+.wx-radar-btn { width: 100%; }
+
 /* ---------- schedule ---------- */
 .sched-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .day-group { display: flex; flex-direction: column; gap: 8px; }

@@ -72,6 +72,13 @@ export const SECTIONS: SectionDef[] = [
       { key: "eventName", label: "Event", type: "text", placeholder: "ESLC 2026" },
       { key: "guideTitle", label: "Guide title", type: "text", placeholder: "Player Guide" },
       { key: "location", label: "Location", type: "text" },
+      {
+        key: "weatherPlace",
+        label: "Weather town",
+        type: "text",
+        placeholder: "Salou, Spain",
+        help: "The town the Weather page is for. Leave blank to use the location above. Add the country if the name is common.",
+      },
       { key: "startDate", label: "First day", type: "date" },
       { key: "endDate", label: "Last day", type: "date", help: "Today's day strip runs from the first day to the last." },
       {

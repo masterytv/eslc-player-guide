@@ -328,6 +328,7 @@ export const SEED: Guide = {
     eventName: "ESLC 2026",
     guideTitle: "Player Guide",
     location: "Salou, Spain",
+    weatherPlace: "",
     startDate: "2026-10-31",
     endDate: "2026-11-09",
     timeZone: "Europe/Madrid",

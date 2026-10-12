@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { Countdown } from "@/components/Countdown";
 import { DayStrip } from "@/components/DayStrip";
 import { EditLink } from "@/components/EditLink";
 import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
+import { TodayWeather } from "@/components/Weather";
 import { loadGuide } from "@/lib/content";
 import { defaultDay, entriesFor, isGameDay, nextGame, tripDays, TYPE_LABEL } from "@/lib/plan";
 import { clock, clockLabel, countdown, dayLabel, dayParts, daysBetween, timeZoneLabel, toMinutes, zonedNow } from "@/lib/time";
@@ -186,6 +188,11 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
             <span>{guide.venue.walkNote}</span>
           </div>
         ) : null}
+
+        {/* The forecast comes from another service: the rest of the page doesn't wait for it. */}
+        <Suspense fallback={null}>
+          <TodayWeather guide={guide} day={day} today={today} minutes={minutes} />
+        </Suspense>
 
         <section className="sec">
           <h3 className="sec-h">Quick links</h3>

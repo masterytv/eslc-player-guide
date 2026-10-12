@@ -54,6 +54,8 @@ test("players see the guide but no editing tools", async () => {
   await viewer.goto("/?day=2026-11-02");
   await expect(viewer.getByText("Ireland vs Finland").first()).toBeVisible();
   await expect(viewer.locator(".edit-link")).toHaveCount(0);
+  // The day's notes come first, above the countdown and the next game.
+  await expect(viewer.locator("main .sec-h").first()).toContainText("Daily notes");
   await expect(viewer.locator(".quick").getByRole("link", { name: "Offence" })).toHaveAttribute("href", "/more/game-plan/offence");
   await expect(viewer.locator(".quick").getByRole("link", { name: "Defence" })).toHaveAttribute("href", "/more/game-plan/defence");
 
@@ -77,6 +79,39 @@ test("players see the guide but no editing tools", async () => {
   expect(api.status()).toBe(403);
 });
 
+test("players see the weather hour by hour, in °C or °F, with the rain radar", async () => {
+  await viewer.goto("/");
+  await expect(viewer.getByRole("heading", { name: "Weather · Salou" })).toBeVisible();
+
+  await viewer.goto("/more");
+  await viewer.getByRole("link", { name: /^Weather/ }).click();
+  await expect(viewer).toHaveURL(/\/weather$/);
+  await expect(viewer.locator(".hdr-eyebrow")).toHaveText("Salou, Spain");
+
+  await viewer.getByRole("button", { name: "Show the rain radar" }).click();
+  await expect(viewer.locator("iframe.wx-radar")).toHaveAttribute("src", /^https:\/\/embed\.windy\.com\/.*overlay=radar/);
+
+  // The last day offered shows from 6 AM (today's list starts at the current hour), unless it's
+  // the only one: the stand-in forecast has a storm from 3 PM and 16 °C at noon every day.
+  const last = viewer.locator(".days a").last();
+  test.skip(/today/.test((await last.getAttribute("aria-label")) ?? ""), "only today's remaining hours are on offer");
+  await last.click();
+  await expect(viewer).toHaveURL(/\/weather\?day=/);
+  // 6 AM to 11 PM.
+  await expect(viewer.locator(".wx-hour")).toHaveCount(18);
+  const at = (hour: string) => viewer.locator(".wx-hour").filter({ has: viewer.locator(".t", { hasText: new RegExp(`^${hour}$`) }) });
+  await expect(at("3 PM")).toContainText("Thunderstorm");
+  await expect(at("3 PM")).toContainText("80%");
+
+  await viewer.getByRole("button", { name: "°C" }).click();
+  await expect(at("12 PM").locator("b")).toHaveText("16°");
+  await viewer.getByRole("button", { name: "°F" }).click();
+  await expect(at("12 PM").locator("b")).toHaveText("61°");
+  await viewer.reload();
+  await expect(at("12 PM").locator("b")).toHaveText("61°");
+  await viewer.getByRole("button", { name: "°C" }).click();
+});
+
 test("packing ticks stay on the phone", async () => {
   await viewer.goto("/more/packing");
   await viewer.getByLabel("Turfs").check();
@@ -97,6 +132,20 @@ test("staff add a daily note and players see it straight away", async () => {
   const item = viewer.locator(".tl-item", { hasText: "Team lunch at the villas" });
   await expect(item).toBeVisible();
   await expect(item.locator(".tl-time")).toHaveText("12:15PM");
+});
+
+test("staff choose the town the weather is for", async () => {
+  await admin.goto("/admin/event");
+  await admin.getByLabel("Weather town").fill("Nowhere");
+  await save(admin);
+  await viewer.goto("/weather");
+  await expect(viewer.getByText("Couldn't find “Nowhere” on the map")).toBeVisible();
+
+  // Blank again: back to the tournament's location.
+  await admin.getByLabel("Weather town").fill("");
+  await save(admin);
+  await viewer.goto("/weather");
+  await expect(viewer.locator(".hdr-eyebrow")).toHaveText("Salou, Spain");
 });
 
 test("the editor explains what needs fixing", async () => {
