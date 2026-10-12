@@ -270,6 +270,17 @@ img { max-width: 100%; }
 .villa-names { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .villa-names li { border: 1px solid var(--line); border-radius: 10px; padding: 10px; font-size: 14px; background: var(--bg); }
 
+/* ---------- around the resort ---------- */
+.jumps.wrap { flex-wrap: wrap; overflow: visible; margin-inline: 0; padding-inline: 0; }
+.jumps.wrap a { min-height: 40px; display: inline-flex; align-items: center; }
+.near-notes { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.near { gap: 8px; }
+.near h3 { overflow-wrap: anywhere; }
+.near-facts { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 14px; color: var(--muted); }
+.near-facts span { display: inline-flex; align-items: center; gap: 4px; }
+.near-note { font-size: 14px; line-height: 1.45; }
+.near-map { justify-content: center; min-height: 44px; margin-top: 4px; }
+
 /* ---------- venue ---------- */
 .jumps { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin-inline: -16px; padding-inline: 16px; }
 .jumps::-webkit-scrollbar { display: none; }

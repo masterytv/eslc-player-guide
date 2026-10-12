@@ -1,4 +1,4 @@
-import type { Guide, SectionKey } from "./schema";
+import { NEARBY_CATEGORIES, NEARBY_LABEL, type Guide, type SectionKey } from "./schema";
 import { clockLabel, TIME_ZONES, timeZoneOption } from "./time";
 
 // How each section appears in the admin editor. Client-safe: no server imports.
@@ -326,6 +326,41 @@ export const SECTIONS: SectionDef[] = [
       { key: "place", label: "Where", type: "text" },
       { key: "notes", label: "Notes", type: "textarea" },
     ],
+  },
+  {
+    key: "nearby",
+    title: "Around the Resort",
+    description: "Shops, coffee, food and things to do near the villas",
+    group: "Venue & stay",
+    kind: "list",
+    viewHref: "/more/around-the-resort",
+    itemName: "place",
+    summary: (r) => join(NEARBY_LABEL[r.category as keyof typeof NEARBY_LABEL] ?? "", s(r.name) || "New place", s(r.walk)),
+    newItem: () => ({ category: "groceries", town: "Cambrils" }),
+    fields: [
+      {
+        key: "category",
+        label: "Category",
+        type: "select",
+        options: NEARBY_CATEGORIES.map((c) => ({ value: c, label: NEARBY_LABEL[c] })),
+        help: "Places are grouped by category; within one, they show in this list's order.",
+      },
+      { key: "name", label: "Name", type: "text", required: true, placeholder: "Mercadona" },
+      { key: "town", label: "Town", type: "text", placeholder: "Cambrils", help: "The Open in Google Maps button searches for the name and town." },
+      { key: "walk", label: "Walk from the resort", type: "text", placeholder: "7 min" },
+      { key: "hours", label: "Hours or closed days", type: "text", placeholder: "Closed Sun and Mon" },
+      { key: "rating", label: "Rating", type: "text", placeholder: "4.8", help: "Out of 5. Leave blank to hide it." },
+      { key: "note", label: "One-line note", type: "text" },
+    ],
+  },
+  {
+    key: "nearbyInfo",
+    title: "Around the Resort notes",
+    description: "Notes at the top of the Around the Resort page",
+    group: "Venue & stay",
+    kind: "object",
+    viewHref: "/more/around-the-resort",
+    fields: [{ key: "notes", label: "Notes", type: "lines", help: "One note per line." }],
   },
   {
     key: "packing",

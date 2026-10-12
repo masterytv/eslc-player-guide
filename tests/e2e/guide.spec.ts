@@ -67,6 +67,18 @@ test("players see the guide but no editing tools", async () => {
   await expect(viewer.getByRole("heading", { name: "Lights out" })).toBeVisible();
 
   await viewer.goto("/more");
+  await viewer.getByRole("link", { name: /^Around the Resort/ }).click();
+  await expect(viewer).toHaveURL(/\/more\/around-the-resort$/);
+  await expect(viewer.locator("main h2")).toHaveText(["Groceries", "Coffee", "Restaurants", "Things to do", "Pharmacy"]);
+  await expect(viewer.locator("#coffee .card").filter({ hasText: "O'Clock Brunch" })).toContainText("★ 4.8");
+  await expect(viewer.locator("#groceries .card").first().getByRole("link", { name: "Open in Google Maps" })).toHaveAttribute(
+    "href",
+    "https://www.google.com/maps/search/?api=1&query=Mercadona%2C%20Cambrils",
+  );
+  // Long names and the jump links wrap: nothing scrolls sideways on a phone.
+  expect(await viewer.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await viewer.goto("/more");
   await viewer.getByRole("link", { name: /^Defence/ }).click();
   await expect(viewer).toHaveURL(/\/more\/game-plan\/defence$/);
   await expect(viewer.locator(".gp-cover")).toContainText("Ashley O’Brien, Defensive Coordinator");
