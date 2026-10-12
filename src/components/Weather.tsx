@@ -30,14 +30,20 @@ function Facts({ d }: { d: WeatherDay }) {
   );
 }
 
-/** The weather card on Today: the selected day at a glance, linking to hour by hour. */
-export async function TodayWeather({ guide, day, today, minutes }: { guide: Guide; day: string; today: string; minutes: number }) {
+/**
+ * The weather card on Today: the selected day at a glance, linking to hour by hour. Until the
+ * forecast reaches that day (the tournament, seen from two weeks out or more), it shows today's.
+ */
+export async function TodayWeather({ guide, day: picked, today, minutes }: { guide: Guide; day: string; today: string; minutes: number }) {
   const w = await loadWeather(guide.event);
   // Today stays clean when there's nothing to show; the Weather page explains why.
-  if (w.status !== "ok" || day < today) return null;
+  if (w.status !== "ok" || picked < today) return null;
   const town = w.place.label.split(",")[0];
+  const later = !w.forecast.days.some((x) => x.date === picked);
+  const day = later ? today : picked;
   const d = w.forecast.days.find((x) => x.date === day);
-  const href = d ? `/weather?day=${day}` : "/weather";
+  const href = later ? "/weather" : `/weather?day=${day}`;
+  const until = later ? `The forecast for ${dayLabel(picked)} shows here from about ${dayLabel(forecastFrom(picked))}.` : null;
 
   if (!d) {
     return (
@@ -46,9 +52,7 @@ export async function TodayWeather({ guide, day, today, minutes }: { guide: Guid
           <span>Weather · {town}</span>
         </h3>
         <Link className="card wx-card" href={href}>
-          <p className="meta">
-            The forecast for {dayLabel(day)} shows here from about {dayLabel(forecastFrom(day))}. Tap for the week ahead in {town}.
-          </p>
+          <p className="meta">{until}</p>
         </Link>
       </section>
     );
@@ -62,13 +66,16 @@ export async function TodayWeather({ guide, day, today, minutes }: { guide: Guid
   return (
     <section className="sec">
       <h3 className="sec-h">
-        <span>Weather · {town}</span>
+        <span>
+          Weather · {town}
+          {later ? " today" : null}
+        </span>
         <Link className="txt-link" href={href}>
           Hour by hour
           <Icon name="chev" size="sm" />
         </Link>
       </h3>
-      <Link className="card wx-card" href={href} aria-label={`Weather for ${dayLabel(day)}: ${head.label}. Hour by hour`}>
+      <Link className="card wx-card" href={href} aria-label={`Weather for ${dayLabel(day)}: ${head.label}. Hour by hour.${until ? ` ${until}` : ""}`}>
         <div className="wx-head">
           <Icon name={head.icon} className="wx-big" />
           <div>
@@ -115,6 +122,7 @@ export async function TodayWeather({ guide, day, today, minutes }: { guide: Guid
             })}
           </ol>
         ) : null}
+        {until ? <p className="meta wx-until">{until}</p> : null}
       </Link>
     </section>
   );

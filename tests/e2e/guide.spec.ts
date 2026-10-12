@@ -88,6 +88,15 @@ test("players see the guide but no editing tools", async () => {
 test("players see the weather hour by hour, in °C or °F, with the rain radar", async () => {
   await viewer.goto("/");
   await expect(viewer.getByRole("heading", { name: "Weather · Salou" })).toBeVisible();
+  await expect(viewer.locator(".wx-card .wx-temp")).toBeVisible();
+  // Until the forecast reaches the day picked (the last day, from about 25 Oct), the card shows
+  // today's weather and says when that day's will show.
+  await viewer.goto("/?day=2026-11-09");
+  await expect(viewer.locator(".wx-card .wx-temp")).toBeVisible();
+  if (Date.now() < Date.parse("2026-10-24T00:00:00Z")) {
+    await expect(viewer.getByRole("heading", { name: "Weather · Salou today" })).toBeVisible();
+    await expect(viewer.locator(".wx-until")).toHaveText("The forecast for Mon 9 Nov shows here from about Sun 25 Oct.");
+  }
 
   await viewer.goto("/more");
   await viewer.getByRole("link", { name: /^Weather/ }).click();
