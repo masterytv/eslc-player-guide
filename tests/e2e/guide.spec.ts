@@ -68,8 +68,14 @@ test("players see the guide but no editing tools", async () => {
   await viewer.goto("/more");
   await viewer.getByRole("link", { name: /^Defence/ }).click();
   await expect(viewer).toHaveURL(/\/more\/game-plan\/defence$/);
-  await expect(viewer.getByText("From Ashley O’Brien, Defensive Coordinator")).toBeVisible();
-  await expect(viewer.getByRole("heading", { name: "Forcing Angles: House Pattern" })).toBeVisible();
+  await expect(viewer.locator(".gp-cover")).toContainText("Ashley O’Brien, Defensive Coordinator");
+  await expect(viewer.getByRole("heading", { name: "Strong decisions • Communication • Anticipation" })).toBeVisible();
+  // The contents jump to each part.
+  await viewer.locator(".toc summary").click();
+  await viewer.locator(".toc").getByRole("link", { name: "Gold Rip: communication" }).click();
+  await expect(viewer).toHaveURL(/#part-5$/);
+  await expect(viewer.locator("#part-5 .banner")).toHaveText("Backside is responsible for organizing the next action.");
+  await expect(viewer.locator("#part-5")).toBeInViewport();
 
   await viewer.goto("/admin");
   await expect(viewer).toHaveURL(/\/login\?.*admin=1/);

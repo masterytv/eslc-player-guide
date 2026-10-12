@@ -201,7 +201,7 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; 
   <div class="side two">
     <div>
       <h3>The game plan</h3>
-      <p>Each coach&rsquo;s philosophy, in their own words, laid out as short cards. Players open it from Quick links on Today or from <span class="ui">More → Game plan</span>. It works offline, so they can read it on the flight.</p>
+      <p>The coaches&rsquo; offence and defence principles, laid out like their slides: a card per slide, ending on its key line, and <span class="ui">Jump to</span> at the top. Players open it from Quick links on Today or <span class="ui">More → Game plan</span>. It works offline.</p>
       <h3>Weather</h3>
       <p>Hour by hour for each day, with games marked at the time they start, plus a live rain radar. It&rsquo;s on Today and under <span class="ui">More → Weather</span>. Each phone can show °C or °F. Forecasts reach about 16 days ahead, so the tournament&rsquo;s days fill in about two weeks before.</p>
     </div>
@@ -261,11 +261,11 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; 
       <p>Pages (rules, conduct, activities) and the game plan use a simple text format. A reminder is shown under the text box:</p>
       <table class="fmt">
         <tr><td><code>## Heading</code></td><td>Starts a new card</td></tr>
-        <tr><td><code>- item</code></td><td>A bullet point</td></tr>
-        <tr><td><code>1. step</code></td><td>A numbered step</td></tr>
-        <tr><td><code>**words**</code></td><td><b>Bold</b></td></tr>
-        <tr><td><code>!! text</code></td><td>A red warning</td></tr>
-        <tr><td><code>&gt; text</code></td><td>A grey note</td></tr>
+        <tr><td><code>### Label</code></td><td>A labelled box for the lines under it</td></tr>
+        <tr><td><code>- item</code> <code>1. step</code></td><td>A bullet point, a numbered step</td></tr>
+        <tr><td><code>&gt;&gt; text</code></td><td>The card&rsquo;s bottom line, in a green bar</td></tr>
+        <tr><td><code>**words**</code></td><td><b>Bold</b>. A line all in bold is highlighted.</td></tr>
+        <tr><td><code>!! text</code> <code>&gt; text</code></td><td>A red warning, a grey note</td></tr>
         <tr><td><code>[label](https://…)</code></td><td>A link</td></tr>
       </table>
       <p class="muted">Leave an empty line between paragraphs.</p>

@@ -198,8 +198,9 @@ function FieldInput({ f, id, value, onChange, error }: { f: FieldDef; id: string
       {control}
       {f.type === "markdown" ? (
         <p className="md-help" id={`${id}-help`}>
-          <code>## Heading</code> starts a new card · <code>- item</code> bullet · <code>1. step</code> numbered · <code>!! text</code> red warning ·{" "}
-          <code>&gt; text</code> grey note · <code>**bold**</code> · <code>[label](https://…)</code>
+          <code>## Heading</code> starts a new card · <code>### Label</code> a box for the lines under it · <code>- item</code> bullet ·{" "}
+          <code>1. step</code> numbered · <code>&gt;&gt; text</code> the card&rsquo;s bottom line · <code>!! text</code> red warning ·{" "}
+          <code>&gt; text</code> grey note · <code>**bold**</code> (a whole line in bold stands out) · <code>[label](https://…)</code>
         </p>
       ) : f.help ? (
         <p className="help" id={`${id}-help`}>
