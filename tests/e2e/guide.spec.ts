@@ -144,6 +144,7 @@ test("packing ticks stay on the phone", async () => {
 test("the daily notes editor shows what else players see that day, and where to change it", async () => {
   await admin.goto("/");
   await admin.getByRole("link", { name: /^Mon 2 Nov/ }).click();
+  await expect(admin.locator(".dayhead h2")).toHaveText("Mon 2 Nov");
   await admin.locator(".sec-h", { hasText: "Daily notes" }).getByRole("link", { name: /Edit/ }).click();
   await expect(admin).toHaveURL(/\/admin\/daily\?day=2026-11-02$/);
   await expect(admin.locator(".card.empty")).toContainText("Players still see the 3 items below on this day.");
