@@ -65,9 +65,12 @@ Log in with the staff password. You'll see an orange **Staff** badge in the head
 - **Daily notes** open on today's date. Add the next day's plan the night before.
 - Leave a time blank while it's not set; players see *TBC*.
 - **Pages** (conduct, tournament rules, activities) and the **Game plan** (the coaches'
-  offence and defence) use a simple text format: `## Heading` starts a card, `- item`
-  makes a bullet, `1. step` a numbered step, `!! text` is a red warning, `> text` is a grey
-  note, `**bold**`, and `[label](https://link)`.
+  offence and defence) use a simple text format: `## Heading` starts a card, `### Label`
+  puts the lines under it in a labelled box, `- item` makes a bullet, `1. step` a numbered
+  step, `>> text` the card's bottom line in a green bar, `!! text` is a red warning,
+  `> text` is a grey note, `**bold**` (a line that's all bold is highlighted), and
+  `[label](https://link)`. The game plan is laid out like the coaches' slides: a card per
+  slide, with a list at the top that jumps to each one.
 - If two staff edit the same section at once, the second person to save is warned
   instead of silently overwriting the first person's changes.
 - Photos and maps can be replaced from the phone's camera roll. Large photos are shrunk
@@ -139,7 +142,9 @@ set, nobody can log in, so put at least `ADMIN_PASSWORD` and `VIEWER_PASSWORD` i
   tournament is the `_app/live` row. Each section has a schema in `src/lib/schema.ts` and an
   editor definition in `src/lib/sections.ts`. To add a field, add it to both. The first
   tournament's never-saved sections read from `src/lib/seed.ts`; later tournaments start from
-  a copy of an earlier one (`src/lib/tournaments.ts`).
+  a copy of an earlier one (`src/lib/tournaments.ts`). When starting content is rewritten
+  after launch (the coaches' new game plan, 12 Oct 2026), `SEED_REWRITTEN` in `seed.ts`
+  makes the first tournament show it in place of copies saved before then.
 - **Saving** checks a version number per section, which is how clashing edits are caught.
 - **Photos** uploaded by staff are stored in the same database and served from `/img/…`.
 - **Logins** are signed cookies (`src/lib/auth.ts`). `src/proxy.ts` turns away anyone without

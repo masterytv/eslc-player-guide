@@ -1,17 +1,22 @@
 // A deliberately small text format for the editable pages, easy to type on a phone:
 //   ## Heading       starts a new card
+//   ### Label        a labelled box in the card, holding the lines right under it
 //   - item           bullet list
 //   1. step          numbered list
+//   >> text          the card's bottom line, in a bar
 //   !! text          red warning
 //   > text           grey note
-//   **bold**, [label](https://link)
+//   **bold**, [label](https://link); a line that's all bold stands out
 // Anything else is a paragraph. Blank lines separate blocks.
 
 export type Inline = { t: "text"; v: string } | { t: "bold"; v: string } | { t: "link"; v: string; href: string };
 export type Block =
   | { kind: "p"; inline: Inline[] }
+  | { kind: "key"; inline: Inline[] }
   | { kind: "ul"; items: Inline[][] }
   | { kind: "ol"; start: number; items: Inline[][] }
+  | { kind: "point"; label: string; blocks: Block[] }
+  | { kind: "banner"; inline: Inline[] }
   | { kind: "warn"; inline: Inline[] }
   | { kind: "note"; inline: Inline[] };
 export type Section =
@@ -36,26 +41,35 @@ export function parseInline(src: string): Inline[] {
   return out;
 }
 
+/** A paragraph that is nothing but bold text. */
+function allBold(inline: Inline[]): boolean {
+  return inline.some((p) => p.t === "bold") && inline.every((p) => p.t === "bold" || (p.t === "text" && !p.v.trim()));
+}
+
 export function parsePage(src: string): Section[] {
   const sections: Section[] = [];
   let card: Extract<Section, { kind: "card" }> | null = null;
+  let point: Extract<Block, { kind: "point" }> | null = null;
   let para: string[] = [];
   let list: Inline[][] | null = null;
   let steps: { start: number; items: Inline[][] } | null = null;
 
+  // Lines go into the open labelled box, if there is one, else the card.
+  const target = () => (point ? point.blocks : ensureCard().blocks);
   const flushPara = () => {
     if (para.length) {
-      ensureCard().blocks.push({ kind: "p", inline: parseInline(para.join("\n")) });
+      const inline = parseInline(para.join("\n"));
+      target().push({ kind: !point && allBold(inline) ? "key" : "p", inline });
       para = [];
     }
   };
   const flushList = () => {
     if (list) {
-      ensureCard().blocks.push({ kind: "ul", items: list });
+      target().push({ kind: "ul", items: list });
       list = null;
     }
     if (steps) {
-      ensureCard().blocks.push({ kind: "ol", ...steps });
+      target().push({ kind: "ol", ...steps });
       steps = null;
     }
   };
@@ -73,18 +87,36 @@ export function parsePage(src: string): Section[] {
     if (!trimmed) {
       flushPara();
       flushList();
+      // A blank line closes a labelled box, unless it comes straight after the label.
+      if (point?.blocks.length) point = null;
+      continue;
+    }
+    if (trimmed.startsWith("### ") || trimmed === "###") {
+      flushPara();
+      flushList();
+      point = { kind: "point", label: trimmed.replace(/^###\s*/, ""), blocks: [] };
+      ensureCard().blocks.push(point);
       continue;
     }
     if (trimmed.startsWith("## ") || trimmed === "##") {
       flushPara();
       flushList();
+      point = null;
       card = { kind: "card", heading: trimmed.replace(/^##\s*/, ""), blocks: [] };
       sections.push(card);
+      continue;
+    }
+    if (trimmed.startsWith(">>")) {
+      flushPara();
+      flushList();
+      point = null;
+      ensureCard().blocks.push({ kind: "banner", inline: parseInline(trimmed.replace(/^>>\s*/, "")) });
       continue;
     }
     if (trimmed.startsWith("!!")) {
       flushPara();
       flushList();
+      point = null;
       sections.push({ kind: "warn", inline: parseInline(trimmed.replace(/^!!\s*/, "")) });
       card = null;
       continue;
@@ -92,6 +124,7 @@ export function parsePage(src: string): Section[] {
     if (trimmed.startsWith(">")) {
       flushPara();
       flushList();
+      point = null;
       sections.push({ kind: "note", inline: parseInline(trimmed.replace(/^>\s*/, "")) });
       card = null;
       continue;

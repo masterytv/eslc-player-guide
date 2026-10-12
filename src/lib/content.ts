@@ -17,7 +17,7 @@ import {
   type Guide,
   type SectionKey,
 } from "./schema";
-import { SEED } from "./seed";
+import { olderThanSeed, SEED } from "./seed";
 import { getStore, type StoredSection } from "./store";
 
 export interface SectionMeta {
@@ -124,7 +124,9 @@ export const loadTournament = cache(async (id: string): Promise<LoadedGuide> => 
       continue;
     }
     const parsed = sectionSchemas[key].safeParse(row.data);
-    if (parsed.success) {
+    if (id === FIRST_TOURNAMENT && olderThanSeed(key, row.updatedAt)) {
+      guide[key] = unsaved(id, key);
+    } else if (parsed.success) {
       guide[key] = parsed.data;
     } else {
       console.error(`Stored "${key}" section of ${id} no longer matches its schema; showing it as if never saved.`, parsed.error.issues);

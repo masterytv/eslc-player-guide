@@ -23,12 +23,16 @@ export default async function GamePlanPage({ params }: { params: Params }) {
   return (
     <>
       <Header title={page.title} eyebrow="Game plan" back="/more" />
-      <main className="main">
-        <div className="h-row">
-          {page.coach ? <p className="meta">From {page.coach}</p> : <span />}
+      <main className="main gp">
+        {/* Laid out like the coaches' slides: a cover, then a card per slide. */}
+        <section className="gp-cover">
+          <div>
+            <h2>{page.summary || page.title}</h2>
+            {page.coach ? <p>{page.coach}</p> : null}
+          </div>
           <EditLink href={`/admin/playbook?item=${page.id}`} />
-        </div>
-        <Markdown source={page.body} />
+        </section>
+        <Markdown source={page.body} contents />
       </main>
     </>
   );

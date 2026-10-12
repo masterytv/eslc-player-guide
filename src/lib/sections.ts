@@ -214,7 +214,7 @@ export const SECTIONS: SectionDef[] = [
     fields: [
       { key: "title", label: "Title", type: "text", required: true, placeholder: "Offence" },
       { key: "coach", label: "From", type: "text", placeholder: "Justin Warner, Offensive Coordinator", help: "Shown at the top of the page." },
-      { key: "summary", label: "Subtitle in the More menu", type: "text" },
+      { key: "summary", label: "Headline", type: "text", placeholder: "Less is more", help: "Shown big at the top of the page, and under its name in the More menu." },
       { key: "body", label: "Page text", type: "markdown" },
       { key: "slug", label: "Web address", type: "text", help: "Made from the title if blank, e.g. offence → /more/game-plan/offence." },
     ],

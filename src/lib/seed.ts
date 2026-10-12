@@ -1,4 +1,4 @@
-import type { Guide } from "./schema";
+import type { Guide, SectionKey } from "./schema";
 
 // Starting content for the first tournament, taken from the ESLC 2026 player guide
 // Google Doc. Admins replace any of it from the app; a section reads from here only
@@ -58,263 +58,283 @@ Please refer to the World Lacrosse 2026–2028 Sixes Official Playing Rules for 
 const activities = `## Barcelona women's football game
 Barcelona. Date and details to come.`;
 
-// The coaches' own words: Justin Warner's offensive philosophy and Ashley O’Brien's
-// defensive principles slides, laid out as cards.
-const offence = `## Less is more
-Hey all, Coach Warner here, extremely excited to get going with this group. I wanted to share my offensive philosophy with you all so we can all be on the same page come Maryland!!!
+// The coaches' own words: Justin Warner's offensive principles and Ashley O’Brien's defensive
+// principles, both from 12 Oct 2026, laid out like their slides: a card per slide, its labelled
+// boxes, and its bottom line.
+const offence = `## Offensive philosophy — less is more
+A simple identity, repeated with purpose.
 
 Our offence is built around pace, spacing, East/West ball movement, clock awareness, and playing simple lacrosse.
 
-There may seem like a lot of information here, but the philosophy is simple:
-
 **Move the ball. Move your feet. Stay wide. Create space. Make the defence move.**
 
+### Our approach
+Few concepts, understood extremely well.
+
+### Our advantage
+Make defenders shift, communicate and decide.
+
+### Our standard
+Trust the next pass, the cutter and each other.
+
+>> Less is more.
+
 ## Fast break / transition
-On a turnover, no more than TWO players transition on the fast break.
+Attack when the opportunity is there — never force it.
 
-We want to attack when the opportunity is there, but we don’t need to force anything.
+### Clear opportunity
+GO! Attack the advantage.
 
-- Clear opportunity → **GO!**
-- Nothing there → Get the ball **LOW** and start our offence.
+### No clear opportunity
+Get the ball LOW and organize.
 
-If there is no clear scoring opportunity, get the ball into the low corner, allow everyone to get organized, and flow directly into our settled offence.
+**On a turnover, no more than TWO players transition on the fast break.**
 
-Don’t turn a good possession into a bad possession by forcing transition.
+If there is no clear scoring opportunity, get the ball into the low corner, allow everyone to get organized, and flow directly into settled offence.
 
-## Settled offence
-Everything starts **LOW**.
+>> Don’t turn a good possession into a bad possession.
 
-Our basic sequence:
+## Settled offence & spacing
+Everything starts LOW.
 
-**PASS DOWN → PICK → MOVE EAST/WEST**
+**Pass down → pick → move East/West**
 
-Less is more!
+### Move the defence
+Avoid unnecessary North/South play. Move the defence before trying to beat it.
 
-We want the ball moving East/West and forcing the defence to constantly shift, communicate and make decisions.
+### Start wide
+On every set, start AS WIDE AS POSSIBLE. Gradually get tighter as the possession develops.
 
-Avoid unnecessary North/South play. Constantly attacking straight downhill without purpose can create turnovers and kill possessions.
+### Keep the middle open
+Outside of 5-on-4, never simply stand in the middle. Make it available for cutters, slips, dodges, picks and crease opportunities.
 
-**Move the defence before trying to beat the defence.**
-
-## Spacing
-On every offensive set, we start **AS WIDE AS POSSIBLE**.
-
-As the possession develops, we can gradually become tighter.
-
-This is especially important on a smaller field. If we start too tight, we make the defence’s job easy and clog our own middle.
-
-Outside of 5-on-4, I NEVER want someone simply standing in the middle.
-
-The middle should be available for:
-**CUTTERS • SLIPS • DODGES • PICKS • CREASE OPPORTUNITIES**
-
-**Create space before attacking space.**
+>> Create space before attacking space.
 
 ## Clock awareness
-Our top players MUST know the shot clock.
-
-At approximately 10 seconds, our top players should begin fading back and preparing for possession/transition.
-
 The clock can be our friend.
 
-Outside of a clear fast break, we don’t need to rush shots.
+### Ideal shooting window
+**15–7 seconds.** Make the defence work before we shoot.
 
-**Ideal shooting window**
-15–7 seconds remaining
+### At ~10 seconds
+Top players begin fading back and preparing for possession / transition.
 
-Make the defence work before we shoot.
+### Stay patient
+Outside a clear fast break, we don’t need to rush shots.
 
-A defence that has defended for 20+ seconds is much easier to break down than one that has defended for five.
+**A defence that has defended for 20+ seconds is easier to break down than one that has defended for five.**
+
+>> Know the clock. Make the defence work.
 
 ## Base offence — “Magic”
 Our base offence is a 3–2.
 
-Depending on personnel:
-- 3 Lefties / 2 Righties, or
-- 3 Righties / 2 Lefties
+### Personnel option A
+3 lefties / 2 righties
 
-**3-man side**
-The three player side is primarily responsible for:
-**SWINGING THE BALL + FILLING SPOTS**
+### Personnel option B
+3 righties / 2 lefties
 
-Pass, cut, clear and replace.
+### 3-man side: 1, 2, 3
+Swing ball • Fill spots • Pass, cut, clear, replace
 
-Nobody watches their pass.
+### 2-man side: 4, 5
+Picks • Slips • Seals • Off-ball movement
 
-**2-man side**
-The two player side works together primarily through:
-**PICKS • SLIPS • SEALS • OFF-BALL MOVEMENT**
-
-Work together and create confusion for defenders.
+>> Nobody watches their pass.
 
 ## Wheel motion
-One of my favourite actions out of Magic.
+A favourite action out of Magic.
 
-1. Ball carrier passes to the weak side.
-2. After passing, they immediately drive/cut through.
-3. The next player fills the cutter’s original spot.
-4. Look immediately for the player filling that space.
+1. **Pass.** Ball carrier passes to the weak side.
+2. **Cut.** After passing, immediately drive / cut through.
+3. **Fill.** Next player fills the cutter’s original spot.
+4. **Find.** Look immediately for the player filling that space.
 
-The defence has to decide whether to follow the cutter, switch, or protect the middle.
+The defence must decide whether to follow the cutter, switch, or protect the middle. We attack that moment of hesitation.
 
-We are attacking that moment of hesitation.
-
-**PASS → CUT → FILL → FIND**
+>> Pass → cut → fill → find
 
 ## Sweep action
-I want our players in the shooting spots confident attacking **TOP SIDE AT FULL SPEED**.
+Attack top side at full speed from the shooting spots.
 
-Take the sweep hard.
+1. **Sweep hard.** Be confident attacking top side at full speed.
+2. **Draw the slide.** The goal is to force a defensive slide — not always to score yourself.
+3. **Move the ball.** Dish to the opposite side as the defence rotates.
 
-The goal isn’t always to score yourself.
+**While the defence rotates, send a cutter through the middle.**
 
-A hard sweep should force a defensive slide.
+### If they don’t slide
+Keep going & shoot.
 
-Once the slide comes: **DISH TO THE OPPOSITE SIDE.**
+### If they slide
+Move the ball.
 
-While the defence rotates, we send a cutter through the middle.
-
-**Read**
-SWEEP → DRAW SLIDE → DISH → CUTTER
-
-- If they don’t slide — keep going and shoot.
-- If they slide — move the ball.
-
-Simple reads.
+>> Sweep → draw slide → dish → cutter
 
 ## Man-up offence
-We have three primary options.
+Three primary options.
 
-## Man-up 1 — Drag & dump
-The ball carrier attacks and drags the defender with them.
+### 01 — Drag & dump
+Ball carrier attacks and drags the defender. As the defender commits, dish into the shooting spot.
+First read: **step-down shot**
+Second read: **crease**
 
-As the defender commits, dish the ball into the shooting spot.
+### 02 — Boro
+1. Top passes and immediately cuts.
+2. Receiver passes down.
+3. Pass down → pick down.
+4. Carry and swing to opposite side.
+5. Pass down again; find the ORIGINAL player arriving on crease.
 
-- First read: **STEP-DOWN SHOT**
-- Second read: **CREASE**
+The goal: force one defender to make a decision, then attack the space they leave. Ball movement creates the opportunity.
 
-The goal is to force one defender to make a decision and immediately attack the space they leave.
+>> Create the decision. Attack the space.
 
-## Man-up 2 — “Boro”
-Our designed man-up action.
+## Man-up — old school
+Free roam.
 
-1. Top player passes.
-2. Top player immediately cuts.
-3. The receiving player passes down.
-4. Pass down → pick down.
-5. That player carries and swings the ball to the opposite side.
-6. Ball gets passed down again.
-7. Find the ORIGINAL PLAYER who started the play, now arriving on the crease.
+**If you hear “GO PLAY!” or “PLAY CATCH!” — I’m giving you freedom.**
 
-The ball movement is creating the opportunity, not one player trying to force something.
+### Read
+Read the defence and attack a matchup.
 
-## Man-up 3 — Old school
-**FREE ROAM.**
+### Move
+Move, pick, cut and play a 2-man game.
 
-If you hear me yell **“GO PLAY!”** or **“PLAY CATCH!”**, I’m giving you freedom.
-
-Read the defence.
-Move.
-Pick.
-Cut.
-Play a 2man.
-Attack a matchup.
-
+### Trust
 Trust your lacrosse IQ and make something happen.
 
+>> Play with freedom. Make a read. Trust yourself.
+
 ## Our offensive identity
-We do NOT need 25 different plays.
+We don’t need 25 different plays. We need a few concepts understood extremely well.
 
-We need players who understand a few concepts extremely well.
+- Fast break when it’s there.
+- Get low when it’s not.
+- Start wide.
+- Move East/West.
+- Pass down & pick.
+- Pass → cut → fill.
+- Sweep hard & force a slide.
+- Use the clock.
+- Don’t clog the middle.
+- Less is more.
 
-- FAST BREAK WHEN IT’S THERE.
-- GET LOW WHEN IT’S NOT.
-- START WIDE.
-- MOVE EAST/WEST.
-- PASS DOWN & PICK.
-- PASS → CUT → FILL.
-- SWEEP HARD & FORCE A SLIDE.
-- USE THE CLOCK.
-- DON’T CLOG THE MIDDLE.
-- LESS IS MORE.
-
-If we understand our spacing and play for each other, opportunities will come.
-
-Move the defence.
-Trust the next pass.
-Trust the cutter.
-Trust each other.
+**Move the defence. Trust the next pass. Trust the cutter. Trust each other.**
 
 Excited to get to work.
-– Coach Warner`;
+— Coach Warner`;
 
 const defence = `## Identity
-**STRONG DECISIONS • COMMUNICATION • ANTICIPATION**
+Gold Rip • Man-to-man • Areas of pressure • Disciplined help
 
-1. We will utilize areas of pressure to make **strong decisions**, **we communicate early, we are organized and connected**
-2. **GOLD RIP:** MAN-TO-MAN - settled defense with areas of pressure supported by disciplined help
-3. **TRANSITION:** early touch, “toes to where she is going”, pressure wide, protect the middle
+### 01 — How we defend
+We will utilize areas of pressure to make strong decisions. We communicate early, stay organized and connected.
 
-## Transition: Early Pressure & Recovery
-1. Make an early touch by the 20-yard line and push the ball wide, “toes to where she’s going”
-2. Pressure the ball carrier toward the sideline and through X - be ready to trap/double
-3. Off-ball defenders drop into help posture while tracking matchups
-4. Backside is the primary communicator; be ready to send pressure via push slide
+### 02 — Gold Rip
+Man-to-man settled defence with areas of pressure supported by disciplined help.
 
-**Protect the middle first; build pressure as teammates recover.**
+### 03 — Transition
+Early touch, “toes to where she is going,” pressure wide, protect the middle.
 
-## Pressure Levels & Clear
-1. **LEVEL 1:** if ball is moving fast - light pressure; manage the fast break and funnel outside
-2. **LEVEL 2:** if they are running the box and have an opportunity - high pressure on ball carrier funneled into double-trap
-3. **CLEAR:** Prioritize the ‘quick clear’ - field player that gave up the shot break out immediately for clear
-4. **CLEAR:** Secondary option is to allow for box change over
+>> Strong decisions • Communication • Anticipation
 
-## Forcing Angles: House Pattern
-1. Shade the top of the house; Protect the middle - Guard the Yard
-2. Send offensive players toward the alley off the elbow
-3. Direct low drives toward X and be ready to send double/help slide on rolls
-4. Move while the ball is in the air, anticipate and commit to strong contact
+## Transition defence
+Early pressure & recovery.
 
-**DICTATE: Set the angle before applying pressure.**
+1. **Early touch.** Make an early touch by the 20-yard line and push the ball wide — “toes to where she’s going.”
+2. **Funnel & trap.** Pressure the ball carrier toward the sideline and through X. Be ready to trap / double.
+3. **Drop into help.** Off-ball defenders drop into help posture while tracking matchups.
+4. **Backside communicates.** Backside is the primary communicator; be ready to send pressure via push slide.
 
-## Communication - Be Specific: Name → Command
-- **Help Left / Help Right:** Adjacents
-- **Got your second:** Two Away
-- **Swing:** Ball moves through X
-- **Skip:** Ball moves on diagonal or two away from current ball carrier
-- **Crash:** Shot is imminent - slide to middle
-- **Send it / Hammer:** Double in area of pressure
+>> Protect the middle first; build pressure as teammates recover.
 
-**Backside is responsible for organizing the next action.**
+## Transition defence / clear
+Pressure levels & clear.
 
-## On-ball fundamentals
-1. Dictate the driver, establish body position first - see hips and rely on footwork
-2. Be physical, bounce offensive player and redirect down our forcing lines or into pressure zone
-3. Approach/move while the ball is in the air, make strong contact, pin elbow - no hands free shots
-4. Be ready to set double if near the ‘elbow’ region
+### Level 1 — Manage
+If the ball is moving fast: light pressure, manage the fast break and funnel outside.
 
-**Get strong initial contact - establish positioning**
+### Level 2 — Pressure
+If they are running the box and have an opportunity: high pressure on the ball carrier, funneled into a double-trap.
 
-## Off-ball Help & Slide
-1. Be aware of scout looks and areas of pressure (in Gold rip we are prepared to send early slides/double in the ‘elbow region’ of the field)
-2. Adjacent: Hedge and be ready to help ball or send pressure - keep sticks big in passing lanes
-3. Second slide pinches toward the ball, in tight but is ready to dead end the ball
-4. Check in as the ball travels; bump cutters and protect goal-side space
+### Clear — first option
+Prioritize the quick clear. The field player who gave up the shot breaks out immediately for the clear.
 
-## Cutters & Recovery
-1. Always be ball-side based on the feed threat, sticks in passing lanes
-2. Frontside (on ball, adjacent): pressure and manage immediate threats
-3. Backside (two-away, goalie): communicate, check in and cover the next threat
-4. Recover into shape after help or a cut - BUMP CUTTERS
+### Clear — second option
+Allow for box change over.
 
-**Sticks are up in passing lanes during recovery and check ins**
+>> Manage the fast break. Recognize when to apply pressure.
 
-## Slide calls, picks & doubles
-1. If we are settled in Gold Rip, our areas of pressure in the ‘elbow’ region of the field
-2. Adjacent be ready to send double from the top if the on ball defender is in the area of pressure
-3. If double breaks down - sliding defender stays, defender who received the help slide recovers through the backside or bumps short
-4. On picks: call direction early; switch only when defenders are even
-5. On rolls: get goalie side and pin elbow`;
+## Gold Rip / transition
+Forcing angles: house pattern.
+
+### 01 — Shade the house
+Shade the top of the house. Protect the middle — Guard the Yard.
+
+### 02 — Send wide
+Direct offensive players toward the alley off the elbow.
+
+### 03 — Low drives
+Direct low drives toward X and be ready to send a double / help slide on rolls.
+
+### 04 — Move on the pass
+Move while the ball is in the air, anticipate and commit to strong contact.
+
+>> Dictate: set the angle before applying pressure.
+
+## Gold Rip: communication
+Be specific: NAME → COMMAND.
+
+- **Help left / help right:** adjacents
+- **Got your second:** two away
+- **Swing:** ball moves through X
+- **Skip:** ball moves on diagonal or two away from current ball carrier
+- **Crash:** shot is imminent — slide to middle
+- **Send it / hammer:** double in area of pressure
+
+>> Backside is responsible for organizing the next action.
+
+## Gold Rip: on-ball fundamentals
+1. **Dictate the driver.** Establish body position first. See hips and rely on footwork.
+2. **Be physical.** Bounce the offensive player and redirect down forcing lines or into the pressure zone.
+3. **Contact on the pass.** Approach / move while the ball is in the air. Make strong contact, pin elbow — no hands-free shots.
+4. **Be ready to double.** Be ready to set the double if near the elbow region.
+
+>> Get strong initial contact — establish positioning.
+
+## Gold Rip: off-ball help & slide
+1. **Scout & pressure.** Know scout looks and areas of pressure. In Gold Rip, be prepared to send early slides / doubles in the elbow region.
+2. **Adjacent.** Hedge and be ready to help the ball or send pressure. Keep sticks big in passing lanes.
+3. **Second slide.** Pinch toward the ball, get in tight and be ready to dead-end the ball.
+4. **Check in.** As the ball travels, bump cutters and protect goal-side space.
+
+>> Help with discipline. Recover with purpose.
+
+## Gold Rip: cutters & recovery
+### 01 — Ball-side
+Always be ball-side based on the feed threat; sticks in passing lanes.
+
+### 02 — Frontside
+On-ball and adjacent: pressure and manage immediate threats.
+
+### 03 — Backside
+Two-away and goalie: communicate, check in and cover the next threat.
+
+### 04 — Recover
+Recover into shape after help or a cut. BUMP CUTTERS.
+
+>> Sticks up in passing lanes during recovery and check-ins.
+
+## Gold Rip: slide calls, picks & doubles
+1. **Areas of pressure.** When settled in Gold Rip, our areas of pressure are in the elbow region of the field.
+2. **Adjacent double.** Adjacent defender is ready to send the double from the top if the on-ball defender is in the pressure area.
+3. **If the double breaks down.** Sliding defender stays; defender who received the help slide recovers through the backside or bumps short.
+4. **On picks.** Call direction early; switch only when defenders are even.
+5. **On rolls.** Get goalie side and pin elbow.
+
+>> Communicate early. Commit to the plan. Recover together.`;
 
 const items = (category: string, prefix: string, list: Array<string | [string, true]>) =>
   list.map((entry, i) => {
@@ -565,7 +585,7 @@ export const SEED: Guide = {
   ],
   playbook: [
     { id: "gp1", title: "Offence", slug: "offence", coach: "Justin Warner, Offensive Coordinator", summary: "Less is more", body: offence },
-    { id: "gp2", title: "Defence", slug: "defence", coach: "Ashley O’Brien, Defensive Coordinator", summary: "Gold Rip man-to-man", body: defence },
+    { id: "gp2", title: "Defence", slug: "defence", coach: "Ashley O’Brien, Defensive Coordinator", summary: "Strong decisions • Communication • Anticipation", body: defence },
   ],
   anthem: {
     title: "Amhrán na bhFiann",
@@ -602,3 +622,16 @@ export const SEED: Guide = {
     { id: "l4", label: "About the anthem", url: "https://en.wikipedia.org/wiki/Amhr%C3%A1n_na_bhFiann", note: "Wikipedia" },
   ],
 };
+
+/**
+ * Sections whose starting content was rewritten after the guide went live, and when. On the first
+ * tournament, a copy saved before then gives way to the new starting content; anything saved after
+ * it shows as usual. The coaches replaced the game plan with new principles on 12 Oct 2026.
+ */
+export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = { playbook: "2026-10-12T13:00:00.000Z" };
+
+/** Whether a first-tournament section saved at `updatedAt` predates its rewritten starting content. */
+export function olderThanSeed(key: SectionKey, updatedAt: string): boolean {
+  const rewritten = SEED_REWRITTEN[key];
+  return !!rewritten && Date.parse(updatedAt) < Date.parse(rewritten);
+}
