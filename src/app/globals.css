@@ -211,6 +211,7 @@ img { max-width: 100%; }
 .wx-temp { font: 700 32px/1 var(--font-display); }
 .wx-low { color: var(--muted); font-size: 22px; }
 .wx-strip { display: flex; gap: 4px; border-top: 1px solid var(--line); padding-top: 12px; }
+.wx-until { border-top: 1px solid var(--line); padding-top: 10px; }
 .wx-strip li { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; }
 .wx-strip .ic { color: var(--green); }
 .wx-strip .t { color: var(--muted); white-space: nowrap; }
