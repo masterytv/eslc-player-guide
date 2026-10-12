@@ -360,6 +360,8 @@ img { max-width: 100%; }
 .adm-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 13px 14px; text-decoration: none; }
 .adm-row .ms { margin-top: 2px; }
 .adm-count { font: 700 18px/1 var(--font-display); color: var(--muted); font-variant-numeric: tabular-nums; }
+/* A long walk note shows its first two lines; tapping opens it in full. */
+.shown-with .mt { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .daypick { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin-inline: -16px; padding-inline: 16px; }
 .daypick::-webkit-scrollbar { display: none; }
 .daypick button { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; font-weight: 600; white-space: nowrap; }
