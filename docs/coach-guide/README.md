@@ -23,7 +23,8 @@ different way of doing something.
    ```
    This starts the app on its own, on port 3410, with example passwords and an empty content folder. It
    never connects to a database. The pictures show the starting content, plus a made-up "Example Cup
-   2027" used for the new-tournament steps. To add a screenshot, add a step to `screenshots.mjs` and an
+   2027" used for the new-tournament steps. The weather comes from the tests' stand-in forecast, so the
+   pictures don't change with the real weather. To add a screenshot, add a step to `screenshots.mjs` and an
    `<img src="shots/….png">` to `guide.html`.
 2. **Edit the wording** in `guide.html`. Keep it short and use the button names exactly as the app shows
    them.

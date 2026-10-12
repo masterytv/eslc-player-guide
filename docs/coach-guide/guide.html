@@ -72,6 +72,8 @@ figcaption b { color: var(--ink); }
 .side { display: grid; grid-template-columns: 1fr 50mm; gap: 8mm; align-items: start; }
 .side.wide { grid-template-columns: 1fr 56mm; }
 .side.narrow { grid-template-columns: 1fr 44mm; }
+.side.two { grid-template-columns: 1fr 78mm; gap: 6mm; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
 
 /* boxes */
 .box { border-radius: 3.5mm; padding: 3.5mm 4.5mm; margin: 2mm 0 4mm; }
@@ -190,22 +192,23 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; 
     <figure><div class="phone"><img src="shots/more.png" alt=""></div><figcaption><b>More</b></figcaption></figure>
   </div>
   <ul class="tabs">
-    <li><b>Today</b><span>A countdown, the next game, and the day&rsquo;s plan (buses, meals, meetings). An alert banner shows at the top when staff post one. Tap the days along the top to see another day. <b>Quick links</b> below the plan include <b>Offence</b> and <b>Defence</b>.</span></li>
+    <li><b>Today</b><span>The day&rsquo;s plan comes first (buses, meals, meetings, games), then the countdown, the next game and the weather. An alert banner shows at the very top when staff post one. Tap the days along the top to see another day. <b>Quick links</b> at the bottom include <b>Offence</b> and <b>Defence</b>.</span></li>
     <li><b>Schedule</b><span>Every game, practice, ceremony and meeting. Players can add one game, or <span class="ui">Add every game to my calendar</span>.</span></li>
     <li><b>Team</b><span>Staff, with <span class="ui">Call</span> and <span class="ui">WhatsApp</span> buttons once a number is added, plus the roster and the rooming list.</span></li>
     <li><b>Venue</b><span>The airport bus and other ways to get there, the villas, the fields, maps and meals.</span></li>
-    <li><b>More</b><span>Packing list, flight details, the <b>Game plan</b> (offence and defence), tournament rules, conduct, the anthem and useful links.</span></li>
+    <li><b>More</b><span>Packing list (ticks are saved on each player&rsquo;s own phone), flight details, <b>Weather</b>, the <b>Game plan</b> (offence and defence), tournament rules, conduct, the anthem and useful links.</span></li>
   </ul>
-  <div class="side narrow">
+  <div class="side two">
     <div>
       <h3>The game plan</h3>
-      <p>Each coach&rsquo;s philosophy, in their own words, laid out as short cards. Players can open it from Quick links on Today or from <span class="ui">More → Game plan</span>, and it works offline. That means they can read it on the flight.</p>
-      <h3>Packing list</h3>
-      <p>Players tick items off as they pack. Ticks are saved on their own phone only, so nobody else sees them.</p>
-      <h3>&ldquo;Saved copy&rdquo; and &ldquo;Offline&rdquo;</h3>
-      <p>Sometimes a note at the top right says <b>Saved copy</b> or <b>Offline</b>. It means the phone is showing its saved copy. It updates by itself as soon as there&rsquo;s signal, and players don&rsquo;t need to do anything.</p>
+      <p>Each coach&rsquo;s philosophy, in their own words, laid out as short cards. Players open it from Quick links on Today or from <span class="ui">More → Game plan</span>. It works offline, so they can read it on the flight.</p>
+      <h3>Weather</h3>
+      <p>Hour by hour for each day, with games marked at the time they start, plus a live rain radar. It&rsquo;s on Today and under <span class="ui">More → Weather</span>. Each phone can show °C or °F. Forecasts reach about 16 days ahead, so the tournament&rsquo;s days fill in about two weeks before.</p>
     </div>
-    <figure><div class="phone"><img src="shots/gameplan.png" alt=""></div><figcaption>More → Game plan → Defence</figcaption></figure>
+    <div class="pair">
+      <figure><div class="phone"><img src="shots/gameplan.png" alt=""></div><figcaption>Game plan</figcaption></figure>
+      <figure><div class="phone"><img src="shots/weather.png" alt=""></div><figcaption>Weather</figcaption></figure>
+    </div>
   </div>
   <div class="foot"><span>Player Guide · How it works</span><span>3</span></div>
 </section>
@@ -240,7 +243,7 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; 
   <h2><span class="num">4</span>Making changes: common jobs</h2>
   <table>
     <tr><th>To…</th><th>In Edit the guide, open…</th></tr>
-    <tr><td>Post tomorrow&rsquo;s plan (buses, meals, meetings)</td><td><b>Daily notes</b>. Pick the day, then <span class="ui">Add a note</span>. Leave the time blank if it isn&rsquo;t set; players see <i>TBC</i>.</td></tr>
+    <tr><td>Post tomorrow&rsquo;s plan (buses, meals, meetings)</td><td><b>Daily notes</b>. Pick the day, then <span class="ui">Add a note</span>. It shows at the top of Today. Leave the time blank if it isn&rsquo;t set; players see <i>TBC</i>.</td></tr>
     <tr><td>Change a game time, field or opponent</td><td><b>Schedule</b></td></tr>
     <tr><td>Put an urgent message at the top of Today</td><td><b>Event &amp; alert → Alert banner</b>. Clear the box to hide it again.</td></tr>
     <tr><td>Update the offence or defence</td><td><b>Game plan</b>, or tap <span class="staffui">Edit</span> on the page itself. <span class="ui">Add a page</span> adds another topic, like draws or clears.</td></tr>
@@ -248,6 +251,7 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; 
     <tr><td>Add or change players</td><td><b>Roster</b>, and <b>Rooming list</b> for who&rsquo;s in which villa</td></tr>
     <tr><td>Replace a map or photo</td><td><b>Maps &amp; photos</b>. You can pick from your camera roll.</td></tr>
     <tr><td>Change rules, conduct or activities, or add a new page</td><td><b>Pages</b></td></tr>
+    <tr><td>Change the town the weather is for</td><td><b>Event &amp; alert → Weather town</b>. Blank uses the tournament&rsquo;s location.</td></tr>
     <tr><td>See, share or change the team passcode</td><td><span class="ui">More → Team passcode</span>. Changing it asks every player for the new one, so share it in the group chat. Staff stay logged in.</td></tr>
   </table>
 
@@ -306,6 +310,8 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; 
   <p>Staff can always see it under <span class="ui">More → Team passcode</span>, with a button to copy it.</p>
   <h3>Can the staff password be changed?</h3>
   <p>Yes, but only Tom can change it. Ask him if you think it has been shared too widely.</p>
+  <h3>What do &ldquo;Saved copy&rdquo; and &ldquo;Offline&rdquo; mean?</h3>
+  <p>The phone is showing the copy it saved last time, so the guide still opens with no signal. It updates by itself as soon as there&rsquo;s signal.</p>
   <h3>A player says the guide looks wrong or old</h3>
   <p>Ask them to open it with signal and wait a few seconds. If the top right still says <b>Offline</b>, their phone has no connection. If something still looks wrong, contact Tom.</p>
 

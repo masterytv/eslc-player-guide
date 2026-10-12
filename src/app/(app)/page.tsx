@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { Countdown } from "@/components/Countdown";
 import { DayStrip } from "@/components/DayStrip";
 import { EditLink } from "@/components/EditLink";
 import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
+import { TodayWeather } from "@/components/Weather";
 import { loadGuide } from "@/lib/content";
 import { defaultDay, entriesFor, isGameDay, nextGame, tripDays, TYPE_LABEL } from "@/lib/plan";
 import { clock, clockLabel, countdown, dayLabel, dayParts, daysBetween, timeZoneLabel, toMinutes, zonedNow } from "@/lib/time";
@@ -49,6 +51,61 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
           <h2 className="h-disp">{dayLabel(day)}</h2>
           <span className="rel">{rel}</span>
         </div>
+
+        {/* The day's plan comes first: it's what players open the guide for each morning. */}
+        <section className="sec">
+          <h3 className="sec-h">
+            <span>Daily notes</span>
+            <EditLink href={`/admin/daily?day=${day}`} />
+          </h3>
+          {entries.length ? (
+            <div className="card">
+              <ol className="tl">
+                {entries.map((e) => {
+                  const c = clock(e.time);
+                  const mins = toMinutes(e.time);
+                  const past = isToday && mins != null && mins < minutes;
+                  return (
+                    <li key={e.id} className={past ? "tl-item past" : "tl-item"}>
+                      {c ? (
+                        <div className="tl-time">
+                          {c.hm}
+                          <small>{c.ap}</small>
+                        </div>
+                      ) : (
+                        <div className="tl-time tbc">TBC</div>
+                      )}
+                      <div className="tl-body">
+                        {e.kind !== "note" ? <span className={`chip ${e.kind}`}>{TYPE_LABEL[e.kind]}</span> : null}
+                        <h3>{e.title}</h3>
+                        {e.meta ? <p className="meta">{e.meta}</p> : null}
+                        {e.details ? <p>{e.details}</p> : null}
+                        {e.link ? (
+                          /^https?:/i.test(e.link.href) ? (
+                            <a className="txt-link" href={e.link.href} target="_blank" rel="noopener noreferrer">
+                              {e.link.label}
+                              <Icon name="ext" size="sm" />
+                            </a>
+                          ) : (
+                            <Link className="txt-link" href={e.link.href}>
+                              {e.link.label}
+                              <Icon name="chev" size="sm" />
+                            </Link>
+                          )
+                        ) : null}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
+          ) : (
+            <div className="card empty">
+              <h3>Nothing posted for this day yet</h3>
+              <p className="meta">Staff add the plan here the night before. Anything new also goes in the group chat.</p>
+            </div>
+          )}
+        </section>
 
         {beforeTrip && day === home ? (
           <section className="pretrip" aria-label="Trip countdown">
@@ -132,59 +189,10 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
           </div>
         ) : null}
 
-        <section className="sec">
-          <h3 className="sec-h">
-            <span>Daily notes</span>
-            <EditLink href={`/admin/daily?day=${day}`} />
-          </h3>
-          {entries.length ? (
-            <div className="card">
-              <ol className="tl">
-                {entries.map((e) => {
-                  const c = clock(e.time);
-                  const mins = toMinutes(e.time);
-                  const past = isToday && mins != null && mins < minutes;
-                  return (
-                    <li key={e.id} className={past ? "tl-item past" : "tl-item"}>
-                      {c ? (
-                        <div className="tl-time">
-                          {c.hm}
-                          <small>{c.ap}</small>
-                        </div>
-                      ) : (
-                        <div className="tl-time tbc">TBC</div>
-                      )}
-                      <div className="tl-body">
-                        {e.kind !== "note" ? <span className={`chip ${e.kind}`}>{TYPE_LABEL[e.kind]}</span> : null}
-                        <h3>{e.title}</h3>
-                        {e.meta ? <p className="meta">{e.meta}</p> : null}
-                        {e.details ? <p>{e.details}</p> : null}
-                        {e.link ? (
-                          /^https?:/i.test(e.link.href) ? (
-                            <a className="txt-link" href={e.link.href} target="_blank" rel="noopener noreferrer">
-                              {e.link.label}
-                              <Icon name="ext" size="sm" />
-                            </a>
-                          ) : (
-                            <Link className="txt-link" href={e.link.href}>
-                              {e.link.label}
-                              <Icon name="chev" size="sm" />
-                            </Link>
-                          )
-                        ) : null}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-          ) : (
-            <div className="card empty">
-              <h3>Nothing posted for this day yet</h3>
-              <p className="meta">Staff add the plan here the night before. Anything new also goes in the group chat.</p>
-            </div>
-          )}
-        </section>
+        {/* The forecast comes from another service: the rest of the page doesn't wait for it. */}
+        <Suspense fallback={null}>
+          <TodayWeather guide={guide} day={day} today={today} minutes={minutes} />
+        </Suspense>
 
         <section className="sec">
           <h3 className="sec-h">Quick links</h3>

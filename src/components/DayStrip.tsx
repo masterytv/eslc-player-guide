@@ -13,7 +13,8 @@ export interface StripDay {
   game: boolean;
 }
 
-export function DayStrip({ days }: { days: StripDay[] }) {
+/** The row of days along the top of Today (or of another page that shows one day at a time: `base`). */
+export function DayStrip({ days, base = "/", label = "Tournament days" }: { days: StripDay[]; base?: string; label?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const selected = days.find((d) => d.selected)?.date;
 
@@ -24,11 +25,11 @@ export function DayStrip({ days }: { days: StripDay[] }) {
   }, [selected]);
 
   return (
-    <div className="days" ref={ref} role="navigation" aria-label="Tournament days">
+    <div className="days" ref={ref} role="navigation" aria-label={label}>
       {days.map((d) => (
         <Link
           key={d.date}
-          href={`/?day=${d.date}`}
+          href={`${base}?day=${d.date}`}
           scroll={false}
           replace
           className={["day", d.selected && "sel", d.today && "today", d.game && "game"].filter(Boolean).join(" ")}

@@ -53,6 +53,7 @@ export const sectionSchemas = {
     eventName: text(80),
     guideTitle: text(80),
     location: text(120),
+    weatherPlace: text(120),
     startDate: date,
     endDate: date,
     timeZone: z.string().trim().refine(isTimeZone, "Pick the tournament's time zone").default(DEFAULT_TZ),
