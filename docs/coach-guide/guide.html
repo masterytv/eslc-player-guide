@@ -41,14 +41,14 @@ b, strong { font-weight: 700; }
 
 /* cover */
 .cover { padding: 0; }
-.cover-top { background: var(--navy); color: #fff; padding: 22mm 18mm 16mm; }
-.crest { width: 22mm; height: 22mm; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; margin-bottom: 9mm; }
+.cover-top { background: var(--navy); color: #fff; padding: 16mm 18mm 12mm; }
+.crest { width: 22mm; height: 22mm; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; margin-bottom: 6mm; }
 .crest img { height: 15mm; }
 .eyebrow { font: 600 9pt/1.2 "Barlow", sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--navy-muted); margin-bottom: 3mm; }
 .cover h1 { font-size: 46pt; line-height: .95; }
 .cover h1 span { color: var(--orange); }
 .cover-sub { font-size: 14pt; margin-top: 5mm; color: #dfe4ef; max-width: 140mm; }
-.cover-body { padding: 12mm 18mm 0; display: grid; grid-template-columns: 1fr 52mm; gap: 10mm; align-items: start; }
+.cover-body { padding: 9mm 18mm 0; display: grid; grid-template-columns: 1fr 52mm; gap: 10mm; align-items: start; }
 .addr { border: 2px solid var(--green); border-radius: 4mm; padding: 4mm 5mm; margin-bottom: 6mm; }
 .addr .k { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 700; }
 .addr .v { font-size: 15pt; font-weight: 700; color: var(--green); }
@@ -58,6 +58,11 @@ b, strong { font-weight: 700; }
 .help { background: var(--orange-soft); border-radius: 4mm; padding: 4mm 5mm; margin-top: 6mm; }
 .help .k { font-weight: 700; color: var(--orange-strong); text-transform: uppercase; letter-spacing: .08em; font-size: 8.5pt; }
 .help .v { font-size: 13pt; font-weight: 700; }
+.new { margin: 6mm 18mm 0; border: 2px solid var(--orange); border-radius: 4mm; padding: 4mm 5mm 3mm; }
+.new .k { font-weight: 700; color: var(--orange-strong); text-transform: uppercase; letter-spacing: .08em; font-size: 8.5pt; margin-bottom: 2mm; }
+.new ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 6mm; font-size: 9.5pt; line-height: 1.35; }
+.new li { margin: 0; }
+.new li b { display: block; color: var(--navy); }
 
 /* phones */
 .phone { width: 100%; border-radius: 4.5mm; border: 1.2mm solid #11182a; overflow: hidden; background: #11182a; box-shadow: 0 1.5mm 4mm rgba(19,26,43,.18); }
@@ -100,7 +105,7 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; 
 .tabs li { display: grid; grid-template-columns: 24mm 1fr; gap: 3mm; padding: 2mm 0; border-bottom: 1px solid var(--line); margin: 0; }
 .tabs li b { color: var(--green); }
 
-.qa h3 { margin-top: 4mm; }
+.qa h3 { margin-top: 3.2mm; }
 .contact { margin-top: auto; margin-bottom: 8mm; background: var(--navy); color: #fff; border-radius: 4mm; padding: 6mm 7mm; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 6mm; }
 .contact .k { font-size: 9pt; letter-spacing: .12em; text-transform: uppercase; color: var(--navy-muted); font-weight: 700; }
 .contact .n { font: 800 22pt/1.1 "Barlow Condensed", sans-serif; text-transform: uppercase; }
@@ -114,7 +119,7 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; 
 <section class="page cover">
   <div class="cover-top">
     <div class="crest"><img src="../../public/crest.png" alt=""></div>
-    <div class="eyebrow">Ireland Lacrosse · For coaches and staff</div>
+    <div class="eyebrow">Ireland Lacrosse · For coaches and staff · Updated 12 Oct 2026</div>
     <h1>The Player Guide<br><span>How it works</span></h1>
     <p class="cover-sub">The team handbook on everyone&rsquo;s phone: what it does, how to get in, and how to change anything in it.</p>
   </div>
@@ -138,6 +143,15 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; 
       </div>
     </div>
     <figure><div class="phone"><img src="shots/today.png" alt=""></div></figure>
+  </div>
+  <div class="new">
+    <div class="k">New since the first version</div>
+    <ul>
+      <li><b>Daily notes come first</b>The day&rsquo;s plan now sits at the top of Today.</li>
+      <li><b>Weather</b>Hour by hour, games marked, a rain radar, °C or °F. Until the tournament, Today shows today&rsquo;s. Page 3.</li>
+      <li><b>The new game plan</b>Coach Warner&rsquo;s offence and Ashley O&rsquo;Brien&rsquo;s defence, laid out like their slides. Page 3.</li>
+      <li><b>More ways to lay out a page</b>Labelled boxes and green bottom-line bars. Page 5.</li>
+    </ul>
   </div>
 </section>
 
@@ -203,7 +217,7 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; 
       <h3>The game plan</h3>
       <p>The coaches&rsquo; offence and defence principles, laid out like their slides: a card per slide, ending on its key line, and <span class="ui">Jump to</span> at the top. Players open it from Quick links on Today or <span class="ui">More → Game plan</span>. It works offline.</p>
       <h3>Weather</h3>
-      <p>Hour by hour for each day, with games marked at the time they start, plus a live rain radar. It&rsquo;s on Today and under <span class="ui">More → Weather</span>. Each phone can show °C or °F. Forecasts reach about 16 days ahead, so the tournament&rsquo;s days fill in about two weeks before. Until then, Today shows today&rsquo;s weather there.</p>
+      <p>Hour by hour for each day, with games marked at the time they start, plus a live rain radar (tap <span class="ui">Show the rain radar</span>; it needs signal). It&rsquo;s on Today and under <span class="ui">More → Weather</span>. Each phone can show °C or °F. Forecasts reach about 16 days ahead, so the tournament&rsquo;s days fill in about two weeks before. Until then, Today shows today&rsquo;s weather there.</p>
     </div>
     <div class="pair">
       <figure><div class="phone"><img src="shots/gameplan.png" alt=""></div><figcaption>Game plan</figcaption></figure>
@@ -314,6 +328,8 @@ code { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; 
   <p>The phone is showing the copy it saved last time, so the guide still opens with no signal. It updates by itself as soon as there&rsquo;s signal.</p>
   <h3>A player says the guide looks wrong or old</h3>
   <p>Ask them to open it with signal and wait a few seconds. If the top right still says <b>Offline</b>, their phone has no connection. If something still looks wrong, contact Tom.</p>
+  <h3>The weather is for the wrong place, or won&rsquo;t show</h3>
+  <p>It uses the tournament&rsquo;s location. To pick a different town, set <span class="ui">Event &amp; alert → Weather town</span>. If it says the forecast isn&rsquo;t available, try again in a few minutes.</p>
 
   <div class="contact">
     <div>

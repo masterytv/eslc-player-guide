@@ -27,7 +27,8 @@ different way of doing something.
    pictures don't change with the real weather. To add a screenshot, add a step to `screenshots.mjs` and an
    `<img src="shots/….png">` to `guide.html`.
 2. **Edit the wording** in `guide.html`. Keep it short and use the button names exactly as the app shows
-   them.
+   them. Change the **Updated** date on the cover, and list the changes in **New since the first version**
+   underneath, so coaches with an older copy can see what's different.
 3. **Rebuild the PDF**:
    ```sh
    npm run guide:pdf
