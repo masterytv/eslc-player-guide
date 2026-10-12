@@ -10,13 +10,14 @@ the current one is live, then switch players over.
 - **Schedule**: games, practices, ceremonies and meetings, with add-to-calendar.
 - **Team**: staff with call and WhatsApp buttons, the roster, the rooming list.
 - **Venue & stay**: airport bus, ride options, villas, fields, maps and meals.
-- **More**: packing checklist, the weather (hour by hour, with a rain radar), conduct and
+- **More**: packing checklist, the weather (hour by hour, with a rain map), conduct and
   tournament rules, the coaches' game plan (offence and defence), the anthem, links.
 
 The guide keeps a saved copy on each phone, so it still opens with no signal abroad.
 
 **For coaches and staff:** [docs/coach-guide/Player-Guide-How-it-works.pdf](docs/coach-guide/Player-Guide-How-it-works.pdf)
-explains the app in seven pages. When the app changes, update it as described in
+explains the app in seven pages. Staff can open it in the app too: *Edit the guide → Coaches' guide*
+(`/admin/coaches-guide.pdf`). When the app changes, update it as described in
 [docs/coach-guide](docs/coach-guide/README.md).
 
 ## Who can do what
@@ -162,7 +163,9 @@ set, nobody can log in, so put at least `ADMIN_PASSWORD` and `VIEWER_PASSWORD` i
 - **Weather**: `src/lib/weather.ts` looks up the tournament's location (or *Event & alert →
   Weather town*) and fetches a 16-day hourly forecast from [Open-Meteo](https://open-meteo.com/),
   which is free with no account. Lookups are cached for a week and forecasts for 30 minutes. The
-  rain radar is Windy's embedded map, loaded only when someone taps it. The tests point
+  rain map is Windy's embedded map, loaded only when someone taps it. It opens on the forecast
+  (rain, thunder and wind); the radar is a tap away, and only shows rain that's falling, so it's
+  empty on a dry day. The tests point
   `OPEN_METEO_FORECAST_URL` and `OPEN_METEO_GEOCODE_URL` at a stand-in
   (`tests/e2e/weather-mock.mjs`), so they never call the real service.
 - Dates and times are local to each tournament, in the time zone set under *Event & alert*.

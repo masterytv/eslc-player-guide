@@ -4,7 +4,7 @@ import { EditLink } from "@/components/EditLink";
 import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
 import { DaySummary, hourLabel, hoursFrom } from "@/components/Weather";
-import { RadarMap, Temp, UnitToggle, Wind } from "@/components/WeatherUnits";
+import { RainMap, Temp, UnitToggle, Wind } from "@/components/WeatherUnits";
 import { loadGuide } from "@/lib/content";
 import { entriesFor, isGameDay, tripDays } from "@/lib/plan";
 import { clockLabel, dayLabel, dayParts, timeZoneLabel, toMinutes, zonedNow } from "@/lib/time";
@@ -138,10 +138,9 @@ export default async function WeatherPage({ searchParams }: { searchParams: Sear
         </section>
 
         <section className="sec">
-          <h3 className="sec-h">Rain radar</h3>
+          <h3 className="sec-h">Rain map</h3>
           <div className="card">
-            <RadarMap latitude={place.latitude} longitude={place.longitude} />
-            <p className="meta">Live radar from Windy.com around {place.label.split(",")[0]}. Zoom in, or press play to see where rain is heading.</p>
+            <RainMap latitude={place.latitude} longitude={place.longitude} town={place.label.split(",")[0]} />
           </div>
         </section>
 

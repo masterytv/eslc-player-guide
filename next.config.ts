@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // The coaches' guide is read from the repo at request time, so it has to ship with its route.
+  outputFileTracingIncludes: { "/admin/coaches-guide.pdf": ["./docs/coach-guide/Player-Guide-How-it-works.pdf"] },
   async headers() {
     return [
       {

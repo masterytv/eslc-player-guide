@@ -85,7 +85,7 @@ test("players see the guide but no editing tools", async () => {
   expect(api.status()).toBe(403);
 });
 
-test("players see the weather hour by hour, in °C or °F, with the rain radar", async () => {
+test("players see the weather hour by hour, in °C or °F, with a rain map", async () => {
   await viewer.goto("/");
   await expect(viewer.getByRole("heading", { name: "Weather · Salou" })).toBeVisible();
   await expect(viewer.locator(".wx-card .wx-temp")).toBeVisible();
@@ -103,8 +103,13 @@ test("players see the weather hour by hour, in °C or °F, with the rain radar",
   await expect(viewer).toHaveURL(/\/weather$/);
   await expect(viewer.locator(".hdr-eyebrow")).toHaveText("Salou, Spain");
 
-  await viewer.getByRole("button", { name: "Show the rain radar" }).click();
-  await expect(viewer.locator("iframe.wx-radar")).toHaveAttribute("src", /^https:\/\/embed\.windy\.com\/.*overlay=radar/);
+  // The map opens on the forecast; the radar, which is empty on a dry day, is a tap away.
+  await viewer.getByRole("button", { name: "Show the rain map" }).click();
+  const map = viewer.locator("iframe.wx-radar");
+  await expect(map).toHaveAttribute("src", /^https:\/\/embed\.windy\.com\/.*overlay=rain&product=ecmwf&/);
+  await viewer.getByRole("button", { name: "Radar: rain now" }).click();
+  await expect(map).toHaveAttribute("src", /overlay=radar&product=radar&/);
+  await expect(viewer.getByRole("button", { name: "Radar: rain now" })).toHaveAttribute("aria-pressed", "true");
 
   // The last day offered shows from 6 AM (today's list starts at the current hour), unless it's
   // the only one: the stand-in forecast has a storm from 3 PM and 16 °C at noon every day.
@@ -147,6 +152,19 @@ test("staff add a daily note and players see it straight away", async () => {
   const item = viewer.locator(".tl-item", { hasText: "Team lunch at the villas" });
   await expect(item).toBeVisible();
   await expect(item.locator(".tl-time")).toHaveText("12:15PM");
+});
+
+test("staff open the coaches' guide from the staff home page; players can't", async () => {
+  await admin.goto("/admin");
+  await expect(admin.getByRole("link", { name: /Coaches’ guide/ })).toHaveAttribute("href", "/admin/coaches-guide.pdf");
+  const pdf = await admin.request.get("/admin/coaches-guide.pdf");
+  expect(pdf.status()).toBe(200);
+  expect(pdf.headers()["content-type"]).toBe("application/pdf");
+  expect((await pdf.body()).subarray(0, 5).toString()).toBe("%PDF-");
+
+  const player = await viewer.request.get("/admin/coaches-guide.pdf", { maxRedirects: 0 });
+  expect(player.status()).toBe(307);
+  expect(player.headers().location).toMatch(/\/login\?.*admin=1/);
 });
 
 test("staff choose the town the weather is for", async () => {
