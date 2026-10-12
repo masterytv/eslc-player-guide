@@ -85,6 +85,21 @@ export default async function AdminHome() {
             </li>
           </ul>
         </section>
+        <section className="adm-group">
+          <h2 className="sec-h">Help</h2>
+          <ul className="list">
+            <li>
+              {/* A file, not a page: opens in the phone's PDF viewer, where it can be saved or shared. */}
+              <a className="adm-row" href="/admin/coaches-guide.pdf" target="_blank" rel="noopener">
+                <span>
+                  <span className="mt">Coaches&rsquo; guide</span>
+                  <span className="ms">How the app works, for coaches and staff. A PDF to read or share.</span>
+                </span>
+                <Icon name="chev" className="chev" />
+              </a>
+            </li>
+          </ul>
+        </section>
       </main>
     </>
   );

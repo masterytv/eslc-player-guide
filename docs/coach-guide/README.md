@@ -36,6 +36,8 @@ different way of doing something.
    Open `Player-Guide-How-it-works.pdf` and check that each page is still one page: nothing should run
    into the footer, and there should still be seven pages unless you added one. If a page overflows,
    shorten its text or shrink a screenshot.
-4. Commit the PDF together with the files that changed.
+4. Commit the PDF together with the files that changed. The app serves this same file to staff
+   (*Edit the guide → Coaches' guide*, `/admin/coaches-guide.pdf`), so the next deployment carries the
+   new version.
 
 Never put the staff password or the team passcode in the guide.

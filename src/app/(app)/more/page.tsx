@@ -43,7 +43,7 @@ export default async function MorePage() {
           <ul className="list menu">
             <Item href="/more/packing" icon="bag" title="Packing list" sub={`${guide.packing.length} items to tick off`} />
             <Item href="/venue#getting" icon="plane" title="Flight details" sub="Add yours to the team sheet" />
-            <Item href="/weather" icon="wx-cloudsun" title="Weather" sub="Hour by hour, and the rain radar" />
+            <Item href="/weather" icon="wx-cloudsun" title="Weather" sub="Hour by hour, and a rain map" />
             {pages("before")}
           </ul>
         </section>

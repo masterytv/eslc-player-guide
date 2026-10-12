@@ -50,22 +50,33 @@ export function UnitToggle() {
   );
 }
 
-/** A live rain radar map around the venue. Loaded on request: it's heavy on a phone plan abroad. */
-export function RadarMap({ latitude, longitude }: { latitude: number; longitude: number }) {
+type MapLayer = "forecast" | "radar";
+
+/**
+ * Windy.com's rain map around the venue: the forecast (rain, thunder and wind, with a timeline to
+ * play), or the radar, which only shows rain that's falling now and so is empty on a dry day.
+ * Loaded on request: it's heavy on a phone plan abroad.
+ */
+export function RainMap({ latitude, longitude, town }: { latitude: number; longitude: number; town: string }) {
   const [shown, setShown] = useState(false);
+  const [layer, setLayer] = useState<MapLayer>("forecast");
   const [units] = useUnits();
   const online = useOnline();
 
   if (!shown) {
     return (
-      <button type="button" className="btn wx-radar-btn" onClick={() => setShown(true)} disabled={!online}>
-        <Icon name="radar" />
-        {online ? "Show the rain radar" : "The radar needs signal"}
-      </button>
+      <>
+        <button type="button" className="btn wx-radar-btn" onClick={() => setShown(true)} disabled={!online}>
+          <Icon name="radar" />
+          {online ? "Show the rain map" : "The rain map needs signal"}
+        </button>
+        <p className="meta">The rain forecast and live radar around {town}, from Windy.com.</p>
+      </>
     );
   }
 
   const imperial = units === "imperial";
+  const radar = layer === "radar";
   const params = new URLSearchParams({
     type: "map",
     location: "coordinates",
@@ -74,8 +85,8 @@ export function RadarMap({ latitude, longitude }: { latitude: number; longitude:
     detailLat: latitude.toFixed(3),
     detailLon: longitude.toFixed(3),
     zoom: "8",
-    overlay: "radar",
-    product: "radar",
+    overlay: radar ? "radar" : "rain",
+    product: radar ? "radar" : "ecmwf",
     level: "surface",
     marker: "true",
     metricTemp: imperial ? "°F" : "°C",
@@ -83,12 +94,27 @@ export function RadarMap({ latitude, longitude }: { latitude: number; longitude:
     metricRain: imperial ? "in" : "mm",
   });
   return (
-    <iframe
-      className="wx-radar"
-      title="Rain radar"
-      src={`https://embed.windy.com/embed.html?${params}`}
-      loading="lazy"
-      referrerPolicy="no-referrer"
-    />
+    <>
+      <div className="seg wx-layers" role="group" aria-label="Map shows">
+        <button type="button" aria-pressed={!radar} onClick={() => setLayer("forecast")}>
+          Rain forecast
+        </button>
+        <button type="button" aria-pressed={radar} onClick={() => setLayer("radar")}>
+          Radar: rain now
+        </button>
+      </div>
+      <iframe
+        className="wx-radar"
+        title={radar ? "Rain radar" : "Rain forecast map"}
+        src={`https://embed.windy.com/embed.html?${params}`}
+        loading="lazy"
+        referrerPolicy="no-referrer"
+      />
+      <p className="meta">
+        {radar
+          ? `Rain falling around ${town} now, from weather radar. Empty means it's dry right now: the forecast shows what's coming.`
+          : `Rain, thunder and wind from the forecast around ${town}. Press play to see what's coming.`}
+      </p>
+    </>
   );
 }
