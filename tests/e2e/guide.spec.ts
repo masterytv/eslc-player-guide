@@ -56,6 +56,7 @@ test("players see the guide but no editing tools", async () => {
   await expect(viewer.locator(".edit-link")).toHaveCount(0);
   // The day's notes come first, above the countdown and the next game.
   await expect(viewer.locator("main .sec-h").first()).toContainText("Daily notes");
+  await expect(viewer.locator(".quick").getByRole("link", { name: "Weather" })).toHaveAttribute("href", "/weather");
   await expect(viewer.locator(".quick").getByRole("link", { name: "Offence" })).toHaveAttribute("href", "/more/game-plan/offence");
   await expect(viewer.locator(".quick").getByRole("link", { name: "Defence" })).toHaveAttribute("href", "/more/game-plan/defence");
 
