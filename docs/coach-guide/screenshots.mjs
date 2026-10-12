@@ -2,6 +2,7 @@
 //
 // Runs the app's production build on its own (example passwords, an empty content folder,
 // never a database), so the pictures show the starting content and nothing real is changed.
+// The weather comes from the tests' stand-in forecast, stretched to reach the tournament.
 // Run `npm run build` first, then `npm run guide:screenshots`.
 import { spawn } from "node:child_process";
 import { existsSync, mkdtempSync, rmSync } from "node:fs";
@@ -23,8 +24,24 @@ if (!existsSync(path.join(root, ".next/BUILD_ID"))) {
   process.exit(1);
 }
 
+// Forecasts are cached between runs of the app; start without one so the stand-in's is used.
+rmSync(path.join(root, ".next/cache/fetch-cache"), { recursive: true, force: true });
+const WEATHER_PORT = 3411;
+const weather = spawn(process.execPath, [path.join(root, "tests/e2e/weather-mock.mjs")], {
+  env: { ...process.env, WEATHER_MOCK_PORT: String(WEATHER_PORT), WEATHER_MOCK_DAYS: "60" },
+  stdio: "ignore",
+});
+
 const data = mkdtempSync(path.join(tmpdir(), "guide-shots-"));
-const env = { ...process.env, SESSION_SECRET: "guide-screenshots-secret-guide-screenshots", ADMIN_PASSWORD: STAFF, VIEWER_PASSWORD: PASSCODE, GUIDE_DATA_DIR: data };
+const env = {
+  ...process.env,
+  SESSION_SECRET: "guide-screenshots-secret-guide-screenshots",
+  ADMIN_PASSWORD: STAFF,
+  VIEWER_PASSWORD: PASSCODE,
+  GUIDE_DATA_DIR: data,
+  OPEN_METEO_FORECAST_URL: `http://127.0.0.1:${WEATHER_PORT}/v1/forecast`,
+  OPEN_METEO_GEOCODE_URL: `http://127.0.0.1:${WEATHER_PORT}/v1/search`,
+};
 // Never touch a real database from here.
 delete env.DATABASE_URL;
 const server = spawn(path.join(root, "node_modules/.bin/next"), ["start", "-p", String(PORT)], { cwd: root, env, stdio: "ignore" });
@@ -77,6 +94,7 @@ try {
     ["/venue", "venue"],
     ["/more", "more"],
     ["/more/game-plan/defence", "gameplan"],
+    ["/weather", "weather"],
   ]) {
     await player.goto(url);
     await shot(player, name);
@@ -114,5 +132,6 @@ try {
 } finally {
   await browser?.close();
   server.kill();
+  weather.kill();
   rmSync(data, { recursive: true, force: true });
 }

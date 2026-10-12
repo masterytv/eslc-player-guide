@@ -6,12 +6,12 @@ Players open a link and enter the **team passcode**. Staff log in with the
 Each tournament gets its own guide at the same address; staff prepare the next one while
 the current one is live, then switch players over.
 
-- **Today**: the day's plan, the next game with a countdown, and alerts.
+- **Today**: the day's plan first, then the next game with a countdown, the weather, and alerts.
 - **Schedule**: games, practices, ceremonies and meetings, with add-to-calendar.
 - **Team**: staff with call and WhatsApp buttons, the roster, the rooming list.
 - **Venue & stay**: airport bus, ride options, villas, fields, maps and meals.
-- **More**: packing checklist, conduct and tournament rules, the coaches' game plan
-  (offence and defence), the anthem, links.
+- **More**: packing checklist, the weather (hour by hour, with a rain radar), conduct and
+  tournament rules, the coaches' game plan (offence and defence), the anthem, links.
 
 The guide keeps a saved copy on each phone, so it still opens with no signal abroad.
 
@@ -154,4 +154,10 @@ set, nobody can log in, so put at least `ADMIN_PASSWORD` and `VIEWER_PASSWORD` i
   phone. Pages open straight from that copy while a fresh one downloads, then
   `src/components/Freshness.tsx` swaps in the latest content in place. The header says
   *Saved copy* until it has. Reopening the app after a few minutes checks for changes too.
+- **Weather**: `src/lib/weather.ts` looks up the tournament's location (or *Event & alert →
+  Weather town*) and fetches a 16-day hourly forecast from [Open-Meteo](https://open-meteo.com/),
+  which is free with no account. Lookups are cached for a week and forecasts for 30 minutes. The
+  rain radar is Windy's embedded map, loaded only when someone taps it. The tests point
+  `OPEN_METEO_FORECAST_URL` and `OPEN_METEO_GEOCODE_URL` at a stand-in
+  (`tests/e2e/weather-mock.mjs`), so they never call the real service.
 - Dates and times are local to each tournament, in the time zone set under *Event & alert*.
