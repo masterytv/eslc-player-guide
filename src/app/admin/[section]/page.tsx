@@ -1,14 +1,35 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
-import { SectionEditor } from "@/components/SectionEditor";
+import { SectionEditor, type ShownWith } from "@/components/SectionEditor";
 import { loadGuide } from "@/lib/content";
-import { defaultDay, tripDays } from "@/lib/plan";
-import { isSectionKey } from "@/lib/schema";
+import { byTime, defaultDay, isGameDay, scheduleTitle, tripDays, TYPE_LABEL } from "@/lib/plan";
+import { isSectionKey, type Guide } from "@/lib/schema";
 import { sectionDef } from "@/lib/sections";
-import { isDate, zonedNow } from "@/lib/time";
+import { clockLabel, isDate, zonedNow } from "@/lib/time";
 
 type Params = Promise<{ section: string }>;
+
+/**
+ * What Today lists with a day's notes that's kept in other sections: the day's schedule,
+ * and the walk note on game days. The notes editor shows these so staff can find them.
+ */
+function shownWithNotes(guide: Guide): ShownWith[] {
+  const events = [...guide.schedule]
+    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : byTime(a, b)))
+    .map((s) => ({
+      id: s.id,
+      date: s.date,
+      title: `${clockLabel(s.time)} · ${scheduleTitle(s)}`,
+      from: `Schedule · ${TYPE_LABEL[s.type]}`,
+      href: `/admin/schedule?day=${s.date}&item=${s.id}`,
+    }));
+  const gameDays = [...new Set(guide.schedule.map((s) => s.date))].filter((d) => isGameDay(guide, d));
+  const walk = guide.venue.walkNote
+    ? gameDays.map((d) => ({ id: `walk-${d}`, date: d, title: guide.venue.walkNote, from: "Venue · Getting there, shown on game days", href: "/admin/venue" }))
+    : [];
+  return [...events, ...walk];
+}
 type Search = Promise<Record<string, string | string[] | undefined>>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
@@ -42,6 +63,7 @@ export default async function EditSectionPage({ params, searchParams }: { params
           days={days}
           startDay={startDay}
           focusItem={typeof sp.item === "string" ? sp.item : null}
+          shownWith={def.key === "daily" ? shownWithNotes(guide) : []}
         />
       </main>
     </>

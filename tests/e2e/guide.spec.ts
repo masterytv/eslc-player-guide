@@ -141,6 +141,21 @@ test("packing ticks stay on the phone", async () => {
   await expect(viewer.locator(".progress-top b")).toHaveText("1");
 });
 
+test("the daily notes editor shows what else players see that day, and where to change it", async () => {
+  await admin.goto("/");
+  await admin.getByRole("link", { name: /^Mon 2 Nov/ }).click();
+  await admin.locator(".sec-h", { hasText: "Daily notes" }).getByRole("link", { name: /Edit/ }).click();
+  await expect(admin).toHaveURL(/\/admin\/daily\?day=2026-11-02$/);
+  await expect(admin.locator(".card.empty")).toContainText("Players still see the 3 items below on this day.");
+  const also = admin.getByRole("region", { name: "Also on Mon 2 Nov" });
+  await expect(also.locator(".mt")).toHaveText(["2:30 PM · Ireland vs Finland", "TBC · Team meeting", /^We will walk to all practices/]);
+  await expect(also.getByRole("link", { name: /We will walk/ })).toHaveAttribute("href", "/admin/venue");
+
+  await also.getByRole("link", { name: /Ireland vs Finland/ }).click();
+  await expect(admin).toHaveURL(/\/admin\/schedule\?day=2026-11-02&item=s3$/);
+  await expect(admin.getByLabel("Opponent", { exact: true })).toHaveValue("Finland");
+});
+
 test("staff add a daily note and players see it straight away", async () => {
   await admin.goto("/admin/daily?day=2026-11-02");
   await admin.getByRole("button", { name: /Add a note for Mon 2 Nov/ }).click();

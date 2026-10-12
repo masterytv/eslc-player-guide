@@ -12,6 +12,8 @@ import { Icon } from "./Icon";
 type Row = Record<string, unknown> & { id: string };
 type Obj = Record<string, unknown>;
 type Status = { kind: "idle" | "saving" | "saved" | "error" | "conflict"; msg?: string };
+/** Something players see beside this section's items on a day, kept in another section. */
+export type ShownWith = { id: string; date: string; title: string; from: string; href: string };
 
 interface Props {
   /** The tournament being edited. Saves go to it even if staff switch tournaments in another tab. */
@@ -24,6 +26,7 @@ interface Props {
   days: string[];
   startDay: string | null;
   focusItem: string | null;
+  shownWith: ShownWith[];
 }
 
 const newId = () => `n${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
@@ -289,6 +292,8 @@ export function SectionEditor(props: Props) {
   }, [rows, def.byDate, day, savedRows, props.days]);
 
   const hasOtherDates = def.byDate && rows.some((r) => !props.days.includes(String(r.date)));
+  const pickedDay = day !== "all" && day !== "other" ? day : null;
+  const shownWith = pickedDay ? props.shownWith.filter((x) => x.date === pickedDay) : [];
 
   const setObjField = (key: string, value: unknown) => setData({ ...(data as Obj), [key]: value });
   const setRowField = (id: string, key: string, value: unknown) =>
@@ -499,15 +504,40 @@ export function SectionEditor(props: Props) {
             })
           ) : (
             <div className="card empty">
-              <h3>{rows.length ? `No ${itemName}s on this day` : `No ${itemName}s yet`}</h3>
+              <h3>{rows.length || shownWith.length ? `No ${itemName}s on this day` : `No ${itemName}s yet`}</h3>
+              {shownWith.length ? (
+                <p className="meta">
+                  Players still see {shownWith.length === 1 ? "the item" : `the ${shownWith.length} items`} below on this day. They&rsquo;re kept in other sections.
+                </p>
+              ) : null}
             </div>
           )}
 
           <button type="button" className="add-btn" onClick={add}>
             <Icon name="plus" />
             Add {/^[aeiou]/i.test(itemName) ? "an" : "a"} {itemName}
-            {def.byDate && day !== "all" && day !== "other" ? ` for ${dayLabel(day)}` : ""}
+            {pickedDay ? ` for ${dayLabel(pickedDay)}` : ""}
           </button>
+
+          {pickedDay && shownWith.length ? (
+            <section className="adm-group shown-with" aria-label={`Also on ${dayLabel(pickedDay)}`}>
+              <h2 className="sec-h">Also on {dayLabel(pickedDay)}</h2>
+              <p className="meta">Players see these with the {def.title.toLowerCase()}. Tap one to change it where it&rsquo;s kept.</p>
+              <ul className="list">
+                {shownWith.map((x) => (
+                  <li key={x.id}>
+                    <Link className="adm-row" href={x.href}>
+                      <span>
+                        <span className="mt">{x.title}</span>
+                        <span className="ms">{x.from}</span>
+                      </span>
+                      <Icon name="chev" className="chev" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
         </>
       ) : (
         <div className="card">
