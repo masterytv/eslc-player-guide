@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
 import { loadGuide } from "@/lib/content";
 import { NEARBY_CATEGORIES, NEARBY_LABEL } from "@/lib/schema";
+import { with24h } from "@/lib/time";
 
 export const metadata: Metadata = { title: "Around the Resort" };
 
@@ -68,7 +69,7 @@ export default async function AroundTheResortPage() {
                         {/walk/i.test(p.walk) ? p.walk : `${p.walk} walk`}
                       </span>
                     ) : null}
-                    {p.hours ? <span>{p.hours}</span> : null}
+                    {p.hours ? <span>{with24h(p.hours)}</span> : null}
                     {p.rating ? <span aria-label={`Rated ${p.rating} out of 5`}>★ {p.rating}</span> : null}
                   </p>
                 ) : null}

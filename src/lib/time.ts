@@ -184,6 +184,26 @@ export function clockLabel(t: string, fallback = "TBC"): string {
   return c ? `${c.hm} ${c.ap}` : fallback;
 }
 
+const AMPM = String.raw`(\d{1,2})(?:[:.](\d{2}))?\s*([ap])\.?m\b\.?`;
+const AMPM_RANGE = new RegExp(`${AMPM}(?:\\s*(?:–|—|-|to)\\s*${AMPM})?`, "gi");
+
+function to24(h: string, m: string | undefined, ap: string): string | null {
+  const hour = Number(h);
+  if (hour < 1 || hour > 12) return null;
+  const hh = (hour % 12) + (ap.toLowerCase() === "p" ? 12 : 0);
+  return `${String(hh).padStart(2, "0")}:${m ?? "00"}`;
+}
+
+/** Adds the 24-hour time after any 12-hour times in free text: "Daily 8am–11pm" → "Daily 8am–11pm (08:00–23:00)". */
+export function with24h(text: string): string {
+  return text.replace(AMPM_RANGE, (match, h1, m1, a1, h2, m2, a2) => {
+    const from = to24(h1, m1, a1);
+    const to = h2 ? to24(h2, m2, a2) : "";
+    if (!from || to === null) return match;
+    return `${match} (${to ? `${from}–${to}` : from})`;
+  });
+}
+
 /** Whole-minute countdown text: "3 h 10 min", "25 min", "2 days". */
 export function countdown(fromMs: number, toMs: number): string {
   const mins = Math.max(0, Math.round((toMs - fromMs) / 60_000));

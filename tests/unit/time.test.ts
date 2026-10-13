@@ -14,6 +14,7 @@ import {
   timeZoneOption,
   toMinutes,
   zonedNow,
+  with24h,
   zonedToUtc,
 } from "../../src/lib/time.ts";
 
@@ -86,4 +87,13 @@ test("describes durations in plain words", () => {
   assert.equal(ago(new Date(t0 - 4 * 60_000).toISOString(), t0), "4 min ago");
   assert.equal(ago(new Date(t0).toISOString(), t0), "just now");
   assert.equal(ago(null, t0), "");
+});
+
+test("adds 24-hour times after 12-hour ones in opening hours", () => {
+  assert.equal(with24h("Daily 8am–11pm"), "Daily 8am–11pm (08:00–23:00)");
+  assert.equal(with24h("Daily 8:30am–11pm"), "Daily 8:30am–11pm (08:30–23:00)");
+  assert.equal(with24h("Mon–Fri 9 am - 2 pm, Sat 10.30am"), "Mon–Fri 9 am - 2 pm (09:00–14:00), Sat 10.30am (10:30)");
+  assert.equal(with24h("12am to 12pm"), "12am to 12pm (00:00–12:00)");
+  assert.equal(with24h("Closed Sun and Mon"), "Closed Sun and Mon");
+  assert.equal(with24h("Open 24 hours"), "Open 24 hours");
 });
