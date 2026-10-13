@@ -409,6 +409,7 @@ export const SEED: Guide = {
     { id: "pl10", number: "34", firstName: "Mimi", lastName: "Painting", position: "" },
     { id: "pl11", number: "30", firstName: "Niamh", lastName: "Pfaff", position: "" },
     { id: "pl12", number: "8", firstName: "Gillian", lastName: "Smith", position: "" },
+    { id: "pl13", number: "", firstName: "Gabby", lastName: "Rosenzweig", position: "Player liaison" },
   ],
   rooming: [],
   meals: [],
