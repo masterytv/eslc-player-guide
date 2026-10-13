@@ -102,13 +102,12 @@ from the EBLC Prague guide, so check these first:
 - **Staff phone numbers** are not stored in this repository. Add them under
   *Team → Staff → Edit*, with the country code (e.g. `+1 315 …`), so Call and WhatsApp work
   from Spain.
-- **Roster, rooming list and meals** are empty in the doc.
+- **Rooming list and meals** are empty in the doc. The roster has numbers and names but no positions.
 - **Flight sheet links**: the doc's links sat inside a drawing and couldn't be copied. Add them
   under *Venue → Getting there → Edit*.
 - **Conduct**: "Coach Melissa" (lights out) isn't on the staff list, and *Getting around*
   mentions chartered buses and trains while the venue notes say everyone walks.
-- **Packing**: medications are to be "reviewed with Allyson" (the listed trainer is Amanda),
-  protein bars mention Prague, and box floor shoes may not be needed outdoors.
+- **Packing**: protein bars mention Prague, and box floor shoes may not be needed outdoors.
 - **Event dates** are set to 31 Oct – 9 Nov; the doc's cover said "9 October".
 
 ## Working on the code
