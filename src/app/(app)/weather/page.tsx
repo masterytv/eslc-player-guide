@@ -7,7 +7,7 @@ import { DaySummary, hourLabel, hoursFrom } from "@/components/Weather";
 import { RainMap, Temp, UnitToggle, Wind } from "@/components/WeatherUnits";
 import { loadGuide } from "@/lib/content";
 import { entriesFor, isGameDay, tripDays } from "@/lib/plan";
-import { clockLabel, dayLabel, dayParts, timeZoneLabel, toMinutes, zonedNow } from "@/lib/time";
+import { clock, clockLabel, dayLabel, dayParts, timeZoneLabel, toMinutes, zonedNow } from "@/lib/time";
 import { describeWeather, forecastFrom, weatherDays } from "@/lib/weather-data";
 import { loadWeather } from "@/lib/weather";
 
@@ -102,7 +102,10 @@ export default async function WeatherPage({ searchParams }: { searchParams: Sear
                 const on = onAt.get(Number(h.time.slice(0, 2)));
                 return (
                   <li key={h.time} className={on ? "wx-hour on" : "wx-hour"}>
-                    <span className="t">{hourLabel(h.time)}</span>
+                    <span className="t">
+                      {hourLabel(h.time)}
+                      <small className="h24">{clock(h.time)?.h24}</small>
+                    </span>
                     <Icon name={x.icon} />
                     <span className="d">
                       <b>

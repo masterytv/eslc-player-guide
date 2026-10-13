@@ -51,9 +51,9 @@ test("names time zones the way the team says them", () => {
 });
 
 test("formats clock times and days the way the guide shows them", () => {
-  assert.equal(clockLabel("14:30"), "2:30 PM");
-  assert.equal(clockLabel("00:05"), "12:05 AM");
-  assert.equal(clockLabel("12:00"), "12:00 PM");
+  assert.equal(clockLabel("14:30"), "2:30 PM (14:30)");
+  assert.equal(clockLabel("00:05"), "12:05 AM (00:05)");
+  assert.equal(clockLabel("12:00"), "12:00 PM (12:00)");
   assert.equal(clockLabel(""), "TBC");
   assert.equal(clockLabel("", "TBD"), "TBD");
   assert.equal(dayLabel("2026-11-02"), "Mon 2 Nov");
@@ -96,4 +96,7 @@ test("adds 24-hour times after 12-hour ones in opening hours", () => {
   assert.equal(with24h("12am to 12pm"), "12am to 12pm (00:00–12:00)");
   assert.equal(with24h("Closed Sun and Mon"), "Closed Sun and Mon");
   assert.equal(with24h("Open 24 hours"), "Open 24 hours");
+  // Times that already show their 24-hour version aren't given it twice.
+  assert.equal(with24h("Daily 8am–11pm (08:00–23:00)"), "Daily 8am–11pm (08:00–23:00)");
+  assert.equal(with24h(`Warm-up ${clockLabel("13:45")}`), "Warm-up 1:45 PM (13:45)");
 });

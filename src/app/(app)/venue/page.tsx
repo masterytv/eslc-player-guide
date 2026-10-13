@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
 import { MapTiles } from "@/components/MapTiles";
 import { loadGuide } from "@/lib/content";
-import { clockLabel, dayLabel } from "@/lib/time";
+import { clock, dayLabel, with24h } from "@/lib/time";
 
 export const metadata: Metadata = { title: "Venue & stay" };
 
@@ -22,6 +22,7 @@ function External({ href, children, className = "txt-link" }: { href: string; ch
 export default async function VenuePage() {
   const { guide } = await loadGuide();
   const { travel, accommodation: acc, venue } = guide;
+  const bus = clock(travel.busTime);
   const maps = (where: string) => guide.maps.filter((m) => m.placement === where).map((m) => ({ id: m.id, title: m.title, src: m.image }));
   const otherMaps = maps("other");
   const resortQuery = [acc.name, acc.address].filter(Boolean).join(", ");
@@ -47,16 +48,21 @@ export default async function VenuePage() {
             <div className="card">
               <p className="eyebrow">{[travel.busDate && dayLabel(travel.busDate), "Team bus"].filter(Boolean).join(" · ")}</p>
               <div className="big-time">
-                {travel.busTime ? <b>{clockLabel(travel.busTime)}</b> : null}
-                {travel.busHeadline ? <span>{travel.busHeadline}</span> : null}
+                {bus ? (
+                  <b>
+                    {bus.hm} {bus.ap}
+                    <small className="h24">{bus.h24}</small>
+                  </b>
+                ) : null}
+                {travel.busHeadline ? <span>{with24h(travel.busHeadline)}</span> : null}
               </div>
-              {travel.busText ? <p className="prose-p">{travel.busText}</p> : null}
+              {travel.busText ? <p className="prose-p">{with24h(travel.busText)}</p> : null}
             </div>
           ) : null}
           {travel.flightTitle || travel.flightText ? (
             <div className="card">
               {travel.flightTitle ? <h3>{travel.flightTitle}</h3> : null}
-              {travel.flightText ? <p className="prose-p">{travel.flightText}</p> : null}
+              {travel.flightText ? <p className="prose-p">{with24h(travel.flightText)}</p> : null}
               {travel.flightFormUrl || travel.flightResponsesUrl ? (
                 <div className="row-btns">
                   {travel.flightFormUrl ? (
@@ -87,11 +93,11 @@ export default async function VenuePage() {
                   <summary>
                     <span>
                       <b>{r.name}</b>
-                      {r.summary ? <span>{r.summary}</span> : null}
+                      {r.summary ? <span>{with24h(r.summary)}</span> : null}
                     </span>
                     <Icon name="chev" />
                   </summary>
-                  {r.details ? <p>{r.details}</p> : null}
+                  {r.details ? <p>{with24h(r.details)}</p> : null}
                 </details>
               ))}
               {travel.ridesLinkUrl ? (
@@ -162,7 +168,7 @@ export default async function VenuePage() {
           {venue.walkNote ? (
             <div className="info">
               <Icon name="walk" />
-              <span>{venue.walkNote}</span>
+              <span>{with24h(venue.walkNote)}</span>
             </div>
           ) : null}
           {venue.amenities.length || venue.notes.length ? (
@@ -178,7 +184,7 @@ export default async function VenuePage() {
               {venue.notes.length ? (
                 <ul className="bul">
                   {venue.notes.map((n) => (
-                    <li key={n}>{n}</li>
+                    <li key={n}>{with24h(n)}</li>
                   ))}
                 </ul>
               ) : null}
@@ -209,8 +215,8 @@ export default async function VenuePage() {
                 <li className="meal-row" key={m.id}>
                   <b>{m.meal}</b>
                   <div>
-                    <p>{[m.time, m.place].filter(Boolean).join(" · ") || "Time and place to be confirmed"}</p>
-                    {m.notes ? <p className="meta">{m.notes}</p> : null}
+                    <p>{with24h([m.time, m.place].filter(Boolean).join(" · ")) || "Time and place to be confirmed"}</p>
+                    {m.notes ? <p className="meta">{with24h(m.notes)}</p> : null}
                   </div>
                 </li>
               ))}
