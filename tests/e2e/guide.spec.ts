@@ -71,6 +71,7 @@ test("players see the guide but no editing tools", async () => {
   await expect(viewer).toHaveURL(/\/more\/around-the-resort$/);
   await expect(viewer.locator("main h2")).toHaveText(["Groceries", "Coffee", "Restaurants", "Things to do", "Pharmacy"]);
   await expect(viewer.locator("#coffee .card").filter({ hasText: "O'Clock Brunch" })).toContainText("★ 4.8");
+  await expect(viewer.locator("#groceries .card").filter({ hasText: "Mi Alcampo" })).toContainText("Daily 8am–11pm (08:00–23:00)");
   await expect(viewer.locator("#groceries .card").first().getByRole("link", { name: "Open in Google Maps" })).toHaveAttribute(
     "href",
     "https://www.google.com/maps/search/?api=1&query=Mercadona%2C%20Cambrils",
