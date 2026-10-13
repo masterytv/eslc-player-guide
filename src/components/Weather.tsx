@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Guide } from "@/lib/schema";
-import { clock, dayLabel, toMinutes } from "@/lib/time";
+import { clock, clockLabel, dayLabel, toMinutes } from "@/lib/time";
 import { describeWeather, forecastFrom, type WeatherDay, type WeatherHour } from "@/lib/weather-data";
 import { loadWeather } from "@/lib/weather";
 import { Icon } from "./Icon";
@@ -112,6 +112,7 @@ export async function TodayWeather({ guide, day: picked, today, minutes }: { gui
               return (
                 <li key={h.time}>
                   <span className="t">{hourLabel(h.time)}</span>
+                  <span className="t h24">{clock(h.time)?.h24}</span>
                   <Icon name={x.icon} />
                   <b>
                     <Temp c={h.temp} />
@@ -174,6 +175,5 @@ export function DaySummary({ d }: { d: WeatherDay }) {
 }
 
 function hourLabelExact(t: string): string {
-  const c = clock(t);
-  return c ? `${c.hm} ${c.ap}` : t;
+  return clockLabel(t, t);
 }

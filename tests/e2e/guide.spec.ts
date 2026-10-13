@@ -133,7 +133,9 @@ test("players see the weather hour by hour, in °C or °F, with a rain map", asy
   await expect(viewer).toHaveURL(/\/weather\?day=/);
   // 6 AM to 11 PM.
   await expect(viewer.locator(".wx-hour")).toHaveCount(18);
-  const at = (hour: string) => viewer.locator(".wx-hour").filter({ has: viewer.locator(".t", { hasText: new RegExp(`^${hour}$`) }) });
+  // Each hour reads "3 PM" with "15:00" under it.
+  const at = (hour: string) => viewer.locator(".wx-hour").filter({ has: viewer.locator(".t", { hasText: new RegExp(`^${hour}`) }) });
+  await expect(at("3 PM").locator(".h24")).toHaveText("15:00");
   await expect(at("3 PM")).toContainText("Thunderstorm");
   await expect(at("3 PM")).toContainText("80%");
 
@@ -163,7 +165,7 @@ test("the daily notes editor shows what else players see that day, and where to 
   await expect(admin).toHaveURL(/\/admin\/daily\?day=2026-11-02$/);
   await expect(admin.locator(".card.empty")).toContainText("Players still see the 3 items below on this day.");
   const also = admin.getByRole("region", { name: "Also on Mon 2 Nov" });
-  await expect(also.locator(".mt")).toHaveText(["2:30 PM · Ireland vs Finland", "TBC · Team meeting", /^We will walk to all practices/]);
+  await expect(also.locator(".mt")).toHaveText(["2:30 PM (14:30) · Ireland vs Finland", "TBC · Team meeting", /^We will walk to all practices/]);
   await expect(also.getByRole("link", { name: /We will walk/ })).toHaveAttribute("href", "/admin/venue");
 
   await also.getByRole("link", { name: /Ireland vs Finland/ }).click();
@@ -181,7 +183,7 @@ test("staff add a daily note and players see it straight away", async () => {
   await viewer.goto("/?day=2026-11-02");
   const item = viewer.locator(".tl-item", { hasText: "Team lunch at the villas" });
   await expect(item).toBeVisible();
-  await expect(item.locator(".tl-time")).toHaveText("12:15PM");
+  await expect(item.locator(".tl-time")).toHaveText("12:15PM12:15");
 });
 
 test("staff open the coaches' guide from the staff home page; players can't", async () => {

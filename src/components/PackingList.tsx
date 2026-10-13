@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { with24h } from "@/lib/time";
 import { useStoredString } from "./hooks";
 import { Icon } from "./Icon";
 
@@ -32,12 +33,12 @@ function NoteView({ note }: { note: Note }) {
   return note.level === "warning" ? (
     <p className="warn">
       <Icon name="warn" />
-      <span>{note.text}</span>
+      <span>{with24h(note.text)}</span>
     </p>
   ) : (
     <p className="info">
       <Icon name="info" />
-      <span>{note.text}</span>
+      <span>{with24h(note.text)}</span>
     </p>
   );
 }

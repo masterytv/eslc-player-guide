@@ -6,7 +6,7 @@ import { Icon } from "@/components/Icon";
 import { loadGuide } from "@/lib/content";
 import { byTime, TYPE_LABEL } from "@/lib/plan";
 import type { Row } from "@/lib/schema";
-import { clock, clockLabel, dayLabel, zonedNow } from "@/lib/time";
+import { clock, clockLabel, dayLabel, with24h, zonedNow } from "@/lib/time";
 
 export const metadata: Metadata = { title: "Schedule" };
 
@@ -82,6 +82,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                         <div className="ev-time">
                           <b>{c.hm}</b>
                           <small>{c.ap}</small>
+                          <small className="h24">{c.h24}</small>
                         </div>
                       ) : (
                         <div className="ev-time tbc">
@@ -91,11 +92,11 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                       <div className="ev-main">
                         <span className={`chip ${r.type}`}>{TYPE_LABEL[r.type]}</span>
                         <h4>
-                          {isGame ? `vs ${r.opponent || "TBC"}` : r.title || TYPE_LABEL[r.type]}
+                          {isGame ? `vs ${r.opponent || "TBC"}` : with24h(r.title) || TYPE_LABEL[r.type]}
                           {isGame && r.opponentCode ? <span className="code">{r.opponentCode}</span> : null}
                         </h4>
                         {meta ? <p className="meta">{meta}</p> : null}
-                        {r.notes ? <p className="meta">{r.notes}</p> : null}
+                        {r.notes ? <p className="meta">{with24h(r.notes)}</p> : null}
                       </div>
                       {c ? (
                         <a className="icon-btn" href={`/cal/${r.id}`} aria-label={`Add ${isGame ? `the ${r.opponent} game` : r.title} to your calendar`}>

@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { parsePage, type Block, type Inline } from "@/lib/markdown";
+import { with24h } from "@/lib/time";
 import { Icon } from "./Icon";
 
 function Inlines({ parts }: { parts: Inline[] }) {
@@ -7,13 +8,13 @@ function Inlines({ parts }: { parts: Inline[] }) {
     <>
       {parts.map((p, i) =>
         p.t === "bold" ? (
-          <strong key={i}>{p.v}</strong>
+          <strong key={i}>{with24h(p.v)}</strong>
         ) : p.t === "link" ? (
           <a key={i} href={p.href} {...(/^https?:/i.test(p.href) ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
             {p.v}
           </a>
         ) : (
-          <Fragment key={i}>{p.v}</Fragment>
+          <Fragment key={i}>{with24h(p.v)}</Fragment>
         ),
       )}
     </>
@@ -43,7 +44,7 @@ function BlockView({ block }: { block: Block }) {
     case "point":
       return (
         <div className="pt">
-          {block.label ? <h4>{block.label}</h4> : null}
+          {block.label ? <h4>{with24h(block.label)}</h4> : null}
           {block.blocks.map((b, i) => (
             <BlockView key={i} block={b} />
           ))}
@@ -95,7 +96,7 @@ export function Markdown({ source, contents = false }: { source: string; content
           <ol>
             {parts.map((p) => (
               <li key={p.i}>
-                <a href={`#${anchor(p.i)}`}>{p.heading}</a>
+                <a href={`#${anchor(p.i)}`}>{with24h(p.heading)}</a>
               </li>
             ))}
           </ol>
@@ -104,7 +105,7 @@ export function Markdown({ source, contents = false }: { source: string; content
       {sections.map((s, i) =>
         s.kind === "card" ? (
           <div className="card" key={i} id={contents && s.heading ? anchor(i) : undefined}>
-            {s.heading ? <h3>{s.heading}</h3> : null}
+            {s.heading ? <h3>{with24h(s.heading)}</h3> : null}
             {s.blocks.map((b, j) => (
               <BlockView key={j} block={b} />
             ))}

@@ -8,7 +8,19 @@ import { Icon } from "@/components/Icon";
 import { TodayWeather } from "@/components/Weather";
 import { loadGuide } from "@/lib/content";
 import { defaultDay, entriesFor, isGameDay, nextGame, tripDays, TYPE_LABEL } from "@/lib/plan";
-import { clock, clockLabel, countdown, dayLabel, dayParts, daysBetween, timeZoneLabel, toMinutes, zonedNow } from "@/lib/time";
+import { clock, countdown, dayLabel, dayParts, daysBetween, timeZoneLabel, toMinutes, with24h, zonedNow } from "@/lib/time";
+
+/** A time in a big display font, with its 24-hour version small underneath. */
+function TimeBig({ t }: { t: string }) {
+  const c = clock(t);
+  if (!c) return <>TBC</>;
+  return (
+    <>
+      {c.hm} {c.ap}
+      <small className="h24">{c.h24}</small>
+    </>
+  );
+}
 
 type Search = Promise<Record<string, string | string[] | undefined>>;
 
@@ -34,7 +46,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
         {guide.event.alert.trim() ? (
           <div className="alert" role="status">
             <Icon name="warn" />
-            <span>{guide.event.alert}</span>
+            <span>{with24h(guide.event.alert)}</span>
           </div>
         ) : null}
 
@@ -71,15 +83,16 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
                         <div className="tl-time">
                           {c.hm}
                           <small>{c.ap}</small>
+                          <small className="h24">{c.h24}</small>
                         </div>
                       ) : (
                         <div className="tl-time tbc">TBC</div>
                       )}
                       <div className="tl-body">
                         {e.kind !== "note" ? <span className={`chip ${e.kind}`}>{TYPE_LABEL[e.kind]}</span> : null}
-                        <h3>{e.title}</h3>
-                        {e.meta ? <p className="meta">{e.meta}</p> : null}
-                        {e.details ? <p>{e.details}</p> : null}
+                        <h3>{with24h(e.title)}</h3>
+                        {e.meta ? <p className="meta">{with24h(e.meta)}</p> : null}
+                        {e.details ? <p>{with24h(e.details)}</p> : null}
                         {e.link ? (
                           /^https?:/i.test(e.link.href) ? (
                             <a className="txt-link" href={e.link.href} target="_blank" rel="noopener noreferrer">
@@ -154,7 +167,9 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
             <dl className="next-meta">
               <div>
                 <dt>Start</dt>
-                <dd>{clockLabel(next.game.time)}</dd>
+                <dd>
+                  <TimeBig t={next.game.time} />
+                </dd>
               </div>
               <div>
                 <dt>Field</dt>
@@ -162,7 +177,9 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
               </div>
               <div>
                 <dt>Warm-up</dt>
-                <dd>{clockLabel(next.game.warmup)}</dd>
+                <dd>
+                  <TimeBig t={next.game.warmup} />
+                </dd>
               </div>
             </dl>
             <div className="next-actions">
@@ -185,7 +202,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
         {isGameDay(guide, day) && guide.venue.walkNote ? (
           <div className="info">
             <Icon name="walk" />
-            <span>{guide.venue.walkNote}</span>
+            <span>{with24h(guide.venue.walkNote)}</span>
           </div>
         ) : null}
 

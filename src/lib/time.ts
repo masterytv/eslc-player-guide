@@ -170,22 +170,23 @@ export function dateRange(start: string, end: string, cap = 60): string[] {
 }
 
 /** "14:30" → { hm: "2:30", ap: "PM" } */
-export function clock(t: string): { hm: string; ap: string } | null {
+export function clock(t: string): { hm: string; ap: string; h24: string } | null {
   const mins = toMinutes(t);
   if (mins == null) return null;
   const h = Math.floor(mins / 60);
-  const m = mins % 60;
-  return { hm: `${h % 12 || 12}:${String(m).padStart(2, "0")}`, ap: h >= 12 ? "PM" : "AM" };
+  const m = String(mins % 60).padStart(2, "0");
+  return { hm: `${h % 12 || 12}:${m}`, ap: h >= 12 ? "PM" : "AM", h24: `${String(h).padStart(2, "0")}:${m}` };
 }
 
-/** "14:30" → "2:30 PM", "" → fallback */
+/** "14:30" → "2:30 PM (14:30)", "" → fallback */
 export function clockLabel(t: string, fallback = "TBC"): string {
   const c = clock(t);
-  return c ? `${c.hm} ${c.ap}` : fallback;
+  return c ? `${c.hm} ${c.ap} (${c.h24})` : fallback;
 }
 
 const AMPM = String.raw`(\d{1,2})(?:[:.](\d{2}))?\s*([ap])\.?m\b\.?`;
 const AMPM_RANGE = new RegExp(`${AMPM}(?:\\s*(?:–|—|-|to)\\s*${AMPM})?`, "gi");
+const HAS_24H = /^\s*\(\d{1,2}:\d{2}/;
 
 function to24(h: string, m: string | undefined, ap: string): string | null {
   const hour = Number(h);
@@ -196,7 +197,9 @@ function to24(h: string, m: string | undefined, ap: string): string | null {
 
 /** Adds the 24-hour time after any 12-hour times in free text: "Daily 8am–11pm" → "Daily 8am–11pm (08:00–23:00)". */
 export function with24h(text: string): string {
-  return text.replace(AMPM_RANGE, (match, h1, m1, a1, h2, m2, a2) => {
+  return text.replace(AMPM_RANGE, (match, h1, m1, a1, h2, m2, a2, offset: number) => {
+    // Already followed by its 24-hour version ("8am (08:00)"): leave it.
+    if (HAS_24H.test(text.slice(offset + match.length))) return match;
     const from = to24(h1, m1, a1);
     const to = h2 ? to24(h2, m2, a2) : "";
     if (!from || to === null) return match;
