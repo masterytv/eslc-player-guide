@@ -3,6 +3,7 @@ import Link from "next/link";
 import { EditLink } from "@/components/EditLink";
 import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
+import { Tickets } from "@/components/Tickets";
 import { loadGuide } from "@/lib/content";
 import { byTime, TYPE_LABEL } from "@/lib/plan";
 import type { Row } from "@/lib/schema";
@@ -125,6 +126,8 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
             Add every game to my calendar
           </a>
         ) : null}
+
+        <Tickets tickets={guide.tickets} venueLink />
 
         <div className="key-legend">
           <span className="meta">Colours match the printed guide:</span>
