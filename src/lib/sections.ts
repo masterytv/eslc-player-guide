@@ -288,6 +288,25 @@ export const SECTIONS: SectionDef[] = [
     ],
   },
   {
+    key: "tickets",
+    title: "Spectator tickets",
+    description: "How family and friends buy tickets, and the prices",
+    group: "Venue & stay",
+    kind: "object",
+    viewHref: "/venue#tickets",
+    fields: [
+      { key: "heading", label: "Heading", type: "text", placeholder: "Tickets for family and friends" },
+      { key: "intro", label: "How to buy", type: "textarea", help: "Shown on Venue and under the schedule. Leave everything blank to hide it." },
+      {
+        key: "prices",
+        label: "Prices",
+        type: "lines",
+        help: "One ticket per line: price, a colon, then what it covers. e.g. €8: One-day ticket. Gets you in for one day.",
+      },
+      { key: "tip", label: "Tip", type: "textarea" },
+    ],
+  },
+  {
     key: "maps",
     title: "Maps & photos",
     description: "Resort map, villa layout, field map",

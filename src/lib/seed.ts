@@ -502,7 +502,7 @@ export const SEED: Guide = {
       "Spa",
       "Gym",
     ],
-    notes: ["Spectators will be allowed. Tickets will be sold online and at the venue.", "Streaming info: coming soon."],
+    notes: ["Spectators are welcome. Tickets are sold at the venue only (see Tickets below).", "Streaming info: coming soon."],
   },
   maps: [
     { id: "m1", title: "Resort map", image: "/seed/resort-map.jpg", placement: "villas" },
@@ -656,6 +656,16 @@ export const SEED: Guide = {
     { id: "nb18", category: "things", name: "Jumpland and Saltapark", town: "Cambrils", walk: "50–60 min", hours: "", rating: "", note: "Trampoline and activity parks. Taxi advised." },
     { id: "nb19", category: "pharmacy", name: "Farmàcia Vilafortuny", town: "Cambrils", walk: "25 min", hours: "Daily 9am–10pm", rating: "", note: "" },
   ],
+  tickets: {
+    heading: "Tickets for family and friends",
+    intro:
+      "Tickets are sold only at the venue. You can't buy them online or ahead of time, so buy yours at the entrance when you arrive. Cash and card are both accepted.",
+    prices: [
+      "€8: One-day ticket. Gets you in for one day of games.",
+      "€50: Whole women's tournament. Gets you in every day from 2 to 9 November.",
+    ],
+    tip: "Coming on 7 or more days? The €50 tournament ticket is cheaper than buying day tickets.",
+  },
   nearbyInfo: {
     notes: [
       "Walking times are estimates, not routed. Check Google Maps.",

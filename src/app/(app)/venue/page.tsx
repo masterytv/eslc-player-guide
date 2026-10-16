@@ -4,6 +4,7 @@ import { EditLink } from "@/components/EditLink";
 import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
 import { MapTiles } from "@/components/MapTiles";
+import { hasTickets, Tickets } from "@/components/Tickets";
 import { loadGuide } from "@/lib/content";
 import { clock, dayLabel, with24h } from "@/lib/time";
 
@@ -36,6 +37,7 @@ export default async function VenuePage() {
           <a href="#getting">Getting there</a>
           <a href="#villas">Villas</a>
           <a href="#fields">Fields</a>
+          {hasTickets(guide.tickets) ? <a href="#tickets">Tickets</a> : null}
           <a href="#meals">Meals</a>
         </nav>
 
@@ -190,6 +192,7 @@ export default async function VenuePage() {
               ) : null}
             </div>
           ) : null}
+          <Tickets tickets={guide.tickets} id="tickets" />
           <MapTiles maps={maps("fields")} />
           <div className="h-row">
             <span />

@@ -140,6 +140,9 @@ img { max-width: 100%; }
 .list > li + li { border-top: 1px solid var(--line); }
 .self-start { align-self: flex-start; }
 .prose-p { white-space: pre-line; }
+.tix-list { display: flex; flex-direction: column; gap: 8px; }
+.tix-list li { display: flex; align-items: baseline; gap: 12px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); line-height: 1.4; }
+.tix-list b { flex: none; min-width: 3.2em; font-size: 20px; font-weight: 700; color: var(--green); }
 .foot { font-size: 12px; color: var(--muted); text-align: center; padding-top: 4px; }
 .addr { font-size: 15px; user-select: text; -webkit-user-select: text; }
 .txt-link { font-size: 14px; font-weight: 600; color: var(--green); display: inline-flex; align-items: center; gap: 4px; width: fit-content; text-decoration: none; }

@@ -212,6 +212,12 @@ export const sectionSchemas = {
   nearbyInfo: z.object({
     notes: lines(20, 300),
   }),
+  tickets: z.object({
+    heading: text(80),
+    intro: long(800),
+    prices: lines(10, 160),
+    tip: long(400),
+  }),
 };
 
 export type SectionKey = keyof typeof sectionSchemas;
