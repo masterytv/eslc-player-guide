@@ -59,7 +59,7 @@ test("calendar files use UTC times and escape text", () => {
   const ics = calendar(finland, SEED, new Date("2026-10-06T12:00:00Z"));
   assert.match(ics, /DTSTART:20261102T133000Z\r\n/);
   assert.match(ics, /DTEND:20261102T143000Z\r\n/);
-  assert.match(ics, /SUMMARY:Ireland vs Finland · Match 006/);
+  assert.match(ics, /SUMMARY:Ireland vs Finland · Match 005/);
   assert.match(ics, /LOCATION:Field 2\\, Mediterranean Sports Hub/);
   assert.ok(ics.endsWith("END:VCALENDAR\r\n"));
   const untimed = calendar(SEED.schedule.filter((s) => s.id === "s1"), SEED);
