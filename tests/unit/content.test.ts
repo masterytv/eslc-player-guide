@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { calendar } from "../../src/lib/ics.ts";
 import { parseInline, parsePage } from "../../src/lib/markdown.ts";
 import { telHref, whatsappHref } from "../../src/lib/phone.ts";
-import { defaultDay, entriesFor, nextGame, tripDays } from "../../src/lib/plan.ts";
+import { defaultDay, entriesFor, fieldLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
 import { SEED } from "../../src/lib/seed.ts";
 
 test("page text splits into cards, bullets and warnings", () => {
@@ -29,7 +29,7 @@ test("a day's plan merges daily notes and the schedule, untimed items last", () 
   const arrival = entriesFor(SEED, "2026-10-31");
   assert.deepEqual(
     arrival.map((e) => e.title),
-    ["Bus departs airport", "Arrive at villas, check in, get settled"],
+    ["Bus departs airport", "Arrive at villas, check in, get settled", "Practice"],
   );
   const tue = entriesFor(SEED, "2026-11-03");
   assert.deepEqual(
@@ -62,8 +62,24 @@ test("calendar files use UTC times and escape text", () => {
   assert.match(ics, /SUMMARY:Ireland vs Finland · Match 005/);
   assert.match(ics, /LOCATION:Field 2\\, Mediterranean Sports Hub/);
   assert.ok(ics.endsWith("END:VCALENDAR\r\n"));
-  const untimed = calendar(SEED.schedule.filter((s) => s.id === "s1"), SEED);
+  const untimed = calendar(SEED.schedule.filter((s) => s.id === "s2"), SEED);
   assert.match(untimed, /DTSTART;VALUE=DATE:20261101/);
+});
+
+test("practices away from the venue show their end time, place and directions", () => {
+  const practice = SEED.schedule.find((s) => s.id === "s0")!;
+  const ics = calendar([practice], SEED, new Date("2026-10-06T12:00:00Z"));
+  // 17:00–18:30 in Spain (UTC+1 on 31 Oct).
+  assert.match(ics, /DTSTART:20261031T160000Z\r\n/);
+  assert.match(ics, /DTEND:20261031T173000Z\r\n/);
+  assert.match(ics, /LOCATION:Practice field\\, Salou\r\n/);
+  assert.doesNotMatch(ics, /Mediterranean Sports Hub/);
+  const [entry] = entriesFor(SEED, "2026-10-31").filter((e) => e.id === "s0");
+  assert.equal(entry.meta, "Until 6:30 PM (18:30) · Practice field, Salou");
+  assert.equal(entry.link?.label, "Directions");
+  assert.equal(fieldLabel("2"), "Field 2");
+  assert.equal(fieldLabel("TBD"), "Field TBD");
+  assert.equal(fieldLabel("Field 1"), "Field 1");
 });
 
 test("phone numbers become call and WhatsApp links only when they can work abroad", () => {

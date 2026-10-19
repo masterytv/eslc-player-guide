@@ -377,15 +377,16 @@ export const SEED: Guide = {
     },
   ],
   schedule: [
-    { id: "s1", date: "2026-11-01", time: "", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "TBD", warmup: "", notes: "" },
-    { id: "s2", date: "2026-11-01", time: "", type: "ceremony", title: "Opening Ceremony", opponent: "", opponentCode: "", round: "", field: "", warmup: "", notes: "" },
-    { id: "s3", date: "2026-11-02", time: "14:30", type: "game", title: "", opponent: "Finland", opponentCode: "FIN", round: "Match 005", field: "Field 2", warmup: "14:00", notes: "" },
-    { id: "s4", date: "2026-11-02", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", warmup: "", notes: "Time will be posted here and in the group chat." },
-    { id: "s5", date: "2026-11-03", time: "12:30", type: "game", title: "", opponent: "Italy", opponentCode: "ITA", round: "Match 012", field: "Field 2", warmup: "12:00", notes: "" },
-    { id: "s6", date: "2026-11-03", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", warmup: "", notes: "Time will be posted here and in the group chat." },
-    { id: "s7", date: "2026-11-03", time: "15:30", type: "game", title: "", opponent: "Sweden", opponentCode: "SWE", round: "Match 016", field: "Field 1", warmup: "15:00", notes: "New time: this game was moved up from 17:00." },
-    { id: "s8", date: "2026-11-04", time: "", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "", warmup: "", notes: "No game today." },
-    { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", warmup: "12:00", notes: "" },
+    { id: "s0", date: "2026-10-31", time: "17:00", endTime: "18:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Practice field, Salou", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", notes: "" },
+    { id: "s1", date: "2026-11-01", time: "11:00", endTime: "12:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Practice field, Salou", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", notes: "" },
+    { id: "s2", date: "2026-11-01", time: "", type: "ceremony", title: "Opening Ceremony", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", notes: "" },
+    { id: "s3", date: "2026-11-02", time: "14:30", type: "game", title: "", opponent: "Finland", opponentCode: "FIN", round: "Match 005", field: "Field 2", endTime: "", mapUrl: "", warmup: "14:00", notes: "" },
+    { id: "s4", date: "2026-11-02", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", notes: "Time will be posted here and in the group chat." },
+    { id: "s5", date: "2026-11-03", time: "12:30", type: "game", title: "", opponent: "Italy", opponentCode: "ITA", round: "Match 012", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", notes: "" },
+    { id: "s6", date: "2026-11-03", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", notes: "Time will be posted here and in the group chat." },
+    { id: "s7", date: "2026-11-03", time: "15:30", type: "game", title: "", opponent: "Sweden", opponentCode: "SWE", round: "Match 016", field: "Field 1", endTime: "", mapUrl: "", warmup: "15:00", notes: "New time: this game was moved up from 17:00." },
+    { id: "s8", date: "2026-11-04", time: "", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", notes: "No game today." },
+    { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", notes: "" },
   ],
   staff: [
     { id: "st1", name: "Maddy Morrissey Buss", role: "Head Coach", phone: "", whatsapp: true, email: "" },
@@ -503,6 +504,10 @@ export const SEED: Guide = {
       "Gym",
     ],
     notes: ["Spectators are welcome. Tickets are sold at the venue only (see Tickets below).", "Streaming info: coming soon."],
+    practiceName: "Practice field",
+    practiceAddress: "Vial, 43840 Salou, Tarragona, Spain",
+    practiceMapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69",
+    practiceNote: "Practices on Sat 31 Oct (17:00–18:30) and Sun 1 Nov (11:00–12:30) are here, not at the tournament venue.",
   },
   maps: [
     { id: "m1", title: "Resort map", image: "/seed/resort-map.jpg", placement: "villas" },
@@ -681,10 +686,12 @@ export const SEED: Guide = {
  * tournament, a copy saved before then gives way to the new starting content; anything saved after
  * it shows as usual. The coaches replaced the game plan with new principles on 12 Oct 2026, and the
  * ELF's revised master schedule (new match numbers, warm-ups, Sweden moved to 15:30) came on 18 Oct 2026.
+ * Practice times and the practice field in Salou (31 Oct and 1 Nov) were added on 19 Oct 2026.
  */
 export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   playbook: "2026-10-12T13:00:00.000Z",
-  schedule: "2026-10-18T17:30:00.000Z",
+  schedule: "2026-10-19T16:30:00.000Z",
+  venue: "2026-10-19T16:30:00.000Z",
 };
 
 /** Whether a first-tournament section saved at `updatedAt` predates its rewritten starting content. */

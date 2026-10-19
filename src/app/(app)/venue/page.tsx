@@ -28,6 +28,8 @@ export default async function VenuePage() {
   const otherMaps = maps("other");
   const resortQuery = [acc.name, acc.address].filter(Boolean).join(", ");
   const venueQuery = [venue.name, venue.address].filter(Boolean).join(", ");
+  const practiceQuery = [venue.practiceName, venue.practiceAddress].filter(Boolean).join(", ");
+  const practiceHref = venue.practiceMapUrl || (practiceQuery ? mapsUrl(practiceQuery) : "");
 
   return (
     <>
@@ -167,6 +169,23 @@ export default async function VenuePage() {
               </div>
             ) : null}
           </div>
+          {venue.practiceName || venue.practiceAddress ? (
+            <div className="card" id="practice-field">
+              <p className="eyebrow">Practice</p>
+              <h3>{venue.practiceName || "Practice field"}</h3>
+              {venue.practiceAddress ? <p className="addr">{venue.practiceAddress}</p> : null}
+              {venue.practiceNote ? <p className="prose-p">{with24h(venue.practiceNote)}</p> : null}
+              <div className="row-btns">
+                {practiceHref ? (
+                  <External className="pill-btn primary" href={practiceHref}>
+                    <Icon name="map" />
+                    Directions
+                  </External>
+                ) : null}
+                {venue.practiceAddress ? <CopyButton text={venue.practiceAddress} label="Copy address" done="Address copied" /> : null}
+              </div>
+            </div>
+          ) : null}
           {venue.walkNote ? (
             <div className="info">
               <Icon name="walk" />

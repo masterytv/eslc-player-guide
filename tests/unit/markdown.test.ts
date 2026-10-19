@@ -60,9 +60,16 @@ test("a game plan saved before the coaches' new one gives way to it", () => {
   assert.equal(olderThanSeed("staff", "2026-10-06T09:00:00.000Z"), false);
 });
 
-test("a schedule saved before the revised master schedule gives way to it", () => {
+test("a schedule saved before the revised master schedule and practice times gives way to it", () => {
   assert.equal(olderThanSeed("schedule", "2026-10-16T09:00:00.000Z"), true);
-  assert.equal(olderThanSeed("schedule", "2026-10-19T09:00:00.000Z"), false);
+  assert.equal(olderThanSeed("schedule", "2026-10-19T09:00:00.000Z"), true);
+  assert.equal(olderThanSeed("schedule", "2026-10-20T09:00:00.000Z"), false);
+  assert.equal(olderThanSeed("venue", "2026-10-19T09:00:00.000Z"), true);
+  assert.deepEqual(
+    SEED.schedule.filter((s) => s.type === "practice" && s.time).map((s) => [s.date, s.time, s.endTime]),
+    [["2026-10-31", "17:00", "18:30"], ["2026-11-01", "11:00", "12:30"]],
+  );
+  assert.ok(SEED.venue.practiceMapUrl.startsWith("https://www.google.com/maps/"));
   const sweden = SEED.schedule.find((s) => s.opponent === "Sweden");
   assert.equal(sweden?.time, "15:30");
   assert.equal(sweden?.warmup, "15:00");
