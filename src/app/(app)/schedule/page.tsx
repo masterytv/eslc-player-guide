@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
 import { Tickets } from "@/components/Tickets";
 import { loadGuide } from "@/lib/content";
-import { byTime, TYPE_LABEL } from "@/lib/plan";
+import { byTime, fieldLabel, TYPE_LABEL, untilLabel } from "@/lib/plan";
 import type { Row } from "@/lib/schema";
 import { clock, clockLabel, dayLabel, with24h, zonedNow } from "@/lib/time";
 
@@ -76,7 +76,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                   const isGame = r.type === "game";
                   const meta = isGame
                     ? [r.round, r.field, r.warmup ? `Warm-up ${clockLabel(r.warmup)}` : ""].filter(Boolean).join(" · ")
-                    : [r.field && (/^field/i.test(r.field) ? r.field : `Field ${r.field}`), c ? "" : "Time to be confirmed"].filter(Boolean).join(" · ");
+                    : [c ? untilLabel(r) : "", fieldLabel(r.field), c ? "" : "Time to be confirmed"].filter(Boolean).join(" · ");
                   return (
                     <article key={r.id} className={date < today ? "ev past" : "ev"}>
                       {c ? (
@@ -98,6 +98,12 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                         </h4>
                         {meta ? <p className="meta">{meta}</p> : null}
                         {r.notes ? <p className="meta">{with24h(r.notes)}</p> : null}
+                        {r.mapUrl ? (
+                          <a className="txt-link" href={r.mapUrl} target="_blank" rel="noopener noreferrer">
+                            <Icon name="map" size="sm" />
+                            Directions
+                          </a>
+                        ) : null}
                       </div>
                       {c ? (
                         <a className="icon-btn" href={`/cal/${r.id}`} aria-label={`Add ${isGame ? `the ${r.opponent} game` : r.title} to your calendar`}>

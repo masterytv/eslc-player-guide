@@ -30,11 +30,22 @@ export function scheduleTitle(row: Row<"schedule">): string {
   return row.type === "game" ? gameTitle(row) : row.title || TYPE_LABEL[row.type];
 }
 
+/** "2" and "TBD" read as "Field 2" and "Field TBD"; a named place ("Practice field, Salou") reads as written. */
+export function fieldLabel(field: string): string {
+  if (!field) return "";
+  return /^field/i.test(field) || !/^[\w-]{1,4}$/.test(field) ? field : `Field ${field}`;
+}
+
+/** "Until 6:30 PM" when a non-game item has an end time. */
+export function untilLabel(row: Row<"schedule">): string {
+  return row.type !== "game" && row.endTime ? `Until ${clockLabel(row.endTime)}` : "";
+}
+
 export function scheduleMeta(row: Row<"schedule">): string {
   if (row.type === "game") {
     return [row.round, row.field, row.warmup ? `Warm-up ${clockLabel(row.warmup)}` : "Warm-up TBC"].filter(Boolean).join(" · ");
   }
-  return row.field ? (/^field/i.test(row.field) ? row.field : `Field ${row.field}`) : "";
+  return [untilLabel(row), fieldLabel(row.field)].filter(Boolean).join(" · ");
 }
 
 /** Sorts by time, with items whose time isn't set yet (TBC) at the end. */
@@ -72,7 +83,7 @@ export function entriesFor(guide: Guide, date: string): Entry[] {
       title: scheduleTitle(s),
       meta: scheduleMeta(s),
       details: s.notes,
-      link: null,
+      link: s.mapUrl ? { label: "Directions", href: s.mapUrl } : null,
       game: s.type === "game" ? s : null,
     }));
   return [...notes, ...events].sort(byTime);

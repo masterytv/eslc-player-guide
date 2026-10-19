@@ -23,13 +23,16 @@ function event(row: Row<"schedule">, guide: Guide, now: Date): string[] {
   const lines = ["BEGIN:VEVENT", `UID:${row.id}@eslc-player-guide`, `DTSTAMP:${stamp(now)}`];
   if (row.time) {
     const start = zonedToUtc(row.date, row.time, guide.event.timeZone);
-    lines.push(`DTSTART:${stamp(start)}`, `DTEND:${stamp(new Date(start.getTime() + 60 * 60_000))}`);
+    const until = row.endTime ? zonedToUtc(row.date, row.endTime, guide.event.timeZone) : null;
+    const end = until && until > start ? until : new Date(start.getTime() + 60 * 60_000);
+    lines.push(`DTSTART:${stamp(start)}`, `DTEND:${stamp(end)}`);
   } else {
     lines.push(`DTSTART;VALUE=DATE:${row.date.replace(/-/g, "")}`, `DTEND;VALUE=DATE:${addDays(row.date, 1).replace(/-/g, "")}`);
   }
   const title = [scheduleTitle(row), row.round].filter(Boolean).join(" \u00b7 ");
-  const where = [row.field, guide.venue.name].filter(Boolean).join(", ");
-  const notes = [row.warmup ? `Warm-up ${row.warmup}` : "", row.notes].filter(Boolean).join("\n");
+  // A row with its own directions link is somewhere other than the tournament venue.
+  const where = row.mapUrl ? row.field : [row.field, guide.venue.name].filter(Boolean).join(", ");
+  const notes = [row.warmup ? `Warm-up ${row.warmup}` : "", row.notes, row.mapUrl ? `Directions: ${row.mapUrl}` : ""].filter(Boolean).join("\n");
   lines.push(`SUMMARY:${esc(title)}`);
   if (where) lines.push(`LOCATION:${esc(where)}`);
   if (notes) lines.push(`DESCRIPTION:${esc(notes)}`);
