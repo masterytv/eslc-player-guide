@@ -185,7 +185,9 @@ test("players see each day's meals on Today and on Venue & stay", async () => {
   await viewer.goto("/?day=2026-11-01");
   const meals = viewer.locator(".tl-item", { has: viewer.locator(".chip.meal") });
   await expect(meals.locator("h3")).toHaveText(["Breakfast", "Lunch", "Dinner"]);
-  await expect(meals.first().locator(".tl-time")).toContainText("9:00");
+  await expect(meals.first().locator(".tl-time.range")).toHaveText("9:00 AM");
+  await viewer.goto("/?day=2026-11-02");
+  await expect(meals.first().locator(".tl-time.range span")).toHaveText(["7:30 AM", "to 9:30 AM"]);
   await viewer.goto("/venue#meals");
   const sun = viewer.locator("#meals .day-group", { hasText: "Sun 1 Nov" });
   await expect(sun.locator(".meal-row b")).toHaveText(["Breakfast", "Lunch", "Dinner"]);
