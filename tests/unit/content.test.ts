@@ -4,6 +4,7 @@ import { calendar } from "../../src/lib/ics.ts";
 import { parseInline, parsePage } from "../../src/lib/markdown.ts";
 import { telHref, whatsappHref } from "../../src/lib/phone.ts";
 import { defaultDay, entriesFor, fieldLabel, mealTimeLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
+import { clockRange } from "../../src/lib/time.ts";
 import { SEED } from "../../src/lib/seed.ts";
 
 test("page text splits into cards, bullets and warnings", () => {
@@ -41,11 +42,12 @@ test("a day's plan merges daily notes, the schedule and meals, untimed items las
 test("meals show on Today with their open hours and where they're served", () => {
   const sun = entriesFor(SEED, "2026-11-01").filter((e) => e.kind === "meal");
   assert.deepEqual(sun.map((e) => [e.title, e.time]), [["Breakfast", "09:00"], ["Lunch", "13:30"], ["Dinner", "20:00"]]);
-  assert.equal(sun[0].meta, "09:00 · Buffet Masia · Cambrils Park Resort");
+  assert.equal(sun[0].meta, "Arrive 09:00 · Buffet Masia · Cambrils Park Resort");
   const [breakfast] = entriesFor(SEED, "2026-11-02").filter((e) => e.kind === "meal");
   assert.equal(breakfast.endTime, "09:30");
   assert.equal(breakfast.meta, "07:30–09:30 · Buffet Masia · Cambrils Park Resort");
-  assert.equal(mealTimeLabel(SEED.meals.find((m) => m.date === "2026-11-02")!), "7:30 AM (07:30) – 9:30 AM (09:30)");
+  assert.equal(mealTimeLabel(SEED.meals.find((m) => m.date === "2026-11-02")!), "7:30–9:30 AM (07:30–09:30)");
+  assert.equal(mealTimeLabel(SEED.meals.find((m) => m.date === "2026-10-31")!), "Arrive 1:30 PM (13:30)");
 });
 
 test("finds the next game and the day Today opens on", () => {
@@ -99,4 +101,11 @@ test("phone numbers become call and WhatsApp links only when they can work abroa
   assert.equal(telHref("087 123 4567"), "tel:0871234567");
   assert.equal(whatsappHref("087 123 4567"), null);
   assert.equal(telHref(""), null);
+});
+
+test("time ranges read 1:30–3:30 PM, and AM–PM when they cross midday", () => {
+  assert.deepEqual(clockRange("13:30", "15:30"), { hm: "1:30–3:30", ap: "PM", h24: "13:30–15:30" });
+  assert.deepEqual(clockRange("11:30", "13:30"), { hm: "11:30–1:30", ap: "AM–PM", h24: "11:30–13:30" });
+  assert.equal(clockRange("09:00", "")?.hm, "9:00");
+  assert.equal(clockRange("", "10:00"), null);
 });

@@ -350,8 +350,8 @@ export const SECTIONS: SectionDef[] = [
     fields: [
       { key: "date", label: "Day", type: "date", required: true },
       { key: "meal", label: "Meal", type: "text", required: true, placeholder: "Breakfast" },
-      { key: "time", label: "Time", type: "time", help: "Our set time, or when the buffet opens. Leave blank if it isn't set yet. Players see TBC." },
-      { key: "endTime", label: "Open until", type: "time", help: "Only for open dining hours, when we can come any time until then." },
+      { key: "time", label: "Time", type: "time", help: "Our arrival time, or when open dining starts. Leave blank if it isn't set yet. Players see TBC." },
+      { key: "endTime", label: "Open until", type: "time", help: "Only for open dining hours. Players see the range, e.g. 12:00–3:00 PM. Leave blank for a set time: players see Arrive 1:30 PM." },
       { key: "place", label: "Where", type: "text" },
       { key: "notes", label: "Notes", type: "textarea" },
     ],

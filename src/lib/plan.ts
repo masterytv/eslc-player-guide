@@ -1,5 +1,5 @@
 import type { Guide, Row, ScheduleType } from "./schema";
-import { clock, clockLabel, dateRange, toMinutes, zonedToUtc } from "./time";
+import { clockLabel, clockRange, dateRange, toMinutes, zonedToUtc } from "./time";
 
 export const TYPE_LABEL: Record<ScheduleType | "note" | "meal", string> = {
   game: "Pool play",
@@ -61,17 +61,18 @@ export function byTime<T extends { time: string }>(a: T, b: T): number {
   return ta - tb;
 }
 
-/** "07:30–09:30 · Buffet Masia": the 24-hour times, then where it's served. */
+/** "12:00–15:00 · Buffet Masia" for open hours, "Arrive 13:30 · Buffet Masia" for our set time. */
 export function mealMeta(row: Row<"meals">): string {
-  const start = clock(row.time)?.h24 ?? "";
-  const end = start ? (clock(row.endTime)?.h24 ?? "") : "";
-  return [end ? `${start}–${end}` : start, row.place].filter(Boolean).join(" · ");
+  const r = clockRange(row.time, row.endTime);
+  const when = r ? (row.endTime ? r.h24 : `Arrive ${r.h24}`) : "";
+  return [when, row.place].filter(Boolean).join(" · ");
 }
 
-/** "9:00 AM (09:00)", or "7:30 AM (07:30) – 9:30 AM (09:30)" for open hours. */
+/** "12:00–3:00 PM (12:00–15:00)" for open hours, "Arrive 1:30 PM (13:30)" for our set time. */
 export function mealTimeLabel(row: Row<"meals">): string {
-  const start = clockLabel(row.time, "Time to be confirmed");
-  return row.time && row.endTime ? `${start} – ${clockLabel(row.endTime)}` : start;
+  const r = clockRange(row.time, row.endTime);
+  if (!r) return "Time to be confirmed";
+  return `${row.endTime ? "" : "Arrive "}${r.hm} ${r.ap} (${r.h24})`;
 }
 
 /** A day's meals in time order. */

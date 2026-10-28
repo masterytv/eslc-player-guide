@@ -200,7 +200,7 @@ img { max-width: 100%; }
 .tl-time { font: 700 22px/1 var(--font-display); font-variant-numeric: tabular-nums; }
 .tl-time small { display: block; font: 600 11px/1.5 var(--font-body); letter-spacing: .06em; color: var(--muted); }
 .tl-time .h24 { font-variant-numeric: tabular-nums; letter-spacing: .02em; }
-.tl-time.range { display: flex; flex-direction: column; gap: 2px; font: 600 13px/1.25 var(--font-body); padding-top: 2px; }
+.tl-time.range { font: 600 13px/1.25 var(--font-body); padding-top: 2px; white-space: nowrap; }
 .tl-time.tbc { font-size: 16px; color: var(--muted); padding-top: 3px; }
 .tl-body { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
 .tl-body h3 { font-size: 16px; font-weight: 600; line-height: 1.25; }
