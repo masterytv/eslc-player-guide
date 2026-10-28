@@ -13,6 +13,7 @@
   --c-game-bg: #d7efdf; --c-game-fg: #1b5a30;
   --c-meeting-bg: #dce8f6; --c-meeting-fg: #1e4878;
   --c-other-bg: #eceff5; --c-other-fg: #3f4860;
+  --c-meal-bg: #fde9d7; --c-meal-fg: #8a4206;
   --crest: #ffffff; --viewer-bg: #0a0e18; --viewer-ink: #ffffff; --toast-bg: #131a2b; --toast-ink: #ffffff;
   --focus: #f0852a;
   --font-display: "Barlow Condensed", "Roboto Condensed", "Arial Narrow", sans-serif;
@@ -36,6 +37,7 @@
     --c-game-bg: #143423; --c-game-fg: #8ee0a8;
     --c-meeting-bg: #16273f; --c-meeting-fg: #9cc3ee;
     --c-other-bg: #1e2840; --c-other-fg: #b7c0d4;
+    --c-meal-bg: #3a2412; --c-meal-fg: #ffb57a;
     --viewer-bg: #03050a; --toast-bg: #e8ecf4; --toast-ink: #0d1322;
     color-scheme: dark;
   }
@@ -124,6 +126,7 @@ img { max-width: 100%; }
 .chip.practice { background: var(--c-practice-bg); color: var(--c-practice-fg); }
 .chip.ceremony { background: var(--c-ceremony-bg); color: var(--c-ceremony-fg); }
 .chip.meeting { background: var(--c-meeting-bg); color: var(--c-meeting-fg); }
+.chip.meal { background: var(--c-meal-bg); color: var(--c-meal-fg); }
 .pill-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 999px; background: var(--surface-2); font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; }
 .pill-btn.primary { background: var(--green); color: var(--green-ink); }
 .pill-btn .ic { width: 16px; height: 16px; }

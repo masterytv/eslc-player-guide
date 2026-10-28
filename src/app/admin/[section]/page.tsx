@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { SectionEditor, type ShownWith } from "@/components/SectionEditor";
 import { loadGuide } from "@/lib/content";
-import { byTime, defaultDay, isGameDay, scheduleTitle, tripDays, TYPE_LABEL } from "@/lib/plan";
+import { byTime, defaultDay, isGameDay, mealTimeLabel, scheduleTitle, tripDays, TYPE_LABEL } from "@/lib/plan";
 import { isSectionKey, type Guide } from "@/lib/schema";
 import { sectionDef } from "@/lib/sections";
 import { clockLabel, isDate, zonedNow } from "@/lib/time";
@@ -11,7 +11,7 @@ import { clockLabel, isDate, zonedNow } from "@/lib/time";
 type Params = Promise<{ section: string }>;
 
 /**
- * What Today lists with a day's notes that's kept in other sections: the day's schedule,
+ * What Today lists with a day's notes that's kept in other sections: the day's schedule and meals,
  * and the walk note on game days. The notes editor shows these so staff can find them.
  */
 function shownWithNotes(guide: Guide): ShownWith[] {
@@ -24,11 +24,20 @@ function shownWithNotes(guide: Guide): ShownWith[] {
       from: `Schedule · ${TYPE_LABEL[s.type]}`,
       href: `/admin/schedule?day=${s.date}&item=${s.id}`,
     }));
+  const meals = [...guide.meals]
+    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : byTime(a, b)))
+    .map((m) => ({
+      id: m.id,
+      date: m.date,
+      title: `${mealTimeLabel(m)} · ${m.meal}`,
+      from: "Venue · Meals",
+      href: `/admin/meals?day=${m.date}&item=${m.id}`,
+    }));
   const gameDays = [...new Set(guide.schedule.map((s) => s.date))].filter((d) => isGameDay(guide, d));
   const walk = guide.venue.walkNote
     ? gameDays.map((d) => ({ id: `walk-${d}`, date: d, title: guide.venue.walkNote, from: "Venue · Getting there, shown on game days", href: "/admin/venue" }))
     : [];
-  return [...events, ...walk];
+  return [...events, ...meals, ...walk];
 }
 type Search = Promise<Record<string, string | string[] | undefined>>;
 

@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { calendar } from "../../src/lib/ics.ts";
 import { parseInline, parsePage } from "../../src/lib/markdown.ts";
 import { telHref, whatsappHref } from "../../src/lib/phone.ts";
-import { defaultDay, entriesFor, fieldLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
+import { defaultDay, entriesFor, fieldLabel, mealTimeLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
 import { SEED } from "../../src/lib/seed.ts";
 
 test("page text splits into cards, bullets and warnings", () => {
@@ -25,17 +25,26 @@ test("page links only allow safe destinations", () => {
   assert.deepEqual(parseInline("**Bring 3 balls**"), [{ t: "bold", v: "Bring 3 balls" }]);
 });
 
-test("a day's plan merges daily notes and the schedule, untimed items last", () => {
+test("a day's plan merges daily notes, the schedule and meals, untimed items last", () => {
   const arrival = entriesFor(SEED, "2026-10-31");
   assert.deepEqual(
     arrival.map((e) => e.title),
-    ["Bus departs airport", "Arrive at villas, check in, get settled", "Practice"],
+    ["Lunch", "Bus departs airport", "Arrive at villas, check in, get settled", "Practice", "Dinner"],
   );
   const tue = entriesFor(SEED, "2026-11-03");
   assert.deepEqual(
     tue.map((e) => e.title),
-    ["Ireland vs Italy", "Ireland vs Sweden", "Team meeting"],
+    ["Breakfast", "Lunch", "Ireland vs Italy", "Ireland vs Sweden", "Dinner", "Team meeting"],
   );
+});
+
+test("meals show on Today with their open hours and where they're served", () => {
+  const sun = entriesFor(SEED, "2026-11-01").filter((e) => e.kind === "meal");
+  assert.deepEqual(sun.map((e) => [e.title, e.time]), [["Breakfast", "09:00"], ["Lunch", "13:30"], ["Dinner", "20:00"]]);
+  assert.equal(sun[0].meta, "Buffet Masia · Cambrils Park Resort");
+  const [breakfast] = entriesFor(SEED, "2026-11-02").filter((e) => e.kind === "meal");
+  assert.equal(breakfast.meta, "Until 9:30 AM (09:30) · Buffet Masia · Cambrils Park Resort");
+  assert.equal(mealTimeLabel(SEED.meals.find((m) => m.date === "2026-11-02")!), "7:30 AM (07:30) – 9:30 AM (09:30)");
 });
 
 test("finds the next game and the day Today opens on", () => {

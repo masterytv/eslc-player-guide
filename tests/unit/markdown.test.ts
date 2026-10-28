@@ -54,6 +54,12 @@ test("the game plan reads as the coaches wrote it", () => {
   assert.ok(steps?.kind === "ol" && steps.items.length === 4);
 });
 
+test("meals saved before the organisers' meal schedule give way to it", () => {
+  assert.equal(olderThanSeed("meals", "2026-10-20T09:00:00.000Z"), true);
+  assert.equal(olderThanSeed("meals", "2026-10-29T09:00:00.000Z"), false);
+  assert.equal(SEED.meals.length, 30);
+});
+
 test("a game plan saved before the coaches' new one gives way to it", () => {
   assert.equal(olderThanSeed("playbook", "2026-10-06T09:00:00.000Z"), true);
   assert.equal(olderThanSeed("playbook", "2026-10-20T09:00:00.000Z"), false);

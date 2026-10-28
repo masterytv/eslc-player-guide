@@ -413,7 +413,38 @@ export const SEED: Guide = {
     { id: "pl13", number: "", firstName: "Gabby", lastName: "Rosenzweig", position: "Player liaison" },
   ],
   rooming: [],
-  meals: [],
+  meals: [
+    { id: "m1", date: "2026-10-31", meal: "Lunch", time: "13:30", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m2", date: "2026-10-31", meal: "Dinner", time: "20:30", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m3", date: "2026-11-01", meal: "Breakfast", time: "09:00", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m4", date: "2026-11-01", meal: "Lunch", time: "13:30", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m5", date: "2026-11-01", meal: "Dinner", time: "20:00", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m6", date: "2026-11-02", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m7", date: "2026-11-02", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m8", date: "2026-11-02", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m9", date: "2026-11-03", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m10", date: "2026-11-03", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m11", date: "2026-11-03", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m12", date: "2026-11-04", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m13", date: "2026-11-04", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m14", date: "2026-11-04", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m15", date: "2026-11-05", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m16", date: "2026-11-05", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m17", date: "2026-11-05", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m18", date: "2026-11-06", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m19", date: "2026-11-06", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m20", date: "2026-11-06", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m21", date: "2026-11-07", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m22", date: "2026-11-07", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m23", date: "2026-11-07", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m24", date: "2026-11-08", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m25", date: "2026-11-08", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m26", date: "2026-11-08", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m27", date: "2026-11-09", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m28", date: "2026-11-09", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m29", date: "2026-11-09", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m30", date: "2026-11-10", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+  ],
   travel: {
     busDate: "2026-10-31",
     busTime: "14:00",
@@ -687,11 +718,13 @@ export const SEED: Guide = {
  * it shows as usual. The coaches replaced the game plan with new principles on 12 Oct 2026, and the
  * ELF's revised master schedule (new match numbers, warm-ups, Sweden moved to 15:30) came on 18 Oct 2026.
  * Practice times and the practice field in Salou (31 Oct and 1 Nov) were added on 19 Oct 2026.
+ * The organisers' meal schedule for Ireland (a time for each meal, by day) came on 28 Oct 2026.
  */
 export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   playbook: "2026-10-12T13:00:00.000Z",
   schedule: "2026-10-19T16:30:00.000Z",
   venue: "2026-10-19T16:30:00.000Z",
+  meals: "2026-10-28T12:00:00.000Z",
 };
 
 /** Whether a first-tournament section saved at `updatedAt` predates its rewritten starting content. */
