@@ -93,7 +93,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
                           <small className="h24">{c.h24}</small>
                         </div>
                       ) : (
-                        <div className="tl-time tbc">TBC</div>
+                        <div className="tl-time tbc">{e.kind === "meal" ? "TBD" : "TBC"}</div>
                       )}
                       <div className="tl-body">
                         {e.kind !== "note" ? <span className={`chip ${e.kind}`}>{TYPE_LABEL[e.kind]}</span> : null}

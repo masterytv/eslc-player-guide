@@ -71,13 +71,19 @@ export function mealMeta(row: Row<"meals">): string {
 /** "12:00–3:00 PM (12:00–15:00)" for open hours, "Arrive 1:30 PM (13:30)" for our set time. */
 export function mealTimeLabel(row: Row<"meals">): string {
   const r = clockRange(row.time, row.endTime);
-  if (!r) return "Time to be confirmed";
+  if (!r) return "TBD";
   return `${row.endTime ? "" : "Arrive "}${r.hm} ${r.ap} (${r.h24})`;
 }
 
-/** A day's meals in time order. */
+const MEAL_ORDER = ["breakfast", "brunch", "lunch", "dinner"];
+const mealRank = (meal: string) => {
+  const i = MEAL_ORDER.indexOf(meal.trim().toLowerCase());
+  return i < 0 ? MEAL_ORDER.length : i;
+};
+
+/** A day's meals, breakfast to dinner, so one without a time yet (TBD) keeps its place. */
 export function mealsFor(guide: Guide, date: string): Row<"meals">[] {
-  return guide.meals.filter((m) => m.date === date).sort(byTime);
+  return guide.meals.filter((m) => m.date === date).sort((a, b) => mealRank(a.meal) - mealRank(b.meal) || byTime(a, b));
 }
 
 /** Daily notes, schedule items and meals for one day, in time order. */

@@ -414,7 +414,7 @@ export const SEED: Guide = {
   ],
   rooming: [],
   meals: [
-    { id: "m1", date: "2026-10-31", meal: "Lunch", time: "13:30", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m1", date: "2026-10-31", meal: "Lunch", time: "", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m2", date: "2026-10-31", meal: "Dinner", time: "20:30", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m3", date: "2026-11-01", meal: "Breakfast", time: "09:00", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m4", date: "2026-11-01", meal: "Lunch", time: "13:30", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
