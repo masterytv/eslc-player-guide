@@ -168,9 +168,9 @@ test("the daily notes editor shows what else players see that day, and where to 
   await expect(also.locator(".mt")).toHaveText([
     "2:30 PM (14:30) · Ireland vs Finland",
     "TBC · Team meeting",
-    "7:30 AM (07:30) – 9:30 AM (09:30) · Breakfast",
-    "12:00 PM (12:00) – 3:00 PM (15:00) · Lunch",
-    "7:00 PM (19:00) – 9:00 PM (21:00) · Dinner",
+    "7:30–9:30 AM (07:30–09:30) · Breakfast",
+    "12:00–3:00 PM (12:00–15:00) · Lunch",
+    "7:00–9:00 PM (19:00–21:00) · Dinner",
     /^We will walk to all practices/,
   ]);
   await expect(also.getByRole("link", { name: /We will walk/ })).toHaveAttribute("href", "/admin/venue");
@@ -185,13 +185,18 @@ test("players see each day's meals on Today and on Venue & stay", async () => {
   await viewer.goto("/?day=2026-11-01");
   const meals = viewer.locator(".tl-item", { has: viewer.locator(".chip.meal") });
   await expect(meals.locator("h3")).toHaveText(["Breakfast", "Lunch", "Dinner"]);
-  await expect(meals.first().locator(".tl-time.range")).toHaveText("9:00 AM");
+  await expect(meals.first().locator(".tl-time.range")).toHaveText("9:00AM");
+  await expect(meals.first().locator(".meta")).toHaveText("Arrive 09:00 · Buffet Masia · Cambrils Park Resort");
   await viewer.goto("/?day=2026-11-02");
-  await expect(meals.first().locator(".tl-time.range span")).toHaveText(["7:30 AM", "to 9:30 AM"]);
+  await expect(meals.first().locator(".tl-time.range span")).toHaveText("7:30–9:30");
+  await expect(meals.first().locator(".tl-time.range small")).toHaveText("AM");
+  await viewer.goto("/?day=2026-10-31");
+  await expect(meals.filter({ hasText: "Lunch" }).locator(".tl-time")).toHaveText("TBD");
   await viewer.goto("/venue#meals");
+  await expect(viewer.locator("#meals .day-group", { hasText: "Sat 31 Oct" }).locator(".meal-row").first()).toContainText("TBD");
   const sun = viewer.locator("#meals .day-group", { hasText: "Sun 1 Nov" });
   await expect(sun.locator(".meal-row b")).toHaveText(["Breakfast", "Lunch", "Dinner"]);
-  await expect(sun.locator(".meal-row").first()).toContainText("9:00 AM (09:00)");
+  await expect(sun.locator(".meal-row").first()).toContainText("Arrive 9:00 AM (09:00)");
 });
 
 test("staff add a daily note and players see it straight away", async () => {

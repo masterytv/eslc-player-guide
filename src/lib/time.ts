@@ -178,6 +178,15 @@ export function clock(t: string): { hm: string; ap: string; h24: string } | null
   return { hm: `${h % 12 || 12}:${m}`, ap: h >= 12 ? "PM" : "AM", h24: `${String(h).padStart(2, "0")}:${m}` };
 }
 
+/** "13:30"–"15:30" → { hm: "1:30–3:30", ap: "PM", h24: "13:30–15:30" }; "11:30"–"13:30" → AM–PM. No end: just the start. */
+export function clockRange(start: string, end: string): { hm: string; ap: string; h24: string } | null {
+  const a = clock(start);
+  if (!a) return null;
+  const b = clock(end);
+  if (!b) return a;
+  return { hm: `${a.hm}–${b.hm}`, ap: a.ap === b.ap ? a.ap : `${a.ap}–${b.ap}`, h24: `${a.h24}–${b.h24}` };
+}
+
 /** "14:30" → "2:30 PM (14:30)", "" → fallback */
 export function clockLabel(t: string, fallback = "TBC"): string {
   const c = clock(t);

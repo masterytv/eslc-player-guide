@@ -8,7 +8,7 @@ import { Icon } from "@/components/Icon";
 import { TodayWeather } from "@/components/Weather";
 import { loadGuide } from "@/lib/content";
 import { defaultDay, entriesFor, isGameDay, nextGame, tripDays, TYPE_LABEL } from "@/lib/plan";
-import { clock, countdown, dayLabel, dayParts, daysBetween, timeZoneLabel, toMinutes, with24h, zonedNow } from "@/lib/time";
+import { clock, clockRange, countdown, dayLabel, dayParts, daysBetween, timeZoneLabel, toMinutes, with24h, zonedNow } from "@/lib/time";
 
 /** A time in a big display font, with its 24-hour version small underneath. */
 function TimeBig({ t }: { t: string }) {
@@ -75,22 +75,16 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
               <ol className="tl">
                 {entries.map((e) => {
                   const c = clock(e.time);
-                  const end = clock(e.endTime);
+                  const range = e.kind === "meal" ? clockRange(e.time, e.endTime) : null;
                   const mins = toMinutes(e.time);
                   const past = isToday && mins != null && mins < minutes;
                   return (
                     <li key={e.id} className={past ? "tl-item past" : "tl-item"}>
-                      {e.kind === "meal" && c ? (
+                      {range ? (
                         // Meals show their whole serving time at the same size, so players see when they can go.
                         <div className="tl-time range">
-                          <span>
-                            {c.hm} {c.ap}
-                          </span>
-                          {end ? (
-                            <span>
-                              to {end.hm} {end.ap}
-                            </span>
-                          ) : null}
+                          <span>{range.hm}</span>
+                          <small>{range.ap}</small>
                         </div>
                       ) : c ? (
                         <div className="tl-time">
@@ -99,7 +93,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
                           <small className="h24">{c.h24}</small>
                         </div>
                       ) : (
-                        <div className="tl-time tbc">TBC</div>
+                        <div className="tl-time tbc">{e.kind === "meal" ? "TBD" : "TBC"}</div>
                       )}
                       <div className="tl-body">
                         {e.kind !== "note" ? <span className={`chip ${e.kind}`}>{TYPE_LABEL[e.kind]}</span> : null}
