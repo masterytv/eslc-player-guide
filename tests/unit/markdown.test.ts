@@ -54,6 +54,13 @@ test("the game plan reads as the coaches wrote it", () => {
   assert.ok(steps?.kind === "ol" && steps.items.length === 4);
 });
 
+test("a rooming list saved before the final one gives way to it", () => {
+  assert.equal(olderThanSeed("rooming", "2026-10-20T09:00:00.000Z"), true);
+  assert.equal(olderThanSeed("rooming", "2026-10-29T09:00:00.000Z"), false);
+  assert.deepEqual(SEED.rooming.map((v) => v.villa), ["Villa 1", "Villa 2", "Villa 3", "Villa 4", "Villa 5", "Villa 6"]);
+  assert.deepEqual(SEED.rooming[4].names, ["Amanda Kusiak", "Liz Mosher", "Treatment room"]);
+});
+
 test("meals saved before the organisers' meal schedule give way to it", () => {
   assert.equal(olderThanSeed("meals", "2026-10-20T09:00:00.000Z"), true);
   assert.equal(olderThanSeed("meals", "2026-10-28T10:30:00.000Z"), true);

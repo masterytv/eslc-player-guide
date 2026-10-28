@@ -102,7 +102,7 @@ from the EBLC Prague guide, so check these first:
 - **Staff phone numbers** are not stored in this repository. Add them under
   *Team → Staff → Edit*, with the country code (e.g. `+1 315 …`), so Call and WhatsApp work
   from Spain.
-- **Rooming list** is empty in the doc. The roster has numbers and names but no positions.
+- The roster has numbers and names but no positions.
 - **Flight sheet links**: the doc's links sat inside a drawing and couldn't be copied. Add them
   under *Venue → Getting there → Edit*.
 - **Conduct**: "Coach Melissa" (lights out) isn't on the staff list, and *Getting around*

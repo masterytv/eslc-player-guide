@@ -412,7 +412,14 @@ export const SEED: Guide = {
     { id: "pl12", number: "8", firstName: "Gillian", lastName: "Smith", position: "" },
     { id: "pl13", number: "", firstName: "Gabby", lastName: "Rosenzweig", position: "Player liaison" },
   ],
-  rooming: [],
+  rooming: [
+    { id: "v1", villa: "Villa 1", names: ["Haley Crosson", "Catherine DeKorte", "Gillian Smith", "Niamh Pfaff"] },
+    { id: "v2", villa: "Villa 2", names: ["Amelie Devine", "Aine Devine", "Maggie Egan", "Amelia Heisler"] },
+    { id: "v3", villa: "Villa 3", names: ["Mimi Painting", "Amy Bolton", "Orla Howlett", "Julia Ruscio"] },
+    { id: "v4", villa: "Villa 4", names: ["Maddy Buss", "Ashley O’Brien", "Justin Warner (single)"] },
+    { id: "v5", villa: "Villa 5", names: ["Amanda Kusiak", "Liz Mosher", "Treatment room"] },
+    { id: "v6", villa: "Villa 6", names: ["Catherine Conway", "Kathleen Finnegan", "Gabby Rosenzweig (single)"] },
+  ],
   meals: [
     { id: "m1", date: "2026-10-31", meal: "Lunch", time: "", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m2", date: "2026-10-31", meal: "Dinner", time: "20:30", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
@@ -718,13 +725,15 @@ export const SEED: Guide = {
  * it shows as usual. The coaches replaced the game plan with new principles on 12 Oct 2026, and the
  * ELF's revised master schedule (new match numbers, warm-ups, Sweden moved to 15:30) came on 18 Oct 2026.
  * Practice times and the practice field in Salou (31 Oct and 1 Nov) were added on 19 Oct 2026.
- * The organisers' meal schedule for Ireland (a time for each meal, by day) came on 28 Oct 2026.
+ * The organisers' meal schedule for Ireland (a time for each meal, by day) and the rooming list
+ * came on 28 Oct 2026.
  */
 export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   playbook: "2026-10-12T13:00:00.000Z",
   schedule: "2026-10-19T16:30:00.000Z",
   venue: "2026-10-19T16:30:00.000Z",
   meals: "2026-10-28T12:00:00.000Z",
+  rooming: "2026-10-28T20:25:00.000Z",
 };
 
 /** Whether a first-tournament section saved at `updatedAt` predates its rewritten starting content. */
