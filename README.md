@@ -7,7 +7,7 @@ Each tournament gets its own guide at the same address; staff prepare the next o
 the current one is live, then switch players over.
 
 - **Today**: the day's plan first, then the next game with a countdown, the weather, and alerts.
-- **Schedule**: games, practices, ceremonies and meetings, with add-to-calendar.
+- **Schedule**: games, practices, ceremonies and meetings, with add-to-calendar. Today's plan also lists the day's meals.
 - **Team**: staff with call and WhatsApp buttons, the roster, the rooming list.
 - **Venue & stay**: airport bus, ride options, villas, fields, maps and meals.
 - **More**: packing checklist, the weather (hour by hour, with a rain map), conduct and
@@ -102,7 +102,7 @@ from the EBLC Prague guide, so check these first:
 - **Staff phone numbers** are not stored in this repository. Add them under
   *Team → Staff → Edit*, with the country code (e.g. `+1 315 …`), so Call and WhatsApp work
   from Spain.
-- **Rooming list and meals** are empty in the doc. The roster has numbers and names but no positions.
+- **Rooming list** is empty in the doc. The roster has numbers and names but no positions.
 - **Flight sheet links**: the doc's links sat inside a drawing and couldn't be copied. Add them
   under *Venue → Getting there → Edit*.
 - **Conduct**: "Coach Melissa" (lights out) isn't on the staff list, and *Getting around*

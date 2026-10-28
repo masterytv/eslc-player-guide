@@ -1,20 +1,21 @@
 import type { Guide, Row, ScheduleType } from "./schema";
 import { clockLabel, dateRange, toMinutes, zonedToUtc } from "./time";
 
-export const TYPE_LABEL: Record<ScheduleType | "note", string> = {
+export const TYPE_LABEL: Record<ScheduleType | "note" | "meal", string> = {
   game: "Pool play",
   practice: "Practice",
   ceremony: "Ceremony",
   meeting: "Meeting",
   other: "Event",
   note: "Note",
+  meal: "Meal",
 };
 
 export interface Entry {
   id: string;
   date: string;
   time: string;
-  kind: ScheduleType | "note";
+  kind: ScheduleType | "note" | "meal";
   title: string;
   meta: string;
   details: string;
@@ -58,7 +59,23 @@ export function byTime<T extends { time: string }>(a: T, b: T): number {
   return ta - tb;
 }
 
-/** Daily notes and schedule items for one day, in time order. */
+/** "Until 9:30 AM · Buffet Masia" for a meal served over open hours. */
+export function mealMeta(row: Row<"meals">): string {
+  return [row.endTime ? `Until ${clockLabel(row.endTime)}` : "", row.place].filter(Boolean).join(" · ");
+}
+
+/** "9:00 AM (09:00)", or "7:30 AM (07:30) – 9:30 AM (09:30)" for open hours. */
+export function mealTimeLabel(row: Row<"meals">): string {
+  const start = clockLabel(row.time, "Time to be confirmed");
+  return row.time && row.endTime ? `${start} – ${clockLabel(row.endTime)}` : start;
+}
+
+/** A day's meals in time order. */
+export function mealsFor(guide: Guide, date: string): Row<"meals">[] {
+  return guide.meals.filter((m) => m.date === date).sort(byTime);
+}
+
+/** Daily notes, schedule items and meals for one day, in time order. */
 export function entriesFor(guide: Guide, date: string): Entry[] {
   const notes: Entry[] = guide.daily
     .filter((d) => d.date === date)
@@ -86,7 +103,18 @@ export function entriesFor(guide: Guide, date: string): Entry[] {
       link: s.mapUrl ? { label: "Directions", href: s.mapUrl } : null,
       game: s.type === "game" ? s : null,
     }));
-  return [...notes, ...events].sort(byTime);
+  const meals: Entry[] = mealsFor(guide, date).map((m) => ({
+    id: m.id,
+    date: m.date,
+    time: m.time,
+    kind: "meal",
+    title: m.meal,
+    meta: mealMeta(m),
+    details: m.notes,
+    link: null,
+    game: null,
+  }));
+  return [...notes, ...events, ...meals].sort(byTime);
 }
 
 export function tripDays(guide: Guide): string[] {

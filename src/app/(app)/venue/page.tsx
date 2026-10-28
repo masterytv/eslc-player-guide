@@ -6,6 +6,7 @@ import { Icon } from "@/components/Icon";
 import { MapTiles } from "@/components/MapTiles";
 import { hasTickets, Tickets } from "@/components/Tickets";
 import { loadGuide } from "@/lib/content";
+import { mealsFor, mealTimeLabel } from "@/lib/plan";
 import { clock, dayLabel, with24h } from "@/lib/time";
 
 export const metadata: Metadata = { title: "Venue & stay" };
@@ -26,6 +27,7 @@ export default async function VenuePage() {
   const bus = clock(travel.busTime);
   const maps = (where: string) => guide.maps.filter((m) => m.placement === where).map((m) => ({ id: m.id, title: m.title, src: m.image }));
   const otherMaps = maps("other");
+  const mealDays = [...new Set(guide.meals.map((m) => m.date))].sort();
   const resortQuery = [acc.name, acc.address].filter(Boolean).join(", ");
   const venueQuery = [venue.name, venue.address].filter(Boolean).join(", ");
   const practiceQuery = [venue.practiceName, venue.practiceAddress].filter(Boolean).join(", ");
@@ -231,18 +233,24 @@ export default async function VenuePage() {
             <h2 className="h-disp">Meals</h2>
             <EditLink href="/admin/meals" />
           </div>
-          {guide.meals.length ? (
-            <ul className="list">
-              {guide.meals.map((m) => (
-                <li className="meal-row" key={m.id}>
-                  <b>{m.meal}</b>
-                  <div>
-                    <p>{with24h([m.time, m.place].filter(Boolean).join(" · ")) || "Time and place to be confirmed"}</p>
-                    {m.notes ? <p className="meta">{with24h(m.notes)}</p> : null}
-                  </div>
-                </li>
-              ))}
-            </ul>
+          {mealDays.length ? (
+            mealDays.map((date) => (
+              <section className="day-group" key={date}>
+                <h3 className="sday">{dayLabel(date)}</h3>
+                <ul className="list">
+                  {mealsFor(guide, date).map((m) => (
+                    <li className="meal-row" key={m.id}>
+                      <b>{m.meal}</b>
+                      <div>
+                        <p>{mealTimeLabel(m)}</p>
+                        {m.place ? <p className="meta">{m.place}</p> : null}
+                        {m.notes ? <p className="meta">{with24h(m.notes)}</p> : null}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))
           ) : (
             <div className="card empty">
               <h3>Meal times aren&rsquo;t posted yet</h3>

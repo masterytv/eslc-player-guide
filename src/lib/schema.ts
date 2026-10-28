@@ -112,8 +112,10 @@ export const sectionSchemas = {
     names: lines(8, 80),
   }),
   meals: list({
+    date: dateReq,
     meal: req("Add the meal", 60),
-    time: text(60),
+    time,
+    endTime: time,
     place: text(120),
     notes: long(400),
   }),

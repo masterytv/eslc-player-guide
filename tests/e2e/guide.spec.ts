@@ -163,14 +163,33 @@ test("the daily notes editor shows what else players see that day, and where to 
   await expect(admin.locator(".dayhead h2")).toHaveText("Mon 2 Nov");
   await admin.locator(".sec-h", { hasText: "Daily notes" }).getByRole("link", { name: /Edit/ }).click();
   await expect(admin).toHaveURL(/\/admin\/daily\?day=2026-11-02$/);
-  await expect(admin.locator(".card.empty")).toContainText("Players still see the 3 items below on this day.");
+  await expect(admin.locator(".card.empty")).toContainText("Players still see the 6 items below on this day.");
   const also = admin.getByRole("region", { name: "Also on Mon 2 Nov" });
-  await expect(also.locator(".mt")).toHaveText(["2:30 PM (14:30) · Ireland vs Finland", "TBC · Team meeting", /^We will walk to all practices/]);
+  await expect(also.locator(".mt")).toHaveText([
+    "2:30 PM (14:30) · Ireland vs Finland",
+    "TBC · Team meeting",
+    "7:30 AM (07:30) – 9:30 AM (09:30) · Breakfast",
+    "12:00 PM (12:00) – 3:00 PM (15:00) · Lunch",
+    "7:00 PM (19:00) – 9:00 PM (21:00) · Dinner",
+    /^We will walk to all practices/,
+  ]);
   await expect(also.getByRole("link", { name: /We will walk/ })).toHaveAttribute("href", "/admin/venue");
+  await expect(also.getByRole("link", { name: /Breakfast/ })).toHaveAttribute("href", /\/admin\/meals\?day=2026-11-02&item=m\d+$/);
 
   await also.getByRole("link", { name: /Ireland vs Finland/ }).click();
   await expect(admin).toHaveURL(/\/admin\/schedule\?day=2026-11-02&item=s3$/);
   await expect(admin.getByLabel("Opponent", { exact: true })).toHaveValue("Finland");
+});
+
+test("players see each day's meals on Today and on Venue & stay", async () => {
+  await viewer.goto("/?day=2026-11-01");
+  const meals = viewer.locator(".tl-item", { has: viewer.locator(".chip.meal") });
+  await expect(meals.locator("h3")).toHaveText(["Breakfast", "Lunch", "Dinner"]);
+  await expect(meals.first().locator(".tl-time")).toContainText("9:00");
+  await viewer.goto("/venue#meals");
+  const sun = viewer.locator("#meals .day-group", { hasText: "Sun 1 Nov" });
+  await expect(sun.locator(".meal-row b")).toHaveText(["Breakfast", "Lunch", "Dinner"]);
+  await expect(sun.locator(".meal-row").first()).toContainText("9:00 AM (09:00)");
 });
 
 test("staff add a daily note and players see it straight away", async () => {
