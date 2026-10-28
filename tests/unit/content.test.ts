@@ -41,9 +41,10 @@ test("a day's plan merges daily notes, the schedule and meals, untimed items las
 test("meals show on Today with their open hours and where they're served", () => {
   const sun = entriesFor(SEED, "2026-11-01").filter((e) => e.kind === "meal");
   assert.deepEqual(sun.map((e) => [e.title, e.time]), [["Breakfast", "09:00"], ["Lunch", "13:30"], ["Dinner", "20:00"]]);
-  assert.equal(sun[0].meta, "Buffet Masia · Cambrils Park Resort");
+  assert.equal(sun[0].meta, "09:00 · Buffet Masia · Cambrils Park Resort");
   const [breakfast] = entriesFor(SEED, "2026-11-02").filter((e) => e.kind === "meal");
-  assert.equal(breakfast.meta, "Until 9:30 AM (09:30) · Buffet Masia · Cambrils Park Resort");
+  assert.equal(breakfast.endTime, "09:30");
+  assert.equal(breakfast.meta, "07:30–09:30 · Buffet Masia · Cambrils Park Resort");
   assert.equal(mealTimeLabel(SEED.meals.find((m) => m.date === "2026-11-02")!), "7:30 AM (07:30) – 9:30 AM (09:30)");
 });
 

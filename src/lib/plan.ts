@@ -1,5 +1,5 @@
 import type { Guide, Row, ScheduleType } from "./schema";
-import { clockLabel, dateRange, toMinutes, zonedToUtc } from "./time";
+import { clock, clockLabel, dateRange, toMinutes, zonedToUtc } from "./time";
 
 export const TYPE_LABEL: Record<ScheduleType | "note" | "meal", string> = {
   game: "Pool play",
@@ -15,6 +15,8 @@ export interface Entry {
   id: string;
   date: string;
   time: string;
+  /** Set only for meals with open hours: Today shows the whole range, not a big start time. */
+  endTime: string;
   kind: ScheduleType | "note" | "meal";
   title: string;
   meta: string;
@@ -59,9 +61,11 @@ export function byTime<T extends { time: string }>(a: T, b: T): number {
   return ta - tb;
 }
 
-/** "Until 9:30 AM · Buffet Masia" for a meal served over open hours. */
+/** "07:30–09:30 · Buffet Masia": the 24-hour times, then where it's served. */
 export function mealMeta(row: Row<"meals">): string {
-  return [row.endTime ? `Until ${clockLabel(row.endTime)}` : "", row.place].filter(Boolean).join(" · ");
+  const start = clock(row.time)?.h24 ?? "";
+  const end = start ? (clock(row.endTime)?.h24 ?? "") : "";
+  return [end ? `${start}–${end}` : start, row.place].filter(Boolean).join(" · ");
 }
 
 /** "9:00 AM (09:00)", or "7:30 AM (07:30) – 9:30 AM (09:30)" for open hours. */
@@ -83,6 +87,7 @@ export function entriesFor(guide: Guide, date: string): Entry[] {
       id: d.id,
       date: d.date,
       time: d.time,
+      endTime: "",
       kind: "note",
       title: d.title,
       meta: "",
@@ -96,6 +101,7 @@ export function entriesFor(guide: Guide, date: string): Entry[] {
       id: s.id,
       date: s.date,
       time: s.time,
+      endTime: "",
       kind: s.type,
       title: scheduleTitle(s),
       meta: scheduleMeta(s),
@@ -107,6 +113,7 @@ export function entriesFor(guide: Guide, date: string): Entry[] {
     id: m.id,
     date: m.date,
     time: m.time,
+    endTime: m.endTime,
     kind: "meal",
     title: m.meal,
     meta: mealMeta(m),

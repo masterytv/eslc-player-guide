@@ -75,11 +75,24 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
               <ol className="tl">
                 {entries.map((e) => {
                   const c = clock(e.time);
+                  const end = clock(e.endTime);
                   const mins = toMinutes(e.time);
                   const past = isToday && mins != null && mins < minutes;
                   return (
                     <li key={e.id} className={past ? "tl-item past" : "tl-item"}>
-                      {c ? (
+                      {e.kind === "meal" && c ? (
+                        // Meals show their whole serving time at the same size, so players see when they can go.
+                        <div className="tl-time range">
+                          <span>
+                            {c.hm} {c.ap}
+                          </span>
+                          {end ? (
+                            <span>
+                              to {end.hm} {end.ap}
+                            </span>
+                          ) : null}
+                        </div>
+                      ) : c ? (
                         <div className="tl-time">
                           {c.hm}
                           <small>{c.ap}</small>
