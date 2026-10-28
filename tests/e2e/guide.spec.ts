@@ -199,6 +199,19 @@ test("players see each day's meals on Today and on Venue & stay", async () => {
   await expect(sun.locator(".meal-row").first()).toContainText("Arrive 9:00 AM (09:00)");
 });
 
+test("the roster lists the final squad", async () => {
+  await viewer.goto("/team?view=roster");
+  await expect(viewer.locator(".roster")).toContainText("Julia Ruscio");
+  await expect(viewer.locator(".roster")).not.toContainText("Aisling");
+});
+
+test("players see who is in each villa", async () => {
+  await viewer.goto("/team?view=rooms");
+  const villa5 = viewer.locator(".card", { has: viewer.locator("h3", { hasText: "Villa 5" }) });
+  await expect(villa5.locator(".villa-names li")).toHaveText(["Amanda Kusiak", "Liz Mosher", "Treatment room"]);
+  await expect(viewer.locator(".card h3", { hasText: /^Villa \d$/ })).toHaveCount(6);
+});
+
 test("staff add a daily note and players see it straight away", async () => {
   await admin.goto("/admin/daily?day=2026-11-02");
   await admin.getByRole("button", { name: /Add a note for Mon 2 Nov/ }).click();
