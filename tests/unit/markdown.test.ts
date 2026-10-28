@@ -54,6 +54,15 @@ test("the game plan reads as the coaches wrote it", () => {
   assert.ok(steps?.kind === "ol" && steps.items.length === 4);
 });
 
+test("a roster saved before the final one gives way to it", () => {
+  assert.equal(olderThanSeed("roster", "2026-10-20T09:00:00.000Z"), true);
+  assert.equal(olderThanSeed("roster", "2026-10-29T09:00:00.000Z"), false);
+  const names = SEED.roster.map((p) => `${p.number} ${p.firstName} ${p.lastName}`);
+  assert.ok(names.includes("51 Julia Ruscio"));
+  assert.ok(!names.some((n) => n.includes("Aisling")));
+  assert.equal(SEED.roster.filter((p) => p.number).length, 12);
+});
+
 test("a rooming list saved before the final one gives way to it", () => {
   assert.equal(olderThanSeed("rooming", "2026-10-20T09:00:00.000Z"), true);
   assert.equal(olderThanSeed("rooming", "2026-10-29T09:00:00.000Z"), false);

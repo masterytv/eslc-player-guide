@@ -398,7 +398,6 @@ export const SEED: Guide = {
     { id: "st7", name: "Liz Mosher", role: "Manager", phone: "", whatsapp: true, email: "" },
   ],
   roster: [
-    { id: "pl1", number: "17", firstName: "Aisling", lastName: "Boyd", position: "" },
     { id: "pl2", number: "40", firstName: "Haley", lastName: "Crosson", position: "" },
     { id: "pl3", number: "28", firstName: "Catherine", lastName: "DeKorte", position: "" },
     { id: "pl4", number: "50", firstName: "Amelie", lastName: "Devine", position: "" },
@@ -409,6 +408,7 @@ export const SEED: Guide = {
     { id: "pl9", number: "14", firstName: "Amy", lastName: "Bolton", position: "" },
     { id: "pl10", number: "34", firstName: "Mimi", lastName: "Painting", position: "" },
     { id: "pl11", number: "30", firstName: "Niamh", lastName: "Pfaff", position: "" },
+    { id: "pl14", number: "51", firstName: "Julia", lastName: "Ruscio", position: "" },
     { id: "pl12", number: "8", firstName: "Gillian", lastName: "Smith", position: "" },
     { id: "pl13", number: "", firstName: "Gabby", lastName: "Rosenzweig", position: "Player liaison" },
   ],
@@ -725,8 +725,8 @@ export const SEED: Guide = {
  * it shows as usual. The coaches replaced the game plan with new principles on 12 Oct 2026, and the
  * ELF's revised master schedule (new match numbers, warm-ups, Sweden moved to 15:30) came on 18 Oct 2026.
  * Practice times and the practice field in Salou (31 Oct and 1 Nov) were added on 19 Oct 2026.
- * The organisers' meal schedule for Ireland (a time for each meal, by day) and the rooming list
- * came on 28 Oct 2026.
+ * The organisers' meal schedule for Ireland (a time for each meal, by day), the rooming list and
+ * the final roster (Julia Ruscio in, Aisling Boyd out) came on 28 Oct 2026.
  */
 export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   playbook: "2026-10-12T13:00:00.000Z",
@@ -734,6 +734,7 @@ export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   venue: "2026-10-19T16:30:00.000Z",
   meals: "2026-10-28T12:00:00.000Z",
   rooming: "2026-10-28T20:25:00.000Z",
+  roster: "2026-10-28T20:30:00.000Z",
 };
 
 /** Whether a first-tournament section saved at `updatedAt` predates its rewritten starting content. */

@@ -199,6 +199,12 @@ test("players see each day's meals on Today and on Venue & stay", async () => {
   await expect(sun.locator(".meal-row").first()).toContainText("Arrive 9:00 AM (09:00)");
 });
 
+test("the roster lists the final squad", async () => {
+  await viewer.goto("/team?view=roster");
+  await expect(viewer.locator(".roster")).toContainText("Julia Ruscio");
+  await expect(viewer.locator(".roster")).not.toContainText("Aisling");
+});
+
 test("players see who is in each villa", async () => {
   await viewer.goto("/team?view=rooms");
   const villa5 = viewer.locator(".card", { has: viewer.locator("h3", { hasText: "Villa 5" }) });
