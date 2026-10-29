@@ -63,6 +63,7 @@ test("the airport bus leaves at 12:30, with the LOC holding an Ireland Lacrosse 
   const bus = SEED.daily.find((d) => d.title === "Bus departs airport");
   assert.equal(bus?.time, "12:30");
   assert.match(bus?.details ?? "", /Ireland Lacrosse sign/);
+  assert.equal(SEED.daily.find((d) => d.title.startsWith("Arrive at villas"))?.time, "14:00");
 });
 
 test("a roster saved before the final one gives way to it", () => {

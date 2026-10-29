@@ -369,9 +369,9 @@ export const SEED: Guide = {
     {
       id: "d2",
       date: "2026-10-31",
-      time: "15:30",
+      time: "14:00",
       title: "Arrive at villas, check in, get settled",
-      details: "",
+      details: "About 1 to 1.5 hours from the airport, so around 13:30–14:00.",
       linkLabel: "",
       linkUrl: "",
     },
