@@ -85,7 +85,8 @@ test("a rooming list saved before the final one gives way to it", () => {
 test("meals saved before the organisers' meal schedule give way to it", () => {
   assert.equal(olderThanSeed("meals", "2026-10-20T09:00:00.000Z"), true);
   assert.equal(olderThanSeed("meals", "2026-10-28T10:30:00.000Z"), true);
-  assert.equal(olderThanSeed("meals", "2026-10-29T09:00:00.000Z"), false);
+  assert.equal(olderThanSeed("meals", "2026-10-29T09:00:00.000Z"), true);
+  assert.equal(olderThanSeed("meals", "2026-10-30T09:00:00.000Z"), false);
   assert.equal(SEED.meals.length, 30);
 });
 

@@ -421,7 +421,7 @@ export const SEED: Guide = {
     { id: "v6", villa: "Villa 6", names: ["Catherine Conway", "Kathleen Finnegan", "Gabby Rosenzweig (single)"] },
   ],
   meals: [
-    { id: "m1", date: "2026-10-31", meal: "Lunch", time: "", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m1", date: "2026-10-31", meal: "Lunch", time: "14:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m2", date: "2026-10-31", meal: "Dinner", time: "20:30", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m3", date: "2026-11-01", meal: "Breakfast", time: "09:00", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m4", date: "2026-11-01", meal: "Lunch", time: "13:30", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
@@ -727,13 +727,14 @@ export const SEED: Guide = {
  * Practice times and the practice field in Salou (31 Oct and 1 Nov) were added on 19 Oct 2026.
  * The organisers' meal schedule for Ireland (a time for each meal, by day), the rooming list and
  * the final roster (Julia Ruscio in, Aisling Boyd out) came on 28 Oct 2026. On 29 Oct the airport bus
- * moved to 12:30, with the LOC meeting players holding an Ireland Lacrosse sign.
+ * moved to 12:30, with the LOC meeting players holding an Ireland Lacrosse sign, and lunch that day
+ * was set for 14:00–15:00.
  */
 export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   playbook: "2026-10-12T13:00:00.000Z",
   schedule: "2026-10-19T16:30:00.000Z",
   venue: "2026-10-19T16:30:00.000Z",
-  meals: "2026-10-28T12:00:00.000Z",
+  meals: "2026-10-29T20:55:00.000Z",
   rooming: "2026-10-28T20:25:00.000Z",
   roster: "2026-10-28T20:30:00.000Z",
   daily: "2026-10-29T13:00:00.000Z",

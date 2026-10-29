@@ -30,7 +30,7 @@ test("a day's plan merges daily notes, the schedule and meals, untimed items las
   const arrival = entriesFor(SEED, "2026-10-31");
   assert.deepEqual(
     arrival.map((e) => e.title),
-    ["Bus departs airport", "Arrive at villas, check in, get settled", "Practice", "Dinner", "Lunch"],
+    ["Bus departs airport", "Arrive at villas, check in, get settled", "Lunch", "Practice", "Dinner"],
   );
   const tue = entriesFor(SEED, "2026-11-03");
   assert.deepEqual(
@@ -48,7 +48,7 @@ test("meals show on Today with their open hours and where they're served", () =>
   assert.equal(breakfast.meta, "07:30–09:30 · Buffet Masia · Cambrils Park Resort");
   assert.equal(mealTimeLabel(SEED.meals.find((m) => m.date === "2026-11-02")!), "7:30–9:30 AM (07:30–09:30)");
   const [lunch31, dinner31] = SEED.meals.filter((m) => m.date === "2026-10-31");
-  assert.equal(mealTimeLabel(lunch31), "TBD");
+  assert.equal(mealTimeLabel(lunch31), "2:00–3:00 PM (14:00–15:00)");
   assert.equal(mealTimeLabel(dinner31), "Arrive 8:30 PM (20:30)");
 });
 
