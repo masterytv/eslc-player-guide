@@ -360,9 +360,9 @@ export const SEED: Guide = {
     {
       id: "d1",
       date: "2026-10-31",
-      time: "14:00",
+      time: "12:30",
       title: "Bus departs airport",
-      details: "If you land after 14:00, please secure your own transportation.",
+      details: "Someone from the LOC will be holding an Ireland Lacrosse sign. If you land after 12:30, please secure your own transportation.",
       linkLabel: "Ride options",
       linkUrl: "/venue#getting",
     },
@@ -454,10 +454,10 @@ export const SEED: Guide = {
   ],
   travel: {
     busDate: "2026-10-31",
-    busTime: "14:00",
+    busTime: "12:30",
     busHeadline: "Bus leaves the airport for the villas",
     busText:
-      "Players who are not ready to board by then will need to arrange their own transportation. The airport is about 1 to 1.5 hours from our accommodation, and a taxi or private transfer can be costly. We recommend booking a flight that lands early enough to clear passport control and collect your bags well before 14:00.",
+      "Someone from the LOC will be holding an Ireland Lacrosse sign at the airport. Players who are not ready to board by then will need to arrange their own transportation. The airport is about 1 to 1.5 hours from our accommodation, and a taxi or private transfer can be costly. We recommend booking a flight that lands early enough to clear passport control and collect your bags well before 12:30.",
     flightTitle: "Add your flight details",
     flightText:
       "Once you have booked your flight, please use this Google sheet to input your information. All players must input their information.",
@@ -726,7 +726,8 @@ export const SEED: Guide = {
  * ELF's revised master schedule (new match numbers, warm-ups, Sweden moved to 15:30) came on 18 Oct 2026.
  * Practice times and the practice field in Salou (31 Oct and 1 Nov) were added on 19 Oct 2026.
  * The organisers' meal schedule for Ireland (a time for each meal, by day), the rooming list and
- * the final roster (Julia Ruscio in, Aisling Boyd out) came on 28 Oct 2026.
+ * the final roster (Julia Ruscio in, Aisling Boyd out) came on 28 Oct 2026. On 29 Oct the airport bus
+ * moved to 12:30, with the LOC meeting players holding an Ireland Lacrosse sign.
  */
 export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   playbook: "2026-10-12T13:00:00.000Z",
@@ -735,6 +736,8 @@ export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   meals: "2026-10-28T12:00:00.000Z",
   rooming: "2026-10-28T20:25:00.000Z",
   roster: "2026-10-28T20:30:00.000Z",
+  daily: "2026-10-29T13:00:00.000Z",
+  travel: "2026-10-29T13:00:00.000Z",
 };
 
 /** Whether a first-tournament section saved at `updatedAt` predates its rewritten starting content. */

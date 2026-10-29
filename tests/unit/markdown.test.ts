@@ -54,6 +54,17 @@ test("the game plan reads as the coaches wrote it", () => {
   assert.ok(steps?.kind === "ol" && steps.items.length === 4);
 });
 
+test("the airport bus leaves at 12:30, with the LOC holding an Ireland Lacrosse sign", () => {
+  assert.equal(olderThanSeed("daily", "2026-10-29T09:00:00.000Z"), true);
+  assert.equal(olderThanSeed("travel", "2026-10-29T09:00:00.000Z"), true);
+  assert.equal(olderThanSeed("travel", "2026-10-30T09:00:00.000Z"), false);
+  assert.equal(SEED.travel.busTime, "12:30");
+  assert.match(SEED.travel.busText, /LOC will be holding an Ireland Lacrosse sign/);
+  const bus = SEED.daily.find((d) => d.title === "Bus departs airport");
+  assert.equal(bus?.time, "12:30");
+  assert.match(bus?.details ?? "", /Ireland Lacrosse sign/);
+});
+
 test("a roster saved before the final one gives way to it", () => {
   assert.equal(olderThanSeed("roster", "2026-10-20T09:00:00.000Z"), true);
   assert.equal(olderThanSeed("roster", "2026-10-29T09:00:00.000Z"), false);
