@@ -7,7 +7,7 @@ import type { Guide, SectionKey } from "./schema";
 // Team → Staff.
 
 const conduct = `## Be on time
-Arrive 10 minutes before the actual meeting time.
+Arrive 15 minutes before the actual meeting time.
 
 ## Personal time
 The team will be together for the majority of the tournament. At designated times, players can "sign out" and leave the facility or accommodations for personal time.
@@ -25,15 +25,10 @@ We will create a group chat where you must post:
 We will text the group chat with any new team meetings and put them in the daily notes.
 
 ## Lights out
-Coach Melissa will communicate the specific nightly lights-out time.
+Coach Maddy will communicate the specific nightly lights-out time.
 
 ## Apparel
-Apparel and gear representing other countries or provinces is not permitted at any time. Club gear is fine during leisure time, but all travel to and from games must be in Ireland apparel only.
-
-## Getting around
-We have chartered buses for transportation to and from all games and we will be using the train system to attend practices. A staff van will be available to help with additional transportation when needed.
-
-It is the intention of the staff to have the team travel as a group, to and from all team events, unless otherwise stated.
+Apparel and gear representing other countries or provinces is not permitted at any time. College gear is not allowed.
 
 ## Disciplinary policy
 We hope this will not be required, but we will operate a fair process of review and escalation to the Ireland Lacrosse Director of Teams in relation to behaviours that are directly in conflict with our code of conduct and that of World Lacrosse.
@@ -802,7 +797,8 @@ export const SEED: Guide = {
  * The organisers' meal schedule for Ireland (a time for each meal, by day), the rooming list and
  * the final roster (Julia Ruscio in, Aisling Boyd out) came on 28 Oct 2026. On 29 Oct the airport bus
  * moved to 12:30, with the LOC meeting players holding an Ireland Lacrosse sign, and lunch that day
- * was set for 14:00–15:00. The Free time page (Salou, Tarragona, Barcelona, Ebro Delta) came on 30 Oct.
+ * was set for 14:00–15:00. The Free time page (Salou, Tarragona, Barcelona, Ebro Delta) came on 30 Oct,
+ * and the conduct rules were updated that day.
  */
 export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   playbook: "2026-10-12T13:00:00.000Z",
@@ -813,7 +809,7 @@ export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   roster: "2026-10-28T20:30:00.000Z",
   daily: "2026-10-29T13:00:00.000Z",
   travel: "2026-10-29T13:00:00.000Z",
-  pages: "2026-10-30T14:30:00.000Z",
+  pages: "2026-10-30T14:45:00.000Z",
 };
 
 /** Whether a first-tournament section saved at `updatedAt` predates its rewritten starting content. */
