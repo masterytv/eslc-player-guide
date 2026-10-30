@@ -105,8 +105,6 @@ from the EBLC Prague guide, so check these first:
 - The roster has numbers and names but no positions.
 - **Flight sheet links**: the doc's links sat inside a drawing and couldn't be copied. Add them
   under *Venue → Getting there → Edit*.
-- **Conduct**: "Coach Melissa" (lights out) isn't on the staff list, and *Getting around*
-  mentions chartered buses and trains while the venue notes say everyone walks.
 - **Packing**: protein bars mention Prague, and box floor shoes may not be needed outdoors.
 - **Event dates** are set to 31 Oct – 9 Nov; the doc's cover said "9 October".
 

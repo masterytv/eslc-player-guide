@@ -54,6 +54,15 @@ test("the game plan reads as the coaches wrote it", () => {
   assert.ok(steps?.kind === "ol" && steps.items.length === 4);
 });
 
+test("conduct rules: arrive 15 minutes early, Coach Maddy sets lights out, no college gear", () => {
+  const body = SEED.pages.find((p) => p.slug === "conduct")?.body ?? "";
+  assert.match(body, /Arrive 15 minutes before/);
+  assert.match(body, /Coach Maddy will communicate/);
+  assert.match(body, /College gear is not allowed\./);
+  assert.match(body, /All travel to and from games must be in Ireland apparel only\./);
+  assert.doesNotMatch(body, /Melissa|Club gear|## Getting around/);
+});
+
 test("the Free time page says how far each place is and how to get there", () => {
   assert.equal(olderThanSeed("pages", "2026-10-29T09:00:00.000Z"), true);
   assert.equal(olderThanSeed("pages", "2026-10-31T09:00:00.000Z"), false);
