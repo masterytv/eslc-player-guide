@@ -28,7 +28,7 @@ We will text the group chat with any new team meetings and put them in the daily
 Coach Maddy will communicate the specific nightly lights-out time.
 
 ## Apparel
-Apparel and gear representing other countries or provinces is not permitted at any time. College gear is not allowed.
+Apparel and gear representing other countries or provinces is not permitted at any time. College gear is not allowed. All travel to and from games must be in Ireland apparel only.
 
 ## Disciplinary policy
 We hope this will not be required, but we will operate a fair process of review and escalation to the Ireland Lacrosse Director of Teams in relation to behaviours that are directly in conflict with our code of conduct and that of World Lacrosse.

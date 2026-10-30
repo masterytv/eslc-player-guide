@@ -59,6 +59,7 @@ test("conduct rules: arrive 15 minutes early, Coach Maddy sets lights out, no co
   assert.match(body, /Arrive 15 minutes before/);
   assert.match(body, /Coach Maddy will communicate/);
   assert.match(body, /College gear is not allowed\./);
+  assert.match(body, /All travel to and from games must be in Ireland apparel only\./);
   assert.doesNotMatch(body, /Melissa|Club gear|## Getting around/);
 });
 
