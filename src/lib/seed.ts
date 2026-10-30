@@ -58,6 +58,79 @@ Please refer to the World Lacrosse 2026–2028 Sixes Official Playing Rules for 
 const activities = `## Barcelona women's football game
 Barcelona. Date and details to come.`;
 
+const freeTime = `> Distances are from Cambrils Park Resort. Times are estimates, so check Google Maps before you go, and sign out in the group chat first.
+
+## Salou
+Vibrant and full of life, with beaches and a long walk along the sea.
+
+### How far
+About 4 km. Around 40 minutes on foot, or about 10 minutes by taxi.
+
+### Getting there
+**You can walk.** Follow the seafront path from the resort toward Salou. It's narrow and shared with bikes. Take a taxi or Cabify back if you're tired.
+
+- Walk the seafront promenade, Passeig Jaume I
+- Platja de Llevant, Salou's main beach
+- The small coves and the lighthouse on the Cap de Salou headland
+
+>> Walkable, about 40 minutes along the sea.
+
+## Tarragona
+A city with living history, where Roman ruins sit beside the sea.
+
+### How far
+About 20 km. About 25 minutes by car or taxi.
+
+### Getting there
+**You need transport.** Take a taxi or Cabify, or the train to Tarragona station, a short walk from the old town. Check train times on Renfe.
+
+- The Roman amphitheatre, right by the sea
+- The Roman circus and the Praetorium tower
+- The old town (Part Alta) and Tarragona Cathedral
+- The Balcó del Mediterrani viewpoint at the top of the Rambla Nova
+- The Mercat Central, the city's food market
+- The Pont del Diable, a Roman aqueduct about 4 km north of the centre (taxi)
+
+>> Transport needed, about 25 minutes away.
+
+## Barcelona
+A cosmopolitan, vibrant city full of contrasts, and an easy day trip. Barcelona has a unique mix of modernist architecture, charming neighbourhoods and culture.
+
+Be amazed by the Sagrada Família, stroll along Las Ramblas, get lost in the colours of the Boqueria market or enjoy the views from Park Güell. There's plenty more: interactive museums, the zoo, the aquarium or a boat tour of the port.
+
+A perfect getaway to experience the Mediterranean at a different pace, and come back to the resort with one more memory from the trip.
+
+### How far
+About 110 km. About 1 to 1.5 hours by car, or about 1.5 hours by train to Barcelona Sants.
+
+### Getting there
+**You need transport.** The train is the easiest way. Trains to Barcelona run from Cambrils and Salou stations; check times on Renfe. Allow a full day.
+
+- Sagrada Família (book tickets ahead)
+- Las Ramblas and the Boqueria market
+- Park Güell (book tickets ahead)
+- The aquarium, the zoo, or a boat tour of the port
+
+>> Transport needed, a full day out.
+
+## Ebro Delta
+A landscape that captivates with its beauty and calm. The Ebro Delta is the perfect place to connect with nature.
+
+Bike routes through rice fields, bird watching, wild beaches and boat trips at sunset. A different experience that invites you to slow down, breathe deeply and enjoy simple things.
+
+### How far
+About 80 km. Just over an hour by car.
+
+### Getting there
+**You need a car or an organised tour.** Public transport there is limited. Bikes can be hired in the delta, around Deltebre.
+
+- Bike routes through the rice fields
+- Bird watching
+- Wild beaches
+- Boat trips at sunset
+
+>> Car or tour needed, just over an hour away.`;
+
 // The coaches' own words: Justin Warner's offensive principles and Ashley O’Brien's defensive
 // principles, both from 12 Oct 2026, laid out like their slides: a card per slide, its labelled
 // boxes, and its bottom line.
@@ -639,6 +712,7 @@ export const SEED: Guide = {
     { id: "pg1", title: "Tournament rules", slug: "rules", group: "before", summary: "Passports, squad size", body: rules },
     { id: "pg2", title: "Conduct & team rules", slug: "conduct", group: "team", summary: "Check in & out, lights out, apparel", body: conduct },
     { id: "pg3", title: "Team activities", slug: "activities", group: "team", summary: "Barcelona trip", body: activities },
+    { id: "pg4", title: "Free time", slug: "free-time", group: "team", summary: "Salou, Tarragona, Barcelona, Ebro Delta: how far, and how to get there", body: freeTime },
   ],
   playbook: [
     { id: "gp1", title: "Offence", slug: "offence", coach: "Justin Warner, Offensive Coordinator", summary: "Less is more", body: offence },
@@ -728,7 +802,7 @@ export const SEED: Guide = {
  * The organisers' meal schedule for Ireland (a time for each meal, by day), the rooming list and
  * the final roster (Julia Ruscio in, Aisling Boyd out) came on 28 Oct 2026. On 29 Oct the airport bus
  * moved to 12:30, with the LOC meeting players holding an Ireland Lacrosse sign, and lunch that day
- * was set for 14:00–15:00.
+ * was set for 14:00–15:00. The Free time page (Salou, Tarragona, Barcelona, Ebro Delta) came on 30 Oct.
  */
 export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   playbook: "2026-10-12T13:00:00.000Z",
@@ -739,6 +813,7 @@ export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   roster: "2026-10-28T20:30:00.000Z",
   daily: "2026-10-29T13:00:00.000Z",
   travel: "2026-10-29T13:00:00.000Z",
+  pages: "2026-10-30T14:30:00.000Z",
 };
 
 /** Whether a first-tournament section saved at `updatedAt` predates its rewritten starting content. */

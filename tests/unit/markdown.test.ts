@@ -54,6 +54,19 @@ test("the game plan reads as the coaches wrote it", () => {
   assert.ok(steps?.kind === "ol" && steps.items.length === 4);
 });
 
+test("the Free time page says how far each place is and how to get there", () => {
+  assert.equal(olderThanSeed("pages", "2026-10-29T09:00:00.000Z"), true);
+  assert.equal(olderThanSeed("pages", "2026-10-31T09:00:00.000Z"), false);
+  const page = SEED.pages.find((p) => p.slug === "free-time");
+  assert.ok(page);
+  const cards = parsePage(page.body).filter((s) => s.kind === "card");
+  assert.deepEqual(cards.map((c) => c.heading), ["Salou", "Tarragona", "Barcelona", "Ebro Delta"]);
+  for (const c of cards) {
+    const labels = c.blocks.flatMap((b) => (b.kind === "point" ? [b.label] : []));
+    assert.deepEqual(labels, ["How far", "Getting there"], c.heading ?? "");
+  }
+});
+
 test("the airport bus leaves at 12:30, with the LOC holding an Ireland Lacrosse sign", () => {
   assert.equal(olderThanSeed("daily", "2026-10-29T09:00:00.000Z"), true);
   assert.equal(olderThanSeed("travel", "2026-10-29T09:00:00.000Z"), true);

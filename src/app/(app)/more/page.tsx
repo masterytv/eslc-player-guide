@@ -25,7 +25,7 @@ function Item({ href, icon, title, sub, admin }: { href: string; icon: IconName;
   );
 }
 
-const PAGE_ICON: Record<string, IconName> = { rules: "book", conduct: "shield" };
+const PAGE_ICON: Record<string, IconName> = { rules: "book", conduct: "shield", "free-time": "map" };
 
 export default async function MorePage() {
   const [{ guide }, session] = await Promise.all([loadGuide(), currentSession()]);
