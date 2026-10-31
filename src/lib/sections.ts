@@ -272,6 +272,7 @@ export const SECTIONS: SectionDef[] = [
       { key: "villaDetails", label: "Villa details", type: "text", placeholder: "2 bedrooms · 1 bathroom" },
       { key: "villaNote", label: "Note", type: "text" },
       { key: "amenities", label: "Amenities", type: "lines", help: "One per line." },
+      { key: "notes", label: "Notes", type: "lines", help: "One per line, e.g. gym times. Shown under the villa." },
     ],
   },
   {
@@ -287,6 +288,7 @@ export const SECTIONS: SectionDef[] = [
       { key: "walkNote", label: "Getting there", type: "textarea", help: "Also shown on Today on game days." },
       { key: "amenities", label: "Amenities", type: "lines", help: "One per line." },
       { key: "notes", label: "Notes", type: "lines", help: "One per line." },
+      { key: "emergency", label: "Emergency number", type: "tel", placeholder: "112", help: "Shown at the top of Team with a Call button." },
       { key: "practiceName", label: "Practice field", type: "text", placeholder: "Practice field", help: "Where we practise when it isn't the tournament venue. Leave blank to hide the card." },
       { key: "practiceAddress", label: "Practice field address", type: "text" },
       { key: "practiceMapUrl", label: "Practice field directions link", type: "url", placeholder: "https://maps.google.com/…", help: "The Directions button. When blank, it searches the address." },

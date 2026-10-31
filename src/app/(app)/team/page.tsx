@@ -5,7 +5,7 @@ import { EditLink } from "@/components/EditLink";
 import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
 import { loadGuide } from "@/lib/content";
-import { telHref, whatsappHref } from "@/lib/phone";
+import { phoneDigits, telHref, whatsappHref } from "@/lib/phone";
 
 export const metadata: Metadata = { title: "Team" };
 
@@ -37,6 +37,21 @@ export default async function TeamPage({ searchParams }: { searchParams: Promise
             </Link>
           ))}
         </nav>
+
+        {view === "staff" && phoneDigits(guide.venue.emergency) ? (
+          // Emergency numbers are short (112, 999, 911), so they skip the length check other numbers get.
+          <div className="card emergency">
+            <p className="eyebrow">Emergency</p>
+            <h3>Call {guide.venue.emergency}</h3>
+            <p className="meta">Police, ambulance and fire. Free from any phone.</p>
+            <div className="row-btns">
+              <a className="pill-btn primary" href={`tel:${phoneDigits(guide.venue.emergency)}`}>
+                <Icon name="phone" />
+                Call {guide.venue.emergency}
+              </a>
+            </div>
+          </div>
+        ) : null}
 
         {view === "staff" ? (
           <section className="sec">

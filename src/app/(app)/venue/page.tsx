@@ -135,7 +135,7 @@ export default async function VenuePage() {
               </div>
             ) : null}
           </div>
-          {acc.villaName || acc.amenities.length ? (
+          {acc.villaName || acc.amenities.length || acc.notes.length ? (
             <div className="card">
               <p className="eyebrow">Our villas</p>
               {acc.villaName ? <h3>{acc.villaName}</h3> : null}
@@ -144,6 +144,13 @@ export default async function VenuePage() {
                 <ul className="amen">
                   {acc.amenities.map((a) => (
                     <li key={a}>{a}</li>
+                  ))}
+                </ul>
+              ) : null}
+              {acc.notes.length ? (
+                <ul className="bul">
+                  {acc.notes.map((n) => (
+                    <li key={n}>{with24h(n)}</li>
                   ))}
                 </ul>
               ) : null}
