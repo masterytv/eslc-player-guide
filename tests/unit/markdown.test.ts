@@ -54,6 +54,22 @@ test("the game plan reads as the coaches wrote it", () => {
   assert.ok(steps?.kind === "ol" && steps.items.length === 4);
 });
 
+test("the LOC infobook: venue map, where things are, ice baths, gym and 112", () => {
+  for (const key of ["venue", "accommodation", "maps"] as const) {
+    assert.equal(olderThanSeed(key, "2026-10-31T09:00:00.000Z"), true, key);
+    assert.equal(olderThanSeed(key, "2026-11-01T09:00:00.000Z"), false, key);
+  }
+  assert.equal(SEED.venue.address, "Via de Cavet, s/n, 43840 Salou, Tarragona, Spain");
+  assert.equal(SEED.venue.emergency, "112");
+  const notes = SEED.venue.notes.join("\n");
+  assert.match(notes, /south gate/);
+  assert.match(notes, /emergency meeting point/);
+  assert.match(notes, /Showering is a must before ice baths/);
+  assert.doesNotMatch(notes, /€|45/);
+  assert.match(SEED.accommodation.notes.join(" "), /contact Maddy/);
+  assert.equal(SEED.maps.filter((m) => m.placement === "fields")[0].image, "/seed/venue-map.jpg");
+});
+
 test("conduct rules: arrive 15 minutes early, Coach Maddy sets lights out, no college gear", () => {
   const body = SEED.pages.find((p) => p.slug === "conduct")?.body ?? "";
   assert.match(body, /Arrive 15 minutes before/);
@@ -121,7 +137,8 @@ test("a game plan saved before the coaches' new one gives way to it", () => {
 test("a schedule saved before the revised master schedule and practice times gives way to it", () => {
   assert.equal(olderThanSeed("schedule", "2026-10-16T09:00:00.000Z"), true);
   assert.equal(olderThanSeed("schedule", "2026-10-19T09:00:00.000Z"), true);
-  assert.equal(olderThanSeed("schedule", "2026-10-20T09:00:00.000Z"), false);
+  assert.equal(olderThanSeed("schedule", "2026-10-20T09:00:00.000Z"), true);
+  assert.equal(olderThanSeed("schedule", "2026-11-01T09:00:00.000Z"), false);
   assert.equal(olderThanSeed("venue", "2026-10-19T09:00:00.000Z"), true);
   assert.deepEqual(
     SEED.schedule.filter((s) => s.type === "practice" && s.time).map((s) => [s.date, s.time, s.endTime]),

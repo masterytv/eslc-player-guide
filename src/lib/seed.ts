@@ -445,8 +445,8 @@ export const SEED: Guide = {
     },
   ],
   schedule: [
-    { id: "s0", date: "2026-10-31", time: "17:00", endTime: "18:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Mediterranean Sports Hub - Futbol Salou", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", notes: "" },
-    { id: "s1", date: "2026-11-01", time: "11:00", endTime: "12:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Mediterranean Sports Hub - Futbol Salou", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", notes: "" },
+    { id: "s0", date: "2026-10-31", time: "17:00", endTime: "18:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", notes: "" },
+    { id: "s1", date: "2026-11-01", time: "11:00", endTime: "12:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", notes: "" },
     { id: "s2", date: "2026-11-01", time: "", type: "ceremony", title: "Opening Ceremony", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", notes: "" },
     { id: "s3", date: "2026-11-02", time: "14:30", type: "game", title: "", opponent: "Finland", opponentCode: "FIN", round: "Match 005", field: "Field 2", endTime: "", mapUrl: "", warmup: "14:00", notes: "" },
     { id: "s4", date: "2026-11-02", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", notes: "Time will be posted here and in the group chat." },
@@ -594,10 +594,13 @@ export const SEED: Guide = {
       "Plasma TV",
       "Dining table",
     ],
+    notes: [
+      "Gym: our team has 1 hour a day, so time is limited. If you're interested in going to the gym, contact Maddy for specific time slot information.",
+    ],
   },
   venue: {
     name: "Mediterranean Sports Hub",
-    address: "Via de Cavet, s/n, 43840 Cambrils, Tarragona, Spain",
+    address: "Via de Cavet, s/n, 43840 Salou, Tarragona, Spain",
     walkNote:
       "We will walk to all practices and matches. The walk from our villas will take approximately 10–15 minutes. All players are expected to arrive at the designated meeting location on time.",
     amenities: [
@@ -609,15 +612,25 @@ export const SEED: Guide = {
       "Spa",
       "Gym",
     ],
-    notes: ["Spectators are welcome. Tickets are sold at the venue only (see Tickets below).", "Streaming info: coming soon."],
-    practiceName: "Mediterranean Sports Hub - Futbol Salou",
-    practiceAddress: "Vial, 43840 Salou, Tarragona, Spain",
+    notes: [
+      "Entrance: the south gate, through the public parking. Follow the dotted walking route north to the main fields, F1, F2 and F3 (see the venue map below).",
+      "Paramedics: between F1 and F3. This is also the emergency meeting point.",
+      "Info point and accreditations: next to the Mini Stadium, by the water point, WC and changing rooms.",
+      "Ice baths will be an option after games. Showering is a must before ice baths.",
+      "Emergency: call 112 for police, ambulance or fire. It's free from any phone.",
+      "Spectators are welcome. Tickets are sold at the venue only (see Tickets below).",
+      "Streaming info: coming soon.",
+    ],
+    practiceName: "Futbol Salou complex",
+    practiceAddress: "Via de Cavet, s/n, 43840 Salou, Tarragona, Spain",
     practiceMapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69",
-    practiceNote: "Practices on Sat 31 Oct (17:00–18:30) and Sun 1 Nov (11:00–12:30) are here, not at the tournament venue.",
+    practiceNote: "Practices on Sat 31 Oct (17:00–18:30) and Sun 1 Nov (11:00–12:30) are at the tournament venue, the Futbol Salou complex.",
+    emergency: "112",
   },
   maps: [
     { id: "m1", title: "Resort map", image: "/seed/resort-map.jpg", placement: "villas" },
     { id: "m2", title: "Villa layout", image: "/seed/villa-bonita.jpg", placement: "villas" },
+    { id: "m5", title: "Venue map: F1, F2, F3", image: "/seed/venue-map.jpg", placement: "fields" },
     { id: "m3", title: "Villas to fields", image: "/seed/villas-to-fields.jpg", placement: "fields" },
     { id: "m4", title: "Field map", image: "/seed/field-map.jpg", placement: "fields" },
   ],
@@ -798,18 +811,22 @@ export const SEED: Guide = {
  * the final roster (Julia Ruscio in, Aisling Boyd out) came on 28 Oct 2026. On 29 Oct the airport bus
  * moved to 12:30, with the LOC meeting players holding an Ireland Lacrosse sign, and lunch that day
  * was set for 14:00–15:00. The Free time page (Salou, Tarragona, Barcelona, Ebro Delta) came on 30 Oct,
- * and the conduct rules were updated that day.
+ * and the conduct rules were updated that day. On 31 Oct the LOC's infobook added the venue map, where
+ * things are at the venue, ice baths, the gym and the emergency number (112), and practices moved to the
+ * same complex as the games.
  */
 export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   playbook: "2026-10-12T13:00:00.000Z",
-  schedule: "2026-10-19T16:30:00.000Z",
-  venue: "2026-10-19T16:30:00.000Z",
+  schedule: "2026-10-31T16:25:00.000Z",
   meals: "2026-10-29T20:55:00.000Z",
   rooming: "2026-10-28T20:25:00.000Z",
   roster: "2026-10-28T20:30:00.000Z",
   daily: "2026-10-29T13:00:00.000Z",
   travel: "2026-10-29T13:00:00.000Z",
   pages: "2026-10-30T14:45:00.000Z",
+  venue: "2026-10-31T16:10:00.000Z",
+  accommodation: "2026-10-31T16:10:00.000Z",
+  maps: "2026-10-31T16:10:00.000Z",
 };
 
 /** Whether a first-tournament section saved at `updatedAt` predates its rewritten starting content. */

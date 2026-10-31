@@ -199,6 +199,15 @@ test("players see each day's meals on Today and on Venue & stay", async () => {
   await expect(sun.locator(".meal-row").first()).toContainText("Arrive 9:00 AM (09:00)");
 });
 
+test("players can call 112 from Team, and see the venue map and gym note", async () => {
+  await viewer.goto("/team");
+  await expect(viewer.locator(".card.emergency").getByRole("link", { name: "Call 112" })).toHaveAttribute("href", "tel:112");
+  await viewer.goto("/venue");
+  await expect(viewer.locator("#fields")).toContainText("Showering is a must before ice baths.");
+  await expect(viewer.locator("#fields").getByText("Venue map: F1, F2, F3")).toBeVisible();
+  await expect(viewer.locator("#villas")).toContainText("contact Maddy");
+});
+
 test("the roster lists the final squad", async () => {
   await viewer.goto("/team?view=roster");
   await expect(viewer.locator(".roster")).toContainText("Julia Ruscio");
@@ -321,8 +330,9 @@ test("two staff editing at once are warned instead of overwriting each other", a
 
 test("staff can replace a map photo from their phone", async () => {
   await admin.goto("/admin/maps?item=m4");
-  await admin.locator('input[type="file"]').setInputFiles("public/icons/icon-512.png");
-  await expect(admin.locator(".img-field img")).toHaveAttribute("src", /^\/img\//);
+  const item = admin.locator("#item-m4");
+  await item.locator('input[type="file"]').setInputFiles("public/icons/icon-512.png");
+  await expect(item.locator(".img-field img")).toHaveAttribute("src", /^\/img\//);
   await save(admin);
 
   await viewer.goto("/venue");

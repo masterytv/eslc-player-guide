@@ -86,9 +86,9 @@ test("practices away from the venue show their end time, place and directions", 
   // 17:00–18:30 in Spain (UTC+1 on 31 Oct).
   assert.match(ics, /DTSTART:20261031T160000Z\r\n/);
   assert.match(ics, /DTEND:20261031T173000Z\r\n/);
-  assert.match(ics, /LOCATION:Mediterranean Sports Hub - Futbol Salou\r\n/);
+  assert.match(ics, /LOCATION:Futbol Salou complex\r\n/);
   const [entry] = entriesFor(SEED, "2026-10-31").filter((e) => e.id === "s0");
-  assert.equal(entry.meta, "Until 6:30 PM (18:30) · Mediterranean Sports Hub - Futbol Salou");
+  assert.equal(entry.meta, "Until 6:30 PM (18:30) · Futbol Salou complex");
   assert.equal(entry.link?.label, "Directions");
   assert.equal(fieldLabel("2"), "Field 2");
   assert.equal(fieldLabel("TBD"), "Field TBD");

@@ -317,6 +317,8 @@ img { max-width: 100%; }
 .rides summary .ic { transition: transform .2s; color: var(--muted); }
 .rides details[open] summary .ic { transform: rotate(90deg); }
 .rides details p { font-size: 14px; padding-bottom: 12px; white-space: pre-line; }
+.card.emergency { border-color: var(--red); background: var(--red-soft); }
+.card.emergency .eyebrow { color: var(--red); }
 .meal-row { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 12px 14px; align-items: baseline; }
 .meal-row b { font: 700 17px/1 var(--font-display); text-transform: uppercase; letter-spacing: .03em; }
 .meal-row p { white-space: pre-line; }

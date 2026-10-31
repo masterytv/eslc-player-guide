@@ -145,6 +145,7 @@ export const sectionSchemas = {
     villaDetails: text(160),
     villaNote: text(160),
     amenities: lines(40, 80),
+    notes: lines(20, 300),
   }),
   venue: z.object({
     name: text(120),
@@ -156,6 +157,7 @@ export const sectionSchemas = {
     practiceAddress: text(200),
     practiceMapUrl: url,
     practiceNote: long(500),
+    emergency: text(20),
   }),
   maps: list({
     title: req("Add a title", 80),
