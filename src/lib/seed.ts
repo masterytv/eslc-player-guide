@@ -812,12 +812,12 @@ export const SEED: Guide = {
  * moved to 12:30, with the LOC meeting players holding an Ireland Lacrosse sign, and lunch that day
  * was set for 14:00–15:00. The Free time page (Salou, Tarragona, Barcelona, Ebro Delta) came on 30 Oct,
  * and the conduct rules were updated that day. On 31 Oct the LOC's infobook added the venue map, where
- * things are at the venue, ice baths, the gym and the emergency number (112), and practices moved to the
- * same complex as the games.
+ * things are at the venue, ice baths, the gym and the emergency number (112). The schedule keeps its
+ * 19 Oct date: staff had saved it since (with the opening ceremony's times), so it isn't replaced.
  */
 export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   playbook: "2026-10-12T13:00:00.000Z",
-  schedule: "2026-10-31T16:25:00.000Z",
+  schedule: "2026-10-19T16:30:00.000Z",
   meals: "2026-10-29T20:55:00.000Z",
   rooming: "2026-10-28T20:25:00.000Z",
   roster: "2026-10-28T20:30:00.000Z",

@@ -137,8 +137,8 @@ test("a game plan saved before the coaches' new one gives way to it", () => {
 test("a schedule saved before the revised master schedule and practice times gives way to it", () => {
   assert.equal(olderThanSeed("schedule", "2026-10-16T09:00:00.000Z"), true);
   assert.equal(olderThanSeed("schedule", "2026-10-19T09:00:00.000Z"), true);
-  assert.equal(olderThanSeed("schedule", "2026-10-20T09:00:00.000Z"), true);
-  assert.equal(olderThanSeed("schedule", "2026-11-01T09:00:00.000Z"), false);
+  // Staff saved the schedule after 19 Oct (the opening ceremony's times): that copy must keep showing.
+  assert.equal(olderThanSeed("schedule", "2026-10-20T09:00:00.000Z"), false);
   assert.equal(olderThanSeed("venue", "2026-10-19T09:00:00.000Z"), true);
   assert.deepEqual(
     SEED.schedule.filter((s) => s.type === "practice" && s.time).map((s) => [s.date, s.time, s.endTime]),
