@@ -88,7 +88,7 @@ export const sectionSchemas = {
     opponent: text(60),
     opponentCode: text(4).transform((v) => v.toUpperCase()),
     round: text(40),
-    field: text(40),
+    field: text(60),
     endTime: time,
     mapUrl: url,
     warmup: time,
