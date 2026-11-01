@@ -213,7 +213,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
 
         {isGameDay(guide, day) && guide.venue.walkNote ? (
           <div className="info">
-            <Icon name="walk" />
+            <Icon name="info" />
             <span>{with24h(guide.venue.walkNote)}</span>
           </div>
         ) : null}
@@ -231,8 +231,8 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
               Weather
             </Link>
             <Link className="qt" href="/venue#fields">
-              <Icon name="walk" />
-              Walk to the fields
+              <Icon name="map" />
+              Getting to the fields
             </Link>
             <Link className="qt" href="/team">
               <Icon name="phone" />

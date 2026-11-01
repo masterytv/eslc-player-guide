@@ -163,17 +163,16 @@ test("the daily notes editor shows what else players see that day, and where to 
   await expect(admin.locator(".dayhead h2")).toHaveText("Mon 2 Nov");
   await admin.locator(".sec-h", { hasText: "Daily notes" }).getByRole("link", { name: /Edit/ }).click();
   await expect(admin).toHaveURL(/\/admin\/daily\?day=2026-11-02$/);
-  await expect(admin.locator(".card.empty")).toContainText("Players still see the 6 items below on this day.");
+  await expect(admin.locator(".card.empty")).toContainText("Players still see the 5 items below on this day.");
   const also = admin.getByRole("region", { name: "Also on Mon 2 Nov" });
   await expect(also.locator(".mt")).toHaveText([
     "2:30 PM (14:30) · Ireland vs Finland",
-    "TBC · Team meeting",
     "7:30–9:30 AM (07:30–09:30) · Breakfast",
     "12:00–3:00 PM (12:00–15:00) · Lunch",
     "7:00–9:00 PM (19:00–21:00) · Dinner",
-    /^We will walk to all practices/,
+    /^We will be shuttling players in cars/,
   ]);
-  await expect(also.getByRole("link", { name: /We will walk/ })).toHaveAttribute("href", "/admin/venue");
+  await expect(also.getByRole("link", { name: /We will be shuttling/ })).toHaveAttribute("href", "/admin/venue");
   await expect(also.getByRole("link", { name: /Breakfast/ })).toHaveAttribute("href", /\/admin\/meals\?day=2026-11-02&item=m\d+$/);
 
   await also.getByRole("link", { name: /Ireland vs Finland/ }).click();
@@ -206,6 +205,15 @@ test("players can call 112 from Team, and see the venue map and gym note", async
   await expect(viewer.locator("#fields")).toContainText("Showering is a must before ice baths.");
   await expect(viewer.locator("#fields").getByText("Venue map: F1, F2, F3")).toBeVisible();
   await expect(viewer.locator("#villas")).toContainText("contact Maddy");
+});
+
+test("spa time shows on 4 and 5 Nov, and 2 Nov has no team meeting", async () => {
+  await viewer.goto("/?day=2026-11-04");
+  await expect(viewer.locator(".tl-item", { hasText: "Spa time" })).toContainText("Until 5:00 PM (17:00) · Spa, Cambrils Park");
+  await viewer.goto("/?day=2026-11-05");
+  await expect(viewer.locator(".tl-item", { hasText: "Spa time" })).toHaveCount(1);
+  await viewer.goto("/?day=2026-11-02");
+  await expect(viewer.locator(".tl-item", { hasText: "Team meeting" })).toHaveCount(0);
 });
 
 test("every game says whether we're home in white or away in green", async () => {

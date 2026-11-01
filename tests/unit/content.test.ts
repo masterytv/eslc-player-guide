@@ -155,3 +155,26 @@ test("games say home (white) or away (green), even on a schedule saved before th
   const changed = withSeedFields("schedule", saved.map((r) => (r.id === "s3" ? { ...r, side: "home" as const } : r)));
   assert.equal(changed.find((r) => r.id === "s3")?.side, "home");
 });
+
+test("spa time on 4 and 5 Nov is added, and the 2 Nov team meeting taken off, keeping staff edits", () => {
+  const spa = SEED.schedule.filter((r) => r.title === "Spa time").map((r) => [r.date, r.time, r.endTime]);
+  assert.deepEqual(spa, [["2026-11-04", "16:00", "17:00"], ["2026-11-05", "16:00", "17:00"]]);
+  // A schedule staff saved in the app before the spa times existed, with their own ceremony time.
+  const meeting = { id: "s4", date: "2026-11-02", time: "13:00", type: "meeting", title: "Team meeting", field: "Villa A64" };
+  const saved = sectionSchemas.schedule.parse([
+    ...SEED.schedule.filter((r) => r.title !== "Spa time").map((r) => (r.id === "s2" ? { ...r, time: "16:30" } : r)),
+    meeting,
+  ]);
+  const shown = withSeedFields("schedule", saved, "2026-10-31T10:00:00.000Z");
+  assert.deepEqual(shown.filter((r) => r.title === "Spa time").map((r) => r.date), ["2026-11-04", "2026-11-05"]);
+  assert.equal(shown.find((r) => r.id === "s2")?.time, "16:30");
+  assert.equal(shown.find((r) => r.id === "s4"), undefined);
+  assert.equal(shown.length, saved.length + 2 - 1);
+  // Saved again after they were added (say, with one deleted): staff's copy wins.
+  const later = withSeedFields("schedule", saved, "2026-11-02T10:00:00.000Z");
+  assert.equal(later.filter((r) => r.title === "Spa time").length, 0);
+  assert.ok(later.find((r) => r.id === "s4"));
+  // Never added twice.
+  assert.equal(withSeedFields("schedule", sectionSchemas.schedule.parse(SEED.schedule), "2026-10-31T10:00:00.000Z").length, SEED.schedule.length);
+  assert.ok(entriesFor(SEED, "2026-11-04").some((e) => e.title === "Spa time" && e.meta === "Until 5:00 PM (17:00) · Spa, Cambrils Park"));
+});

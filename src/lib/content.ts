@@ -127,7 +127,7 @@ export const loadTournament = cache(async (id: string): Promise<LoadedGuide> => 
     if (id === FIRST_TOURNAMENT && olderThanSeed(key, row.updatedAt)) {
       guide[key] = unsaved(id, key);
     } else if (parsed.success) {
-      guide[key] = id === FIRST_TOURNAMENT ? withSeedFields(key, parsed.data as Guide[typeof key]) : parsed.data;
+      guide[key] = id === FIRST_TOURNAMENT ? withSeedFields(key, parsed.data as Guide[typeof key], row.updatedAt) : parsed.data;
     } else {
       console.error(`Stored "${key}" section of ${id} no longer matches its schema; showing it as if never saved.`, parsed.error.issues);
       guide[key] = unsaved(id, key);

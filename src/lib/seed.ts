@@ -475,12 +475,13 @@ export const SEED: Guide = {
     { id: "s1", date: "2026-11-01", time: "11:00", endTime: "12:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", side: "", notes: "" },
     { id: "s2", date: "2026-11-01", time: "", type: "ceremony", title: "Opening Ceremony", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", notes: "" },
     { id: "s3", date: "2026-11-02", time: "14:30", type: "game", title: "", opponent: "Finland", opponentCode: "FIN", round: "Match 005", field: "Field 2", endTime: "", mapUrl: "", warmup: "14:00", side: "away", notes: "" },
-    { id: "s4", date: "2026-11-02", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", notes: "Time will be posted here and in the group chat." },
     { id: "s5", date: "2026-11-03", time: "12:30", type: "game", title: "", opponent: "Italy", opponentCode: "ITA", round: "Match 012", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", notes: "" },
     { id: "s6", date: "2026-11-03", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", notes: "Time will be posted here and in the group chat." },
     { id: "s7", date: "2026-11-03", time: "15:30", type: "game", title: "", opponent: "Sweden", opponentCode: "SWE", round: "Match 016", field: "Field 1", endTime: "", mapUrl: "", warmup: "15:00", side: "away", notes: "New time: this game was moved up from 17:00." },
     { id: "s8", date: "2026-11-04", time: "", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", notes: "No game today." },
     { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", notes: "" },
+    { id: "s10", date: "2026-11-04", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", notes: "" },
+    { id: "s11", date: "2026-11-05", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", notes: "" },
   ],
   staff: [
     { id: "st1", name: "Maddy Morrissey Buss", role: "Head Coach", phone: "", whatsapp: true, email: "" },
@@ -628,7 +629,7 @@ export const SEED: Guide = {
     name: "Mediterranean Sports Hub",
     address: "Via de Cavet, s/n, 43840 Salou, Tarragona, Spain",
     walkNote:
-      "We will walk to all practices and matches. The walk from our villas will take approximately 10–15 minutes. All players are expected to arrive at the designated meeting location on time.",
+      "We will be shuttling players in cars to all practices and matches. All players are expected to arrive at the designated meeting location on time.",
     amenities: [
       "Changing rooms & showers",
       "Grass and turf fields",
@@ -837,19 +838,39 @@ export const SEED_FIELDS: Partial<Record<SectionKey, string[]>> = {
   schedule: ["side"],
 };
 
-/** A first-tournament section as saved, with SEED_FIELDS filled in from the starting content. */
-export function withSeedFields<K extends SectionKey>(key: K, data: Guide[K]): Guide[K] {
-  const fields = SEED_FIELDS[key];
+/**
+ * Items added to or removed from the starting content after staff had saved a section, and when. A saved
+ * copy older than that gets them added or removed (it keeps everything else staff typed); once staff save
+ * the section again, their copy holds the change, so they can edit it there like anything else. On 1 Nov
+ * spa time on 4 and 5 Nov was added, and the team meeting on 2 Nov was taken off. That day players
+ * moved from walking to the fields to being shuttled in cars (the venue section's Getting there note).
+ */
+export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, { at: string; add: string[]; remove: string[] }>> = {
+  schedule: { at: "2026-11-01T19:30:00.000Z", add: ["s10", "s11"], remove: ["s4"] },
+};
+
+/**
+ * A first-tournament section as saved at `updatedAt`, with SEED_FIELDS filled in from the starting
+ * content and any SEED_ITEM_CHANGES since then applied.
+ */
+export function withSeedFields<K extends SectionKey>(key: K, data: Guide[K], updatedAt = ""): Guide[K] {
+  const fields = SEED_FIELDS[key] ?? [];
+  const changes = SEED_ITEM_CHANGES[key];
   const seed = SEED[key];
-  if (!fields || !Array.isArray(data) || !Array.isArray(seed)) return data;
+  if (!Array.isArray(data) || !Array.isArray(seed)) return data;
   const byId = new Map(seed.map((r: { id: string }) => [r.id, r as Record<string, unknown>]));
-  return data.map((row: Record<string, unknown>) => {
+  const rows = data.map((row: Record<string, unknown>) => {
     const from = byId.get(String(row.id));
-    if (!from) return row;
+    if (!from || !fields.length) return row;
     const out = { ...row };
     for (const f of fields) if (!out[f] && from[f]) out[f] = from[f];
     return out;
-  }) as Guide[K];
+  });
+  if (!changes || !(Date.parse(updatedAt) < Date.parse(changes.at))) return rows as Guide[K];
+  const kept = rows.filter((r) => !changes.remove.includes(String(r.id)));
+  const have = new Set(kept.map((r) => String(r.id)));
+  for (const id of changes.add) if (!have.has(id) && byId.has(id)) kept.push(byId.get(id)!);
+  return kept as Guide[K];
 }
 
 /**
@@ -876,7 +897,7 @@ export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   daily: "2026-10-29T13:00:00.000Z",
   travel: "2026-10-29T13:00:00.000Z",
   pages: "2026-11-01T15:30:00.000Z",
-  venue: "2026-10-31T16:10:00.000Z",
+  venue: "2026-11-01T18:55:00.000Z",
   accommodation: "2026-10-31T16:10:00.000Z",
   maps: "2026-10-31T16:10:00.000Z",
 };
