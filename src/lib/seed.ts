@@ -133,8 +133,8 @@ The championships are streamed live on World Lacrosse TV (WLTV), so family and f
 - **US$20**: one championship (the women's tournament, 1–9 November)
 - **US$30**: both championships (women's and men's, 1–18 November)
 
-### Where
-[Watch on World Lacrosse TV](https://tv.worldlacrosse.sport/page/6697b8996bb85855e883a4e3)
+### Where to buy
+Online only, on World Lacrosse TV: [Buy and watch on World Lacrosse TV](https://tv.worldlacrosse.sport/page/6697b8996bb85855e883a4e3)
 
 >> Share this page with family and friends at home.
 
@@ -145,6 +145,9 @@ Family and friends can watch in person at the Mediterranean Sports Hub (Futbol S
 - **€8**: day pass
 - **€50**: one championship
 - **€100**: both championships
+
+### Where to buy
+**At the venue only.** Tickets aren't sold online: buy them at the entrance when you arrive. Cash and card are both accepted.
 
 > Prices are from the organisers' Team Infobook. Check the World Lacrosse TV page for the latest streaming prices.`;
 
@@ -743,7 +746,7 @@ export const SEED: Guide = {
     { id: "pg1", title: "Tournament rules", slug: "rules", group: "before", summary: "Passports, squad size", body: rules },
     { id: "pg2", title: "Conduct & team rules", slug: "conduct", group: "team", summary: "Check in & out, lights out, apparel", body: conduct },
     { id: "pg3", title: "Team activities", slug: "activities", group: "team", summary: "Barcelona trip", body: activities },
-    { id: "pg5", title: "Where to watch", slug: "watch", group: "before", summary: "World Lacrosse TV: US$20 or US$30. Tickets at the venue", body: watch },
+    { id: "pg5", title: "Where to watch", slug: "watch", group: "before", summary: "Stream online on World Lacrosse TV, or buy tickets at the venue", body: watch },
     { id: "pg4", title: "Free time", slug: "free-time", group: "team", summary: "Salou, Tarragona, Barcelona, Ebro Delta: how far, and how to get there", body: freeTime },
   ],
   playbook: [
@@ -872,7 +875,7 @@ export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   roster: "2026-10-28T20:30:00.000Z",
   daily: "2026-10-29T13:00:00.000Z",
   travel: "2026-10-29T13:00:00.000Z",
-  pages: "2026-11-01T15:00:00.000Z",
+  pages: "2026-11-01T15:30:00.000Z",
   venue: "2026-10-31T16:10:00.000Z",
   accommodation: "2026-10-31T16:10:00.000Z",
   maps: "2026-10-31T16:10:00.000Z",

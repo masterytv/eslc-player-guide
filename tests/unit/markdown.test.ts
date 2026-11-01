@@ -88,6 +88,8 @@ test("the Where to watch page has the World Lacrosse TV prices and link", () => 
   assert.match(page.body, /https:\/\/tv\.worldlacrosse\.sport\/page\/6697b8996bb85855e883a4e3/);
   const cards = parsePage(page.body).filter((s) => s.kind === "card");
   assert.deepEqual(cards.map((c) => c.heading), ["Watch online: World Lacrosse TV", "Watch at the venue"]);
+  assert.match(page.body, /Online only, on World Lacrosse TV/);
+  assert.match(page.body, /At the venue only\.\*\* Tickets aren't sold online/);
 });
 
 test("the Free time page says how far each place is and how to get there", () => {
