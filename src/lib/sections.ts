@@ -90,6 +90,12 @@ export const SECTIONS: SectionDef[] = [
       },
       { key: "poolName", label: "Pool", type: "text", placeholder: "Pool play B" },
       { key: "scheduleUrl", label: "Full schedule link", type: "url", placeholder: "https://" },
+      {
+        key: "gameCountdown",
+        label: "Game countdown",
+        type: "lines",
+        help: "Shown under every game with a start time. Start a line with the minutes before the start (-60:) or after the game (+10:). A line without a number shows as a reminder.",
+      },
     ],
   },
   {

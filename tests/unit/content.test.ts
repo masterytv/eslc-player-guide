@@ -3,7 +3,8 @@ import { test } from "node:test";
 import { calendar } from "../../src/lib/ics.ts";
 import { parseInline, parsePage } from "../../src/lib/markdown.ts";
 import { telHref, whatsappHref } from "../../src/lib/phone.ts";
-import { defaultDay, entriesFor, fieldLabel, mealTimeLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
+import { defaultDay, entriesFor, fieldLabel, gameCountdown, mealTimeLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
+import { GAME_COUNTDOWN, sectionSchemas } from "../../src/lib/schema.ts";
 import { clockRange } from "../../src/lib/time.ts";
 import { SEED } from "../../src/lib/seed.ts";
 
@@ -110,4 +111,19 @@ test("time ranges read 1:30–3:30 PM, and AM–PM when they cross midday", () =
   assert.deepEqual(clockRange("11:30", "13:30"), { hm: "11:30–1:30", ap: "AM–PM", h24: "11:30–13:30" });
   assert.equal(clockRange("09:00", "")?.hm, "9:00");
   assert.equal(clockRange("", "10:00"), null);
+});
+
+test("each game's countdown runs from its start time", () => {
+  const steps = gameCountdown(GAME_COUNTDOWN, "14:30");
+  assert.deepEqual(steps[0], { time: "1:30 PM", h24: "13:30", offset: "−60 min", text: "Locker room opens, Ireland only. Take all items with you." });
+  assert.deepEqual(steps.slice(1, 7).map((s) => s.h24), ["14:00", "14:10", "14:15", "14:23", "14:27", "14:30"]);
+  assert.equal(steps[6].offset, "Start");
+  assert.deepEqual(steps[7], { time: "", h24: "", offset: "", text: "Do not go on the field until the whistle blows." });
+  assert.deepEqual(steps[8], { time: "", h24: "", offset: "+10 min after", text: "Team must leave the field" });
+  assert.deepEqual(gameCountdown(GAME_COUNTDOWN, ""), []);
+});
+
+test("an Event & alert section saved before the countdown existed shows it", () => {
+  const saved = sectionSchemas.event.parse({ team: "Ireland", alert: "" });
+  assert.deepEqual(saved.gameCountdown, GAME_COUNTDOWN);
 });

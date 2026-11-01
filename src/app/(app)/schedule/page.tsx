@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EditLink } from "@/components/EditLink";
+import { GameCountdown } from "@/components/GameCountdown";
 import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
 import { Tickets } from "@/components/Tickets";
@@ -98,6 +99,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                         </h4>
                         {meta ? <p className="meta">{meta}</p> : null}
                         {r.notes ? <p className="meta">{with24h(r.notes)}</p> : null}
+                        {isGame && c ? <GameCountdown lines={guide.event.gameCountdown} start={r.time} /> : null}
                         {r.mapUrl ? (
                           <a className="txt-link" href={r.mapUrl} target="_blank" rel="noopener noreferrer">
                             <Icon name="map" size="sm" />

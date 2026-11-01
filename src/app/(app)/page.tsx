@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { Countdown } from "@/components/Countdown";
 import { DayStrip } from "@/components/DayStrip";
 import { EditLink } from "@/components/EditLink";
+import { GameCountdown } from "@/components/GameCountdown";
 import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
 import { TodayWeather } from "@/components/Weather";
@@ -100,6 +101,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
                         <h3>{with24h(e.title)}</h3>
                         {e.meta ? <p className="meta">{with24h(e.meta)}</p> : null}
                         {e.details ? <p>{with24h(e.details)}</p> : null}
+                        {e.game && c ? <GameCountdown lines={guide.event.gameCountdown} start={e.time} /> : null}
                         {e.link ? (
                           /^https?:/i.test(e.link.href) ? (
                             <a className="txt-link" href={e.link.href} target="_blank" rel="noopener noreferrer">

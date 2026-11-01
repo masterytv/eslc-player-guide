@@ -1,4 +1,4 @@
-import type { Guide, SectionKey } from "./schema";
+import { GAME_COUNTDOWN, type Guide, type SectionKey } from "./schema";
 
 // Starting content for the first tournament, taken from the ESLC 2026 player guide
 // Google Doc. Admins replace any of it from the app; a section reads from here only
@@ -423,6 +423,7 @@ export const SEED: Guide = {
     poolName: "Pool play B",
     scheduleUrl: "https://docs.google.com/spreadsheets/d/1w1AZLKIqm7Hn1UoOrIJrpYPv0AghAMeA/edit?usp=sharing",
     alert: "",
+    gameCountdown: GAME_COUNTDOWN,
   },
   daily: [
     {

@@ -1,5 +1,5 @@
 import type { Guide, Row, ScheduleType } from "./schema";
-import { clockLabel, clockRange, dateRange, toMinutes, zonedToUtc } from "./time";
+import { clock, clockLabel, clockRange, dateRange, toMinutes, zonedToUtc } from "./time";
 
 export const TYPE_LABEL: Record<ScheduleType | "note" | "meal", string> = {
   game: "Pool play",
@@ -37,6 +37,32 @@ export function scheduleTitle(row: Row<"schedule">): string {
 export function fieldLabel(field: string): string {
   if (!field) return "";
   return /^field/i.test(field) || !/^[\w-]{1,4}$/.test(field) ? field : `Field ${field}`;
+}
+
+export interface CountdownStep {
+  /** "1:30 PM" for a step before the start, "" for a reminder or a step after the game. */
+  time: string;
+  h24: string;
+  /** "−60 min", "Start", "+10 min after", or "" for a reminder. */
+  offset: string;
+  text: string;
+}
+
+const COUNTDOWN_LINE = /^([+\-−]?)\s*(\d{1,3})\s*:\s*(.+)$/;
+
+/** A game's countdown, from the Event & alert lines: "-60: Locker room opens" becomes 1:30 PM for a 2:30 PM game. */
+export function gameCountdown(lines: string[], start: string): CountdownStep[] {
+  const startMins = toMinutes(start);
+  if (startMins == null) return [];
+  return lines.map((line) => {
+    const m = COUNTDOWN_LINE.exec(line);
+    if (!m) return { time: "", h24: "", offset: "", text: line };
+    const mins = Number(m[2]);
+    if (m[1] === "+") return { time: "", h24: "", offset: `+${mins} min after`, text: m[3] };
+    const at = (startMins - mins + 24 * 60) % (24 * 60);
+    const c = clock(`${String(Math.floor(at / 60)).padStart(2, "0")}:${String(at % 60).padStart(2, "0")}`)!;
+    return { time: `${c.hm} ${c.ap}`, h24: c.h24, offset: mins ? `−${mins} min` : "Start", text: m[3] };
+  });
 }
 
 /** "Until 6:30 PM" when a non-game item has an end time. */
