@@ -39,6 +39,11 @@ export function fieldLabel(field: string): string {
   return /^field/i.test(field) || !/^[\w-]{1,4}$/.test(field) ? field : `Field ${field}`;
 }
 
+/** "Home · wear white" or "Away · wear green", for a game whose side is set. */
+export function kitLabel(row: Row<"schedule">): string {
+  return row.side === "home" ? "Home · wear white" : row.side === "away" ? "Away · wear green" : "";
+}
+
 export interface CountdownStep {
   /** "1:30 PM" for a step before the start, "" for a reminder or a step after the game. */
   time: string;

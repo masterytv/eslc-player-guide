@@ -114,6 +114,8 @@ export const sectionSchemas = {
     endTime: time,
     mapUrl: url,
     warmup: time,
+    /** The first team listed is home (white), the second away (green). */
+    side: z.enum(["", "home", "away"]).default(""),
     notes: long(500),
   }),
   staff: list({

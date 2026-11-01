@@ -156,6 +156,18 @@ export const SECTIONS: SectionDef[] = [
       { key: "field", label: "Field", type: "text", placeholder: "Field 2", help: "For somewhere other than the tournament venue, write the place, e.g. Practice field, Salou." },
       { key: "mapUrl", label: "Directions link", type: "url", placeholder: "https://maps.google.com/…", help: "Optional. Adds a Directions button. Use it when this isn't at the tournament venue." },
       { key: "warmup", label: "Warm-up time", type: "time", showIf: isGame },
+      {
+        key: "side",
+        label: "Home or away",
+        type: "select",
+        options: [
+          { value: "", label: "Not set" },
+          { value: "home", label: "Home: wear white" },
+          { value: "away", label: "Away: wear green" },
+        ],
+        help: "The first team listed on the official schedule is home and wears white; the second is away and wears green.",
+        showIf: isGame,
+      },
       { key: "notes", label: "Notes", type: "textarea" },
     ],
   },

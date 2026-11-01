@@ -208,6 +208,14 @@ test("players can call 112 from Team, and see the venue map and gym note", async
   await expect(viewer.locator("#villas")).toContainText("contact Maddy");
 });
 
+test("every game says whether we're home in white or away in green", async () => {
+  await viewer.goto("/schedule");
+  await expect(viewer.locator("article", { hasText: "vs Finland" }).locator(".kit")).toHaveText("Away · wear green");
+  await expect(viewer.locator("article", { hasText: "vs Italy" }).locator(".kit")).toHaveText("Home · wear white");
+  await viewer.goto("/?day=2026-11-03");
+  await expect(viewer.locator(".tl-item", { hasText: "Ireland vs Sweden" }).locator(".kit")).toHaveText("Away · wear green");
+});
+
 test("every game shows its countdown, at that game's times", async () => {
   await viewer.goto("/schedule");
   const finland = viewer.locator("article", { hasText: "vs Finland" });

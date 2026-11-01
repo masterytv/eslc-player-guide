@@ -3,6 +3,7 @@ import Link from "next/link";
 import { EditLink } from "@/components/EditLink";
 import { GameCountdown } from "@/components/GameCountdown";
 import { Header } from "@/components/Header";
+import { Kit } from "@/components/Kit";
 import { Icon } from "@/components/Icon";
 import { Tickets } from "@/components/Tickets";
 import { loadGuide } from "@/lib/content";
@@ -98,6 +99,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                           {isGame && r.opponentCode ? <span className="code">{r.opponentCode}</span> : null}
                         </h4>
                         {meta ? <p className="meta">{meta}</p> : null}
+                        {isGame ? <Kit game={r} /> : null}
                         {r.notes ? <p className="meta">{with24h(r.notes)}</p> : null}
                         {isGame && c ? <GameCountdown lines={guide.event.gameCountdown} start={r.time} /> : null}
                         {r.mapUrl ? (

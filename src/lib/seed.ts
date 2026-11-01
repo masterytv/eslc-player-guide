@@ -446,16 +446,16 @@ export const SEED: Guide = {
     },
   ],
   schedule: [
-    { id: "s0", date: "2026-10-31", time: "17:00", endTime: "18:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", notes: "" },
-    { id: "s1", date: "2026-11-01", time: "11:00", endTime: "12:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", notes: "" },
-    { id: "s2", date: "2026-11-01", time: "", type: "ceremony", title: "Opening Ceremony", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", notes: "" },
-    { id: "s3", date: "2026-11-02", time: "14:30", type: "game", title: "", opponent: "Finland", opponentCode: "FIN", round: "Match 005", field: "Field 2", endTime: "", mapUrl: "", warmup: "14:00", notes: "" },
-    { id: "s4", date: "2026-11-02", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", notes: "Time will be posted here and in the group chat." },
-    { id: "s5", date: "2026-11-03", time: "12:30", type: "game", title: "", opponent: "Italy", opponentCode: "ITA", round: "Match 012", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", notes: "" },
-    { id: "s6", date: "2026-11-03", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", notes: "Time will be posted here and in the group chat." },
-    { id: "s7", date: "2026-11-03", time: "15:30", type: "game", title: "", opponent: "Sweden", opponentCode: "SWE", round: "Match 016", field: "Field 1", endTime: "", mapUrl: "", warmup: "15:00", notes: "New time: this game was moved up from 17:00." },
-    { id: "s8", date: "2026-11-04", time: "", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", notes: "No game today." },
-    { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", notes: "" },
+    { id: "s0", date: "2026-10-31", time: "17:00", endTime: "18:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", side: "", notes: "" },
+    { id: "s1", date: "2026-11-01", time: "11:00", endTime: "12:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", side: "", notes: "" },
+    { id: "s2", date: "2026-11-01", time: "", type: "ceremony", title: "Opening Ceremony", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", notes: "" },
+    { id: "s3", date: "2026-11-02", time: "14:30", type: "game", title: "", opponent: "Finland", opponentCode: "FIN", round: "Match 005", field: "Field 2", endTime: "", mapUrl: "", warmup: "14:00", side: "away", notes: "" },
+    { id: "s4", date: "2026-11-02", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", notes: "Time will be posted here and in the group chat." },
+    { id: "s5", date: "2026-11-03", time: "12:30", type: "game", title: "", opponent: "Italy", opponentCode: "ITA", round: "Match 012", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", notes: "" },
+    { id: "s6", date: "2026-11-03", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", notes: "Time will be posted here and in the group chat." },
+    { id: "s7", date: "2026-11-03", time: "15:30", type: "game", title: "", opponent: "Sweden", opponentCode: "SWE", round: "Match 016", field: "Field 1", endTime: "", mapUrl: "", warmup: "15:00", side: "away", notes: "New time: this game was moved up from 17:00." },
+    { id: "s8", date: "2026-11-04", time: "", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", notes: "No game today." },
+    { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", notes: "" },
   ],
   staff: [
     { id: "st1", name: "Maddy Morrissey Buss", role: "Head Coach", phone: "", whatsapp: true, email: "" },
@@ -801,6 +801,30 @@ export const SEED: Guide = {
     ],
   },
 };
+
+/**
+ * Fields added after staff had saved a section, filled in from the starting content for the items that
+ * came from it (matched by id) while the saved value is blank. The organisers' schedule lists the home
+ * team first: Ireland is away (green) against Finland and Sweden, home (white) against Italy and Switzerland.
+ */
+export const SEED_FIELDS: Partial<Record<SectionKey, string[]>> = {
+  schedule: ["side"],
+};
+
+/** A first-tournament section as saved, with SEED_FIELDS filled in from the starting content. */
+export function withSeedFields<K extends SectionKey>(key: K, data: Guide[K]): Guide[K] {
+  const fields = SEED_FIELDS[key];
+  const seed = SEED[key];
+  if (!fields || !Array.isArray(data) || !Array.isArray(seed)) return data;
+  const byId = new Map(seed.map((r: { id: string }) => [r.id, r as Record<string, unknown>]));
+  return data.map((row: Record<string, unknown>) => {
+    const from = byId.get(String(row.id));
+    if (!from) return row;
+    const out = { ...row };
+    for (const f of fields) if (!out[f] && from[f]) out[f] = from[f];
+    return out;
+  }) as Guide[K];
+}
 
 /**
  * Sections whose starting content was rewritten after the guide went live, and when. On the first

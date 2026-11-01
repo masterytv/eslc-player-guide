@@ -3,10 +3,10 @@ import { test } from "node:test";
 import { calendar } from "../../src/lib/ics.ts";
 import { parseInline, parsePage } from "../../src/lib/markdown.ts";
 import { telHref, whatsappHref } from "../../src/lib/phone.ts";
-import { defaultDay, entriesFor, fieldLabel, gameCountdown, mealTimeLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
+import { defaultDay, entriesFor, fieldLabel, gameCountdown, kitLabel, mealTimeLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
 import { GAME_COUNTDOWN, sectionSchemas } from "../../src/lib/schema.ts";
 import { clockRange } from "../../src/lib/time.ts";
-import { SEED } from "../../src/lib/seed.ts";
+import { SEED, withSeedFields } from "../../src/lib/seed.ts";
 
 test("page text splits into cards, bullets and warnings", () => {
   const conduct = SEED.pages.find((p) => p.slug === "conduct")!;
@@ -126,4 +126,30 @@ test("each game's countdown runs from its start time", () => {
 test("an Event & alert section saved before the countdown existed shows it", () => {
   const saved = sectionSchemas.event.parse({ team: "Ireland", alert: "" });
   assert.deepEqual(saved.gameCountdown, GAME_COUNTDOWN);
+});
+
+test("games say home (white) or away (green), even on a schedule saved before the setting existed", () => {
+  const sides = SEED.schedule.filter((r) => r.type === "game").map((r) => [r.opponent, kitLabel(r)]);
+  assert.deepEqual(sides, [
+    ["Finland", "Away · wear green"],
+    ["Italy", "Home · wear white"],
+    ["Sweden", "Away · wear green"],
+    ["Switzerland", "Home · wear white"],
+  ]);
+  // A schedule staff saved in the app: no side yet, and their own ceremony time.
+  const saved = sectionSchemas.schedule.parse(
+    SEED.schedule.map((row) => {
+      const r: Record<string, unknown> = { ...row };
+      delete r.side;
+      return r.id === "s2" ? { ...r, time: "16:30", notes: "Parade of Nations 16:40" } : r;
+    }),
+  );
+  const shown = withSeedFields("schedule", saved);
+  assert.equal(shown.find((r) => r.id === "s3")?.side, "away");
+  assert.equal(shown.find((r) => r.id === "s5")?.side, "home");
+  assert.equal(shown.find((r) => r.id === "s2")?.time, "16:30");
+  assert.equal(shown.find((r) => r.id === "s2")?.notes, "Parade of Nations 16:40");
+  // A side staff set themselves is kept.
+  const changed = withSeedFields("schedule", saved.map((r) => (r.id === "s3" ? { ...r, side: "home" as const } : r)));
+  assert.equal(changed.find((r) => r.id === "s3")?.side, "home");
 });
