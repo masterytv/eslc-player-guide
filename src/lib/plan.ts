@@ -92,18 +92,21 @@ export function byTime<T extends { time: string }>(a: T, b: T): number {
   return ta - tb;
 }
 
-/** "12:00–15:00 · Buffet Masia" for open hours, "Arrive 13:30 · Buffet Masia" for our set time. */
+/** The buffet gives each team a set time to arrive; other meals (a villa dinner) just have a time. */
+const arriveBy = (row: Row<"meals">) => !row.endTime && /buffet/i.test(row.place);
+
+/** "12:00–15:00 · Buffet Masia" for open hours, "Arrive 13:30 · Buffet Masia" for our buffet slot. */
 export function mealMeta(row: Row<"meals">): string {
   const r = clockRange(row.time, row.endTime);
-  const when = r ? (row.endTime ? r.h24 : `Arrive ${r.h24}`) : "";
+  const when = r ? `${arriveBy(row) ? "Arrive " : ""}${r.h24}` : "";
   return [when, row.place].filter(Boolean).join(" · ");
 }
 
-/** "12:00–3:00 PM (12:00–15:00)" for open hours, "Arrive 1:30 PM (13:30)" for our set time. */
+/** "12:00–3:00 PM (12:00–15:00)" for open hours, "Arrive 1:30 PM (13:30)" for our buffet slot, "7:00 PM (19:00)" otherwise. */
 export function mealTimeLabel(row: Row<"meals">): string {
   const r = clockRange(row.time, row.endTime);
   if (!r) return "TBD";
-  return `${row.endTime ? "" : "Arrive "}${r.hm} ${r.ap} (${r.h24})`;
+  return `${arriveBy(row) ? "Arrive " : ""}${r.hm} ${r.ap} (${r.h24})`;
 }
 
 const MEAL_ORDER = ["breakfast", "brunch", "lunch", "dinner"];

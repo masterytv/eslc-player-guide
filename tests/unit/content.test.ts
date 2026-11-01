@@ -189,7 +189,7 @@ test("spa time on 4 and 5 Nov is added, and the 2 Nov team meeting taken off, ke
 test("dinner on 4 Nov is the Villa Tapas Competition at 7 PM, on a meals list saved before it too", () => {
   const dinner = SEED.meals.filter((m) => m.date === "2026-11-04" && m.meal === "Dinner");
   assert.equal(dinner.length, 1);
-  assert.equal(mealTimeLabel(dinner[0]), "Arrive 7:00 PM (19:00)");
+  assert.equal(mealTimeLabel(dinner[0]), "7:00 PM (19:00)");
   assert.equal(dinner[0].place, "Villa Tapas Competition");
   const old = { id: "m14", date: "2026-11-04", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" };
   const saved = sectionSchemas.meals.parse([...SEED.meals.filter((m) => m.id !== "m31"), old]);

@@ -482,7 +482,7 @@ export const SEED: Guide = {
     { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", notes: "" },
     { id: "s10", date: "2026-11-04", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", notes: "" },
     { id: "s11", date: "2026-11-05", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", notes: "" },
-    { id: "s12", date: "2026-11-02", time: "17:30", endTime: "", type: "other", title: "Sunset swim at the beach", opponent: "", opponentCode: "", round: "", field: "Meet at Villa 64", mapUrl: "", warmup: "", side: "", notes: "" },
+    { id: "s12", date: "2026-11-02", time: "17:30", endTime: "", type: "other", title: "Sunset swim at the beach", opponent: "", opponentCode: "", round: "", field: "Meet at Villa A 64", mapUrl: "", warmup: "", side: "", notes: "" },
   ],
   staff: [
     { id: "st1", name: "Maddy Morrissey Buss", role: "Head Coach", phone: "", whatsapp: true, email: "" },
@@ -844,7 +844,7 @@ export const SEED_FIELDS: Partial<Record<SectionKey, string[]>> = {
  * copy older than that gets them added or removed (it keeps everything else staff typed); once staff save
  * the section again, their copy holds the change, so they can edit it there like anything else. On 1 Nov
  * spa time on 4 and 5 Nov was added, the team meeting on 2 Nov was taken off, and dinner on 4 Nov became
- * the Villa Tapas Competition at 19:00. A sunset swim on 2 Nov (meet at Villa 64, 17:30) was added too. That day players
+ * the Villa Tapas Competition at 19:00. A sunset swim on 2 Nov (meet at Villa A 64, 17:30) was added too. That day players
  * moved from walking to the fields to being shuttled in cars (the venue section's Getting there note).
  */
 export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, { at: string; add: string[]; remove: string[] }>> = {

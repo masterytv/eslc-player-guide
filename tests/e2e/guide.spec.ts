@@ -211,12 +211,13 @@ test("players can call 112 from Team, and see the venue map and gym note", async
 test("spa time shows on 4 and 5 Nov, and 2 Nov has no team meeting", async () => {
   await viewer.goto("/?day=2026-11-04");
   await expect(viewer.locator(".tl-item", { hasText: "Spa time" })).toContainText("Until 5:00 PM (17:00) · Spa, Cambrils Park");
-  await expect(viewer.locator(".tl-item", { hasText: "Dinner" })).toContainText("Arrive 19:00 · Villa Tapas Competition");
+  await expect(viewer.locator(".tl-item", { hasText: "Dinner" })).toContainText("19:00 · Villa Tapas Competition");
+  await expect(viewer.locator(".tl-item", { hasText: "Dinner" })).not.toContainText("Arrive");
   await viewer.goto("/?day=2026-11-05");
   await expect(viewer.locator(".tl-item", { hasText: "Spa time" })).toHaveCount(1);
   await viewer.goto("/?day=2026-11-02");
   await expect(viewer.locator(".tl-item", { hasText: "Team meeting" })).toHaveCount(0);
-  await expect(viewer.locator(".tl-item", { hasText: "Sunset swim at the beach" })).toContainText("Meet at Villa 64");
+  await expect(viewer.locator(".tl-item", { hasText: "Sunset swim at the beach" })).toContainText("Meet at Villa A 64");
 });
 
 test("every game says whether we're home in white or away in green", async () => {
