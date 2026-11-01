@@ -163,10 +163,11 @@ test("the daily notes editor shows what else players see that day, and where to 
   await expect(admin.locator(".dayhead h2")).toHaveText("Mon 2 Nov");
   await admin.locator(".sec-h", { hasText: "Daily notes" }).getByRole("link", { name: /Edit/ }).click();
   await expect(admin).toHaveURL(/\/admin\/daily\?day=2026-11-02$/);
-  await expect(admin.locator(".card.empty")).toContainText("Players still see the 5 items below on this day.");
+  await expect(admin.locator(".card.empty")).toContainText("Players still see the 6 items below on this day.");
   const also = admin.getByRole("region", { name: "Also on Mon 2 Nov" });
   await expect(also.locator(".mt")).toHaveText([
     "2:30 PM (14:30) · Ireland vs Finland",
+    "5:30 PM (17:30) · Sunset swim at the beach",
     "7:30–9:30 AM (07:30–09:30) · Breakfast",
     "12:00–3:00 PM (12:00–15:00) · Lunch",
     "7:00–9:00 PM (19:00–21:00) · Dinner",
@@ -215,6 +216,7 @@ test("spa time shows on 4 and 5 Nov, and 2 Nov has no team meeting", async () =>
   await expect(viewer.locator(".tl-item", { hasText: "Spa time" })).toHaveCount(1);
   await viewer.goto("/?day=2026-11-02");
   await expect(viewer.locator(".tl-item", { hasText: "Team meeting" })).toHaveCount(0);
+  await expect(viewer.locator(".tl-item", { hasText: "Sunset swim at the beach" })).toContainText("Meet at Villa 64");
 });
 
 test("every game says whether we're home in white or away in green", async () => {

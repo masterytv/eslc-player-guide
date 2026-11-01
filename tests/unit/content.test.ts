@@ -168,14 +168,15 @@ test("spa time on 4 and 5 Nov is added, and the 2 Nov team meeting taken off, ke
   // A schedule staff saved in the app before the spa times existed, with their own ceremony time.
   const meeting = { id: "s4", date: "2026-11-02", time: "13:00", type: "meeting", title: "Team meeting", field: "Villa A64" };
   const saved = sectionSchemas.schedule.parse([
-    ...SEED.schedule.filter((r) => r.title !== "Spa time").map((r) => (r.id === "s2" ? { ...r, time: "16:30" } : r)),
+    ...SEED.schedule.filter((r) => !["s10", "s11", "s12"].includes(r.id)).map((r) => (r.id === "s2" ? { ...r, time: "16:30" } : r)),
     meeting,
   ]);
   const shown = withSeedFields("schedule", saved, "2026-10-31T10:00:00.000Z");
   assert.deepEqual(shown.filter((r) => r.title === "Spa time").map((r) => r.date), ["2026-11-04", "2026-11-05"]);
   assert.equal(shown.find((r) => r.id === "s2")?.time, "16:30");
   assert.equal(shown.find((r) => r.id === "s4"), undefined);
-  assert.equal(shown.length, saved.length + 2 - 1);
+  assert.equal(shown.length, saved.length + 3 - 1);
+  assert.equal(shown.find((r) => r.id === "s12")?.title, "Sunset swim at the beach");
   // Saved again after they were added (say, with one deleted): staff's copy wins.
   const later = withSeedFields("schedule", saved, "2026-11-02T10:00:00.000Z");
   assert.equal(later.filter((r) => r.title === "Spa time").length, 0);
