@@ -482,6 +482,7 @@ export const SEED: Guide = {
     { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", notes: "" },
     { id: "s10", date: "2026-11-04", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", notes: "" },
     { id: "s11", date: "2026-11-05", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", notes: "" },
+    { id: "s12", date: "2026-11-02", time: "17:30", endTime: "", type: "other", title: "Sunset swim at the beach", opponent: "", opponentCode: "", round: "", field: "Meet at Villa A 64", mapUrl: "", warmup: "", side: "", notes: "" },
   ],
   staff: [
     { id: "st1", name: "Maddy Morrissey Buss", role: "Head Coach", phone: "", whatsapp: true, email: "" },
@@ -529,7 +530,7 @@ export const SEED: Guide = {
     { id: "m11", date: "2026-11-03", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m12", date: "2026-11-04", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m13", date: "2026-11-04", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
-    { id: "m14", date: "2026-11-04", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m31", date: "2026-11-04", meal: "Dinner", time: "19:00", endTime: "", place: "Villa Tapas Competition", notes: "" },
     { id: "m15", date: "2026-11-05", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m16", date: "2026-11-05", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m17", date: "2026-11-05", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
@@ -842,11 +843,13 @@ export const SEED_FIELDS: Partial<Record<SectionKey, string[]>> = {
  * Items added to or removed from the starting content after staff had saved a section, and when. A saved
  * copy older than that gets them added or removed (it keeps everything else staff typed); once staff save
  * the section again, their copy holds the change, so they can edit it there like anything else. On 1 Nov
- * spa time on 4 and 5 Nov was added, and the team meeting on 2 Nov was taken off. That day players
+ * spa time on 4 and 5 Nov was added, the team meeting on 2 Nov was taken off, and dinner on 4 Nov became
+ * the Villa Tapas Competition at 19:00. A sunset swim on 2 Nov (meet at Villa A 64, 17:30) was added too. That day players
  * moved from walking to the fields to being shuttled in cars (the venue section's Getting there note).
  */
 export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, { at: string; add: string[]; remove: string[] }>> = {
-  schedule: { at: "2026-11-01T19:30:00.000Z", add: ["s10", "s11"], remove: ["s4"] },
+  schedule: { at: "2026-11-01T20:30:00.000Z", add: ["s10", "s11", "s12"], remove: ["s4"] },
+  meals: { at: "2026-11-01T20:30:00.000Z", add: ["m31"], remove: ["m14"] },
 };
 
 /**

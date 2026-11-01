@@ -163,10 +163,11 @@ test("the daily notes editor shows what else players see that day, and where to 
   await expect(admin.locator(".dayhead h2")).toHaveText("Mon 2 Nov");
   await admin.locator(".sec-h", { hasText: "Daily notes" }).getByRole("link", { name: /Edit/ }).click();
   await expect(admin).toHaveURL(/\/admin\/daily\?day=2026-11-02$/);
-  await expect(admin.locator(".card.empty")).toContainText("Players still see the 5 items below on this day.");
+  await expect(admin.locator(".card.empty")).toContainText("Players still see the 6 items below on this day.");
   const also = admin.getByRole("region", { name: "Also on Mon 2 Nov" });
   await expect(also.locator(".mt")).toHaveText([
     "2:30 PM (14:30) · Ireland vs Finland",
+    "5:30 PM (17:30) · Sunset swim at the beach",
     "7:30–9:30 AM (07:30–09:30) · Breakfast",
     "12:00–3:00 PM (12:00–15:00) · Lunch",
     "7:00–9:00 PM (19:00–21:00) · Dinner",
@@ -210,10 +211,13 @@ test("players can call 112 from Team, and see the venue map and gym note", async
 test("spa time shows on 4 and 5 Nov, and 2 Nov has no team meeting", async () => {
   await viewer.goto("/?day=2026-11-04");
   await expect(viewer.locator(".tl-item", { hasText: "Spa time" })).toContainText("Until 5:00 PM (17:00) · Spa, Cambrils Park");
+  await expect(viewer.locator(".tl-item", { hasText: "Dinner" })).toContainText("19:00 · Villa Tapas Competition");
+  await expect(viewer.locator(".tl-item", { hasText: "Dinner" })).not.toContainText("Arrive");
   await viewer.goto("/?day=2026-11-05");
   await expect(viewer.locator(".tl-item", { hasText: "Spa time" })).toHaveCount(1);
   await viewer.goto("/?day=2026-11-02");
   await expect(viewer.locator(".tl-item", { hasText: "Team meeting" })).toHaveCount(0);
+  await expect(viewer.locator(".tl-item", { hasText: "Sunset swim at the beach" })).toContainText("Meet at Villa A 64");
 });
 
 test("every game says whether we're home in white or away in green", async () => {
@@ -228,13 +232,15 @@ test("every game shows its countdown, at that game's times", async () => {
   await viewer.goto("/schedule");
   const finland = viewer.locator("article", { hasText: "vs Finland" });
   const steps = finland.locator(".countdown li");
-  await expect(steps).toHaveCount(8);
-  await expect(steps.first()).toContainText("1:30 PM");
-  await expect(steps.first()).toContainText("Locker room opens, Ireland only. Take all items with you.");
+  await expect(steps).toHaveCount(9);
+  await expect(steps.first()).toContainText("1:00 PM");
+  await expect(steps.first()).toContainText("Shuttle to the fields");
+  await expect(steps.nth(1)).toContainText("1:30 PM");
+  await expect(steps.nth(1)).toContainText("Locker room opens, Ireland only. Take all items with you.");
   await expect(finland.locator(".countdown")).not.toContainText("whistle");
   await expect(steps.last()).toContainText("+10 min after");
   await viewer.goto("/?day=2026-11-02");
-  await expect(viewer.locator(".tl-item", { hasText: "Ireland vs Finland" }).locator(".countdown li")).toHaveCount(8);
+  await expect(viewer.locator(".tl-item", { hasText: "Ireland vs Finland" }).locator(".countdown li")).toHaveCount(9);
 });
 
 test("the roster lists the final squad", async () => {
