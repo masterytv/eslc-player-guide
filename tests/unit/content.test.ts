@@ -118,8 +118,10 @@ test("each game's countdown runs from its start time", () => {
   assert.deepEqual(steps[0], { time: "1:30 PM", h24: "13:30", offset: "−60 min", text: "Locker room opens, Ireland only. Take all items with you." });
   assert.deepEqual(steps.slice(1, 7).map((s) => s.h24), ["14:00", "14:10", "14:15", "14:23", "14:27", "14:30"]);
   assert.equal(steps[6].offset, "Start");
-  assert.deepEqual(steps[7], { time: "", h24: "", offset: "", text: "Do not go on the field until the whistle blows." });
-  assert.deepEqual(steps[8], { time: "", h24: "", offset: "+10 min after", text: "Team must leave the field" });
+  assert.deepEqual(steps[7], { time: "", h24: "", offset: "+10 min after", text: "Team must leave the field" });
+  assert.equal(steps.length, 8);
+  // A line without a number is a reminder.
+  assert.deepEqual(gameCountdown(["Bring water"], "14:30"), [{ time: "", h24: "", offset: "", text: "Bring water" }]);
   assert.deepEqual(gameCountdown(GAME_COUNTDOWN, ""), []);
 });
 

@@ -68,7 +68,6 @@ export const GAME_COUNTDOWN = [
   "-7: Anthem",
   "-3: Team line-up",
   "0: Game starts",
-  "Do not go on the field until the whistle blows.",
   "+10: Team must leave the field",
 ];
 
