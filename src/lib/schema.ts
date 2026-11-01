@@ -61,6 +61,7 @@ export const NEARBY_LABEL: Record<NearbyCategory, string> = {
  * section from before it existed shows it too.
  */
 export const GAME_COUNTDOWN = [
+  "-90: Shuttle to the fields",
   "-60: Locker room opens, Ireland only. Take all items with you.",
   "-30: Field opens for warm-up",
   "-20: Officials and coaches meet",
@@ -70,6 +71,18 @@ export const GAME_COUNTDOWN = [
   "0: Game starts",
   "+10: Team must leave the field",
 ];
+
+/** Earlier versions of GAME_COUNTDOWN. A saved list that still matches one wasn't edited, so it shows the current one. */
+const PAST_COUNTDOWNS = [
+  // 1 Nov: before "Do not go on the field until the whistle blows." came out.
+  [...GAME_COUNTDOWN.slice(1, 8), "Do not go on the field until the whistle blows.", GAME_COUNTDOWN[8]],
+  // 1 Nov: before the shuttle, 90 minutes before the start, went in.
+  GAME_COUNTDOWN.slice(1),
+];
+
+function currentCountdown(rows: string[]): string[] {
+  return PAST_COUNTDOWNS.some((past) => past.length === rows.length && past.every((line, i) => line === rows[i])) ? GAME_COUNTDOWN : rows;
+}
 
 export const SCHEDULE_TYPES = ["game", "practice", "ceremony", "meeting", "other"] as const;
 export type ScheduleType = (typeof SCHEDULE_TYPES)[number];
@@ -91,7 +104,7 @@ export const sectionSchemas = {
       .array(z.string().max(200, "Keep each line under 200 characters"))
       .max(30, "Keep this to 30 lines")
       .default(GAME_COUNTDOWN)
-      .transform((rows) => rows.map((r) => r.trim()).filter(Boolean)),
+      .transform((rows) => currentCountdown(rows.map((r) => r.trim()).filter(Boolean))),
   }),
   daily: list({
     date: dateReq,

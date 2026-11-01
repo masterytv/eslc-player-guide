@@ -228,13 +228,15 @@ test("every game shows its countdown, at that game's times", async () => {
   await viewer.goto("/schedule");
   const finland = viewer.locator("article", { hasText: "vs Finland" });
   const steps = finland.locator(".countdown li");
-  await expect(steps).toHaveCount(8);
-  await expect(steps.first()).toContainText("1:30 PM");
-  await expect(steps.first()).toContainText("Locker room opens, Ireland only. Take all items with you.");
+  await expect(steps).toHaveCount(9);
+  await expect(steps.first()).toContainText("1:00 PM");
+  await expect(steps.first()).toContainText("Shuttle to the fields");
+  await expect(steps.nth(1)).toContainText("1:30 PM");
+  await expect(steps.nth(1)).toContainText("Locker room opens, Ireland only. Take all items with you.");
   await expect(finland.locator(".countdown")).not.toContainText("whistle");
   await expect(steps.last()).toContainText("+10 min after");
   await viewer.goto("/?day=2026-11-02");
-  await expect(viewer.locator(".tl-item", { hasText: "Ireland vs Finland" }).locator(".countdown li")).toHaveCount(8);
+  await expect(viewer.locator(".tl-item", { hasText: "Ireland vs Finland" }).locator(".countdown li")).toHaveCount(9);
 });
 
 test("the roster lists the final squad", async () => {

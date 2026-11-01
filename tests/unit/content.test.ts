@@ -115,19 +115,25 @@ test("time ranges read 1:30–3:30 PM, and AM–PM when they cross midday", () =
 
 test("each game's countdown runs from its start time", () => {
   const steps = gameCountdown(GAME_COUNTDOWN, "14:30");
-  assert.deepEqual(steps[0], { time: "1:30 PM", h24: "13:30", offset: "−60 min", text: "Locker room opens, Ireland only. Take all items with you." });
-  assert.deepEqual(steps.slice(1, 7).map((s) => s.h24), ["14:00", "14:10", "14:15", "14:23", "14:27", "14:30"]);
-  assert.equal(steps[6].offset, "Start");
-  assert.deepEqual(steps[7], { time: "", h24: "", offset: "+10 min after", text: "Team must leave the field" });
-  assert.equal(steps.length, 8);
+  assert.deepEqual(steps[0], { time: "1:00 PM", h24: "13:00", offset: "−90 min", text: "Shuttle to the fields" });
+  assert.deepEqual(steps[1], { time: "1:30 PM", h24: "13:30", offset: "−60 min", text: "Locker room opens, Ireland only. Take all items with you." });
+  assert.deepEqual(steps.slice(2, 8).map((s) => s.h24), ["14:00", "14:10", "14:15", "14:23", "14:27", "14:30"]);
+  assert.equal(steps[7].offset, "Start");
+  assert.deepEqual(steps[8], { time: "", h24: "", offset: "+10 min after", text: "Team must leave the field" });
+  assert.equal(steps.length, 9);
   // A line without a number is a reminder.
   assert.deepEqual(gameCountdown(["Bring water"], "14:30"), [{ time: "", h24: "", offset: "", text: "Bring water" }]);
   assert.deepEqual(gameCountdown(GAME_COUNTDOWN, ""), []);
 });
 
-test("an Event & alert section saved before the countdown existed shows it", () => {
-  const saved = sectionSchemas.event.parse({ team: "Ireland", alert: "" });
-  assert.deepEqual(saved.gameCountdown, GAME_COUNTDOWN);
+test("an Event & alert section saved before the countdown existed, or with an older unedited one, shows the current one", () => {
+  assert.deepEqual(sectionSchemas.event.parse({ team: "Ireland", alert: "" }).gameCountdown, GAME_COUNTDOWN);
+  const withWhistle = [...GAME_COUNTDOWN.slice(1, 8), "Do not go on the field until the whistle blows.", GAME_COUNTDOWN[8]];
+  assert.deepEqual(sectionSchemas.event.parse({ gameCountdown: withWhistle }).gameCountdown, GAME_COUNTDOWN);
+  assert.deepEqual(sectionSchemas.event.parse({ gameCountdown: GAME_COUNTDOWN.slice(1) }).gameCountdown, GAME_COUNTDOWN);
+  // A list staff changed is theirs.
+  const edited = ["-45: Meet at the villa", ...GAME_COUNTDOWN.slice(1)];
+  assert.deepEqual(sectionSchemas.event.parse({ gameCountdown: edited }).gameCountdown, edited);
 });
 
 test("games say home (white) or away (green), even on a schedule saved before the setting existed", () => {
