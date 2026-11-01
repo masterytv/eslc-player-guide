@@ -3,8 +3,10 @@ import { Suspense } from "react";
 import { Countdown } from "@/components/Countdown";
 import { DayStrip } from "@/components/DayStrip";
 import { EditLink } from "@/components/EditLink";
+import { GameCountdown } from "@/components/GameCountdown";
 import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
+import { Kit } from "@/components/Kit";
 import { TodayWeather } from "@/components/Weather";
 import { loadGuide } from "@/lib/content";
 import { defaultDay, entriesFor, isGameDay, nextGame, tripDays, TYPE_LABEL } from "@/lib/plan";
@@ -99,7 +101,9 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
                         {e.kind !== "note" ? <span className={`chip ${e.kind}`}>{TYPE_LABEL[e.kind]}</span> : null}
                         <h3>{with24h(e.title)}</h3>
                         {e.meta ? <p className="meta">{with24h(e.meta)}</p> : null}
+                        {e.game ? <Kit game={e.game} /> : null}
                         {e.details ? <p>{with24h(e.details)}</p> : null}
+                        {e.game && c ? <GameCountdown lines={guide.event.gameCountdown} start={e.time} /> : null}
                         {e.link ? (
                           /^https?:/i.test(e.link.href) ? (
                             <a className="txt-link" href={e.link.href} target="_blank" rel="noopener noreferrer">
@@ -171,6 +175,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
               <span className="tm">{next.game.opponentCode || next.game.opponent.slice(0, 3).toUpperCase() || "TBC"}</span>
             </div>
             {next.game.opponent ? <p className="next-names">Ireland v {next.game.opponent}</p> : null}
+            <Kit game={next.game} />
             <dl className="next-meta">
               <div>
                 <dt>Start</dt>

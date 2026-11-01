@@ -55,6 +55,23 @@ export const NEARBY_LABEL: Record<NearbyCategory, string> = {
   pharmacy: "Pharmacy",
 };
 
+/**
+ * The countdown shown under every game. "-60: …" is 60 minutes before the start, "+10: …" is 10 minutes
+ * after the game ends, and a line without a number is a reminder. It's a default, so a saved Event & alert
+ * section from before it existed shows it too.
+ */
+export const GAME_COUNTDOWN = [
+  "-60: Locker room opens, Ireland only. Take all items with you.",
+  "-30: Field opens for warm-up",
+  "-20: Officials and coaches meet",
+  "-15: Coin toss",
+  "-7: Anthem",
+  "-3: Team line-up",
+  "0: Game starts",
+  "Do not go on the field until the whistle blows.",
+  "+10: Team must leave the field",
+];
+
 export const SCHEDULE_TYPES = ["game", "practice", "ceremony", "meeting", "other"] as const;
 export type ScheduleType = (typeof SCHEDULE_TYPES)[number];
 
@@ -71,6 +88,11 @@ export const sectionSchemas = {
     poolName: text(80),
     scheduleUrl: url,
     alert: long(600),
+    gameCountdown: z
+      .array(z.string().max(200, "Keep each line under 200 characters"))
+      .max(30, "Keep this to 30 lines")
+      .default(GAME_COUNTDOWN)
+      .transform((rows) => rows.map((r) => r.trim()).filter(Boolean)),
   }),
   daily: list({
     date: dateReq,
@@ -92,6 +114,8 @@ export const sectionSchemas = {
     endTime: time,
     mapUrl: url,
     warmup: time,
+    /** The first team listed is home (white), the second away (green). */
+    side: z.enum(["", "home", "away"]).default(""),
     notes: long(500),
   }),
   staff: list({
