@@ -79,9 +79,20 @@ test("conduct rules: arrive 15 minutes early, Coach Maddy sets lights out, no co
   assert.doesNotMatch(body, /Melissa|Club gear|## Getting around/);
 });
 
+test("the Where to watch page has the World Lacrosse TV prices and link", () => {
+  const page = SEED.pages.find((p) => p.slug === "watch");
+  assert.ok(page);
+  assert.equal(page.group, "before");
+  assert.match(page.body, /US\$20\*\*: one championship/);
+  assert.match(page.body, /US\$30\*\*: both championships/);
+  assert.match(page.body, /https:\/\/tv\.worldlacrosse\.sport\/page\/6697b8996bb85855e883a4e3/);
+  const cards = parsePage(page.body).filter((s) => s.kind === "card");
+  assert.deepEqual(cards.map((c) => c.heading), ["Watch online: World Lacrosse TV", "Watch at the venue"]);
+});
+
 test("the Free time page says how far each place is and how to get there", () => {
   assert.equal(olderThanSeed("pages", "2026-10-29T09:00:00.000Z"), true);
-  assert.equal(olderThanSeed("pages", "2026-10-31T09:00:00.000Z"), false);
+  assert.equal(olderThanSeed("pages", "2026-11-02T09:00:00.000Z"), false);
   const page = SEED.pages.find((p) => p.slug === "free-time");
   assert.ok(page);
   const cards = parsePage(page.body).filter((s) => s.kind === "card");

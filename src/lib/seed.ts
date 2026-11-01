@@ -126,6 +126,28 @@ About 80 km. Just over an hour by car.
 
 >> Car or tour needed, just over an hour away.`;
 
+const watch = `## Watch online: World Lacrosse TV
+The championships are streamed live on World Lacrosse TV (WLTV), so family and friends back home can watch.
+
+### Cost
+- **US$20**: one championship (the women's tournament, 1–9 November)
+- **US$30**: both championships (women's and men's, 1–18 November)
+
+### Where
+[Watch on World Lacrosse TV](https://tv.worldlacrosse.sport/page/6697b8996bb85855e883a4e3)
+
+>> Share this page with family and friends at home.
+
+## Watch at the venue
+Family and friends can watch in person at the Mediterranean Sports Hub (Futbol Salou complex), Via de Cavet, s/n, 43840 Salou.
+
+### Tickets
+- **€8**: day pass
+- **€50**: one championship
+- **€100**: both championships
+
+> Prices are from the organisers' Team Infobook. Check the World Lacrosse TV page for the latest streaming prices.`;
+
 // The coaches' own words: Justin Warner's offensive principles and Ashley O’Brien's defensive
 // principles, both from 12 Oct 2026, laid out like their slides: a card per slide, its labelled
 // boxes, and its bottom line.
@@ -721,6 +743,7 @@ export const SEED: Guide = {
     { id: "pg1", title: "Tournament rules", slug: "rules", group: "before", summary: "Passports, squad size", body: rules },
     { id: "pg2", title: "Conduct & team rules", slug: "conduct", group: "team", summary: "Check in & out, lights out, apparel", body: conduct },
     { id: "pg3", title: "Team activities", slug: "activities", group: "team", summary: "Barcelona trip", body: activities },
+    { id: "pg5", title: "Where to watch", slug: "watch", group: "before", summary: "World Lacrosse TV: US$20 or US$30. Tickets at the venue", body: watch },
     { id: "pg4", title: "Free time", slug: "free-time", group: "team", summary: "Salou, Tarragona, Barcelona, Ebro Delta: how far, and how to get there", body: freeTime },
   ],
   playbook: [
@@ -839,6 +862,7 @@ export function withSeedFields<K extends SectionKey>(key: K, data: Guide[K]): Gu
  * and the conduct rules were updated that day. On 31 Oct the LOC's infobook added the venue map, where
  * things are at the venue, ice baths, the gym and the emergency number (112). The schedule keeps its
  * 19 Oct date: staff had saved it since (with the opening ceremony's times), so it isn't replaced.
+ * The Where to watch page (World Lacrosse TV and tickets) came on 1 Nov.
  */
 export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   playbook: "2026-10-12T13:00:00.000Z",
@@ -848,7 +872,7 @@ export const SEED_REWRITTEN: Partial<Record<SectionKey, string>> = {
   roster: "2026-10-28T20:30:00.000Z",
   daily: "2026-10-29T13:00:00.000Z",
   travel: "2026-10-29T13:00:00.000Z",
-  pages: "2026-10-30T14:45:00.000Z",
+  pages: "2026-11-01T15:00:00.000Z",
   venue: "2026-10-31T16:10:00.000Z",
   accommodation: "2026-10-31T16:10:00.000Z",
   maps: "2026-10-31T16:10:00.000Z",
