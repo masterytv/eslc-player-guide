@@ -197,7 +197,7 @@ export default async function VenuePage() {
           ) : null}
           {venue.walkNote ? (
             <div className="info">
-              <Icon name="walk" />
+              <Icon name="info" />
               <span>{with24h(venue.walkNote)}</span>
             </div>
           ) : null}

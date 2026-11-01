@@ -57,8 +57,10 @@ test("the game plan reads as the coaches wrote it", () => {
 test("the LOC infobook: venue map, where things are, ice baths, gym and 112", () => {
   for (const key of ["venue", "accommodation", "maps"] as const) {
     assert.equal(olderThanSeed(key, "2026-10-31T09:00:00.000Z"), true, key);
-    assert.equal(olderThanSeed(key, "2026-11-01T09:00:00.000Z"), false, key);
+    assert.equal(olderThanSeed(key, "2026-11-02T09:00:00.000Z"), false, key);
   }
+  assert.match(SEED.venue.walkNote, /^We will be shuttling players in cars/);
+  assert.doesNotMatch(SEED.venue.walkNote, /walk/i);
   assert.equal(SEED.venue.address, "Via de Cavet, s/n, 43840 Salou, Tarragona, Spain");
   assert.equal(SEED.venue.emergency, "112");
   const notes = SEED.venue.notes.join("\n");
