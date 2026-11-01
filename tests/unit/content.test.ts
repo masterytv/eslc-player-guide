@@ -184,3 +184,16 @@ test("spa time on 4 and 5 Nov is added, and the 2 Nov team meeting taken off, ke
   assert.equal(withSeedFields("schedule", sectionSchemas.schedule.parse(SEED.schedule), "2026-10-31T10:00:00.000Z").length, SEED.schedule.length);
   assert.ok(entriesFor(SEED, "2026-11-04").some((e) => e.title === "Spa time" && e.meta === "Until 5:00 PM (17:00) · Spa, Cambrils Park"));
 });
+
+test("dinner on 4 Nov is the Villa Tapas Competition at 7 PM, on a meals list saved before it too", () => {
+  const dinner = SEED.meals.filter((m) => m.date === "2026-11-04" && m.meal === "Dinner");
+  assert.equal(dinner.length, 1);
+  assert.equal(mealTimeLabel(dinner[0]), "Arrive 7:00 PM (19:00)");
+  assert.equal(dinner[0].place, "Villa Tapas Competition");
+  const old = { id: "m14", date: "2026-11-04", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" };
+  const saved = sectionSchemas.meals.parse([...SEED.meals.filter((m) => m.id !== "m31"), old]);
+  const shown = withSeedFields("meals", saved, "2026-10-30T10:00:00.000Z");
+  const wed = shown.filter((m) => m.date === "2026-11-04" && m.meal === "Dinner");
+  assert.deepEqual(wed.map((m) => [m.time, m.place]), [["19:00", "Villa Tapas Competition"]]);
+  assert.equal(shown.length, saved.length);
+});
