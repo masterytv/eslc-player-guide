@@ -120,10 +120,15 @@ export function mealsFor(guide: Guide, date: string): Row<"meals">[] {
   return guide.meals.filter((m) => m.date === date).sort((a, b) => mealRank(a.meal) - mealRank(b.meal) || byTime(a, b));
 }
 
+/** A day's highlighted notes, shown at the top of Today. */
+export function highlightsFor(guide: Guide, date: string): Row<"daily">[] {
+  return guide.daily.filter((d) => d.date === date && d.highlight).sort(byTime);
+}
+
 /** Daily notes, schedule items and meals for one day, in time order. */
 export function entriesFor(guide: Guide, date: string): Entry[] {
   const notes: Entry[] = guide.daily
-    .filter((d) => d.date === date)
+    .filter((d) => d.date === date && !d.highlight)
     .map((d) => ({
       id: d.id,
       date: d.date,

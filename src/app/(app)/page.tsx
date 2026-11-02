@@ -9,7 +9,7 @@ import { Icon } from "@/components/Icon";
 import { Kit } from "@/components/Kit";
 import { TodayWeather } from "@/components/Weather";
 import { loadGuide } from "@/lib/content";
-import { defaultDay, entriesFor, isGameDay, nextGame, tripDays, TYPE_LABEL } from "@/lib/plan";
+import { defaultDay, entriesFor, highlightsFor, isGameDay, nextGame, tripDays, TYPE_LABEL } from "@/lib/plan";
 import { clock, clockRange, countdown, dayLabel, dayParts, daysBetween, timeZoneLabel, toMinutes, with24h, zonedNow } from "@/lib/time";
 
 /** A time in a big display font, with its 24-hour version small underneath. */
@@ -38,6 +38,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
   const isToday = day === today;
   const rel = isToday ? "Today" : day < today ? "Earlier" : beforeTrip && day === days[0] ? "Day 1" : "Coming up";
   const entries = entriesFor(guide, day);
+  const highlights = highlightsFor(guide, day);
   const next = day === home ? nextGame(guide, now.getTime()) : null;
   const nextIsToday = next?.game.date === today;
 
@@ -65,6 +66,16 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
           <h2 className="h-disp">{dayLabel(day)}</h2>
           <span className="rel">{rel}</span>
         </div>
+
+        {highlights.map((h) => (
+          <div className="alert day-highlight" role="note" key={h.id}>
+            <Icon name="warn" />
+            <div>
+              <b>{with24h(h.title)}</b>
+              {h.details ? <p>{with24h(h.details)}</p> : null}
+            </div>
+          </div>
+        ))}
 
         {/* The day's plan comes first: it's what players open the guide for each morning. */}
         <section className="sec">

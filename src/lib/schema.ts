@@ -113,6 +113,8 @@ export const sectionSchemas = {
     details: long(1500),
     linkLabel: text(60),
     linkUrl: url,
+    /** Shown at the top of the day on Today, in a highlighted box, rather than in the day's timeline. */
+    highlight: bool(false),
   }),
   schedule: list({
     date: dateReq,
