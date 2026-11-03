@@ -267,13 +267,14 @@ test("players see who is in each villa", async () => {
 });
 
 test("staff add a daily note and players see it straight away", async () => {
-  await admin.goto("/admin/daily?day=2026-11-02");
-  await admin.getByRole("button", { name: /Add a note for Mon 2 Nov/ }).click();
+  // A day no earlier test opens, so the player's phone has no saved copy of it to show first.
+  await admin.goto("/admin/daily?day=2026-11-06");
+  await admin.getByRole("button", { name: /Add a note for Fri 6 Nov/ }).click();
   await admin.getByLabel("What's happening").last().fill("Team lunch at the villas");
   await admin.getByLabel("Time").last().fill("12:15");
   await save(admin);
 
-  await viewer.goto("/?day=2026-11-02");
+  await viewer.goto("/?day=2026-11-06");
   const item = viewer.locator(".tl-item", { hasText: "Team lunch at the villas" });
   await expect(item).toBeVisible();
   await expect(item.locator(".tl-time")).toHaveText("12:15PM12:15");
