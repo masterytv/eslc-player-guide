@@ -220,14 +220,19 @@ test("spa time shows on 4 and 5 Nov, and 2 Nov has no team meeting", async () =>
   await expect(viewer.locator(".tl-item", { hasText: "Sunset swim at the beach" })).toContainText("Meet at Villa A 64");
 });
 
-test("Tuesday's packing note is highlighted at the top, with boxed lunches between the games", async () => {
+test("Tuesday shows the packing note, the coaches' plan between the games, and no countdowns", async () => {
   await viewer.goto("/?day=2026-11-03");
   const note = viewer.locator(".day-highlight");
   await expect(note).toContainText("Two games today, and rain is forecast");
   await expect(note).toContainText("Pack both uniforms");
   const titles = viewer.locator(".tl-item h3");
-  await expect(titles).toContainText(["Breakfast", "Ireland vs Italy", "Boxed lunches at the field", "Ireland vs Sweden"]);
-  await expect(viewer.locator(".tl-item", { hasText: /^Lunch$/ })).toHaveCount(0);
+  await expect(titles).toContainText(["Breakfast pick-up loops", "Take the field", "Ireland vs Italy", "Game and singing done", "Ireland vs Sweden", "Done, head home", "Dinner on your own"]);
+  await expect(viewer.locator(".tl-item", { hasText: "Game and singing done" })).toContainText("boxed lunches at the field");
+  await expect(viewer.locator(".tl-item h3", { hasText: /^Boxed lunches at the field$/ })).toHaveCount(0);
+  await expect(viewer.locator(".countdown")).toHaveCount(0);
+  await viewer.goto("/schedule");
+  await expect(viewer.locator("article", { hasText: "vs Italy" }).locator(".countdown")).toHaveCount(0);
+  await expect(viewer.locator("article", { hasText: "vs Finland" }).locator(".countdown")).toHaveCount(1);
 });
 
 test("every game says whether we're home in white or away in green", async () => {

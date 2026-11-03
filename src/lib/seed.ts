@@ -482,21 +482,32 @@ export const SEED: Guide = {
       linkUrl: "",
       highlight: true,
     },
+    { id: "d4", date: "2026-11-03", time: "08:30", title: "Breakfast pick-up loops", details: "At A64", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d5", date: "2026-11-03", time: "09:00", title: "Walkthrough", details: "30 minutes", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d6", date: "2026-11-03", time: "10:30", title: "Meet at A64", details: "", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d7", date: "2026-11-03", time: "10:45", title: "Pick-up for the field", details: "", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d8", date: "2026-11-03", time: "11:00", title: "Arrive at the field", details: "", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d9", date: "2026-11-03", time: "11:20", title: "Start stretching and moving", details: "", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d10", date: "2026-11-03", time: "11:30", title: "Warm-up", details: "Past Field 2 (north)", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d11", date: "2026-11-03", time: "12:00", title: "Take the field", details: "Finish the warm-up · 4v3 box (10–15 minutes)", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d12", date: "2026-11-03", time: "14:00", title: "Game and singing done", details: "Change, regroup and eat lunch (boxed lunches at the field)", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d13", date: "2026-11-03", time: "14:45", title: "Start moving and stretching", details: "", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d14", date: "2026-11-03", time: "15:00", title: "Take the field", details: "", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d15", date: "2026-11-03", time: "17:00", title: "Done, head home", details: "", linkLabel: "", linkUrl: "", highlight: false },
+    { id: "d16", date: "2026-11-03", time: "", title: "Dinner on your own", details: "", linkLabel: "", linkUrl: "", highlight: false },
   ],
   schedule: [
-    { id: "s0", date: "2026-10-31", time: "17:00", endTime: "18:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", side: "", notes: "" },
-    { id: "s1", date: "2026-11-01", time: "11:00", endTime: "12:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", side: "", notes: "" },
-    { id: "s2", date: "2026-11-01", time: "", type: "ceremony", title: "Opening Ceremony", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", notes: "" },
-    { id: "s3", date: "2026-11-02", time: "14:30", type: "game", title: "", opponent: "Finland", opponentCode: "FIN", round: "Match 005", field: "Field 2", endTime: "", mapUrl: "", warmup: "14:00", side: "away", notes: "" },
-    { id: "s5", date: "2026-11-03", time: "12:30", type: "game", title: "", opponent: "Italy", opponentCode: "ITA", round: "Match 012", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", notes: "" },
-    { id: "s6", date: "2026-11-03", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", notes: "Time will be posted here and in the group chat." },
-    { id: "s7", date: "2026-11-03", time: "15:30", type: "game", title: "", opponent: "Sweden", opponentCode: "SWE", round: "Match 016", field: "Field 1", endTime: "", mapUrl: "", warmup: "15:00", side: "away", notes: "New time: this game was moved up from 17:00." },
-    { id: "s8", date: "2026-11-04", time: "", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", notes: "No game today." },
-    { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", notes: "" },
-    { id: "s10", date: "2026-11-04", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", notes: "" },
-    { id: "s11", date: "2026-11-05", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", notes: "" },
-    { id: "s12", date: "2026-11-02", time: "17:30", endTime: "", type: "other", title: "Sunset swim at the beach", opponent: "", opponentCode: "", round: "", field: "Meet at Villa A 64", mapUrl: "", warmup: "", side: "", notes: "" },
-    { id: "s13", date: "2026-11-03", time: "13:30", endTime: "", type: "other", title: "Boxed lunches at the field", opponent: "", opponentCode: "", round: "", field: "", mapUrl: "", warmup: "", side: "", notes: "Boxed lunches will be brought to the field between the two games." },
+    { id: "s0", date: "2026-10-31", time: "17:00", endTime: "18:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", side: "", hideCountdown: false, notes: "" },
+    { id: "s1", date: "2026-11-01", time: "11:00", endTime: "12:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", side: "", hideCountdown: false, notes: "" },
+    { id: "s2", date: "2026-11-01", time: "", type: "ceremony", title: "Opening Ceremony", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", hideCountdown: false, notes: "" },
+    { id: "s3", date: "2026-11-02", time: "14:30", type: "game", title: "", opponent: "Finland", opponentCode: "FIN", round: "Match 005", field: "Field 2", endTime: "", mapUrl: "", warmup: "14:00", side: "away", hideCountdown: false, notes: "" },
+    { id: "s5", date: "2026-11-03", time: "12:30", type: "game", title: "", opponent: "Italy", opponentCode: "ITA", round: "Match 012", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", hideCountdown: true, notes: "" },
+    { id: "s7", date: "2026-11-03", time: "15:30", type: "game", title: "", opponent: "Sweden", opponentCode: "SWE", round: "Match 016", field: "Field 1", endTime: "", mapUrl: "", warmup: "15:00", side: "away", hideCountdown: true, notes: "New time: this game was moved up from 17:00." },
+    { id: "s8", date: "2026-11-04", time: "", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", hideCountdown: false, notes: "No game today." },
+    { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", hideCountdown: false, notes: "" },
+    { id: "s10", date: "2026-11-04", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", hideCountdown: false, notes: "" },
+    { id: "s11", date: "2026-11-05", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", hideCountdown: false, notes: "" },
+    { id: "s12", date: "2026-11-02", time: "17:30", endTime: "", type: "other", title: "Sunset swim at the beach", opponent: "", opponentCode: "", round: "", field: "Meet at Villa A 64", mapUrl: "", warmup: "", side: "", hideCountdown: false, notes: "" },
   ],
   staff: [
     { id: "st1", name: "Maddy Morrissey Buss", role: "Head Coach", phone: "", whatsapp: true, email: "" },
@@ -540,7 +551,6 @@ export const SEED: Guide = {
     { id: "m7", date: "2026-11-02", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m8", date: "2026-11-02", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m9", date: "2026-11-03", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
-    { id: "m11", date: "2026-11-03", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m12", date: "2026-11-04", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m13", date: "2026-11-04", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m31", date: "2026-11-04", meal: "Dinner", time: "19:00", endTime: "", place: "Villa Tapas Competition", notes: "" },
@@ -849,7 +859,7 @@ export const SEED: Guide = {
  * team first: Ireland is away (green) against Finland and Sweden, home (white) against Italy and Switzerland.
  */
 export const SEED_FIELDS: Partial<Record<SectionKey, string[]>> = {
-  schedule: ["side"],
+  schedule: ["side", "hideCountdown"],
 };
 
 /**
@@ -865,15 +875,21 @@ export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; a
     { at: "2026-11-01T20:30:00.000Z", add: ["s10", "s11", "s12"], remove: ["s4"] },
     // 2 Nov: boxed lunches at the field between Tuesday's two games.
     { at: "2026-11-02T17:00:00.000Z", add: ["s13"], remove: [] },
+    // 3 Nov: lunch is in Tuesday's plan (14:00) instead, and Tuesday has no team meeting.
+    { at: "2026-11-03T11:15:00.000Z", add: [], remove: ["s13", "s6"] },
   ],
   meals: [
     { at: "2026-11-01T20:30:00.000Z", add: ["m31"], remove: ["m14"] },
     // 2 Nov: no buffet lunch on Tuesday 3 Nov (boxed lunches at the field instead).
     { at: "2026-11-02T17:00:00.000Z", add: [], remove: ["m10"] },
+    // 3 Nov: dinner on your own on Tuesday.
+    { at: "2026-11-03T11:15:00.000Z", add: [], remove: ["m11"] },
   ],
   daily: [
     // 2 Nov: what to pack for Tuesday's two games, highlighted at the top of the day.
     { at: "2026-11-02T17:00:00.000Z", add: ["d3"], remove: [] },
+    // 3 Nov: the coaches' plan for Tuesday, from breakfast to dinner on your own.
+    { at: "2026-11-03T11:15:00.000Z", add: ["d4", "d5", "d6", "d7", "d8", "d9", "d10", "d11", "d12", "d13", "d14", "d15", "d16"], remove: [] },
   ],
 };
 

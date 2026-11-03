@@ -101,7 +101,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                         {meta ? <p className="meta">{meta}</p> : null}
                         {isGame ? <Kit game={r} /> : null}
                         {r.notes ? <p className="meta">{with24h(r.notes)}</p> : null}
-                        {isGame && c ? <GameCountdown lines={guide.event.gameCountdown} start={r.time} /> : null}
+                        {isGame && c && !r.hideCountdown ? <GameCountdown lines={guide.event.gameCountdown} start={r.time} /> : null}
                         {r.mapUrl ? (
                           <a className="txt-link" href={r.mapUrl} target="_blank" rel="noopener noreferrer">
                             <Icon name="map" size="sm" />

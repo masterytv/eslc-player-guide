@@ -36,7 +36,24 @@ test("a day's plan merges daily notes, the schedule and meals, untimed items las
   const tue = entriesFor(SEED, "2026-11-03");
   assert.deepEqual(
     tue.map((e) => e.title),
-    ["Breakfast", "Ireland vs Italy", "Boxed lunches at the field", "Ireland vs Sweden", "Dinner", "Team meeting"],
+    [
+      "Breakfast",
+      "Breakfast pick-up loops",
+      "Walkthrough",
+      "Meet at A64",
+      "Pick-up for the field",
+      "Arrive at the field",
+      "Start stretching and moving",
+      "Warm-up",
+      "Take the field",
+      "Ireland vs Italy",
+      "Game and singing done",
+      "Start moving and stretching",
+      "Take the field",
+      "Ireland vs Sweden",
+      "Done, head home",
+      "Dinner on your own",
+    ],
   );
 });
 
@@ -199,26 +216,33 @@ test("dinner on 4 Nov is the Villa Tapas Competition at 7 PM, on a meals list sa
   assert.equal(shown.length, saved.length);
 });
 
-test("Tuesday 3 Nov: no buffet lunch, boxed lunches between the games, and a highlighted packing note", () => {
-  assert.equal(SEED.meals.some((m) => m.date === "2026-11-03" && m.meal === "Lunch"), false);
+test("Tuesday 3 Nov: the coaches' plan, no countdowns, no buffet lunch or dinner, and the packing note", () => {
+  assert.deepEqual(SEED.meals.filter((m) => m.date === "2026-11-03").map((m) => m.meal), ["Breakfast"]);
+  assert.equal(SEED.schedule.some((r) => r.id === "s13"), false);
+  assert.deepEqual(SEED.schedule.filter((r) => r.type === "game" && r.hideCountdown).map((r) => r.opponent), ["Italy", "Sweden"]);
   const [note] = highlightsFor(SEED, "2026-11-03");
   assert.equal(note.title, "Two games today, and rain is forecast");
-  assert.match(note.details, /both uniforms.*rain gear.*undergarments, socks.*two games/);
-  assert.equal(entriesFor(SEED, "2026-11-03").some((e) => e.id === "d3"), false, "kept out of the timeline");
-  assert.deepEqual(highlightsFor(SEED, "2026-11-02"), []);
+  const lunch = SEED.daily.find((d) => d.id === "d12");
+  assert.equal(lunch?.details, "Change, regroup and eat lunch (boxed lunches at the field)");
 
-  // Saved in the app before these came in: each gets the change and keeps the rest.
-  const lunch = { id: "m10", date: "2026-11-03", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" };
-  const meals = withSeedFields("meals", sectionSchemas.meals.parse([...SEED.meals, lunch]), "2026-11-02T10:00:00.000Z");
-  assert.equal(meals.some((m) => m.id === "m10"), false);
-  const daily = withSeedFields("daily", sectionSchemas.daily.parse(SEED.daily.filter((d) => d.id !== "d3")), "2026-11-02T10:00:00.000Z");
-  assert.equal(daily.find((d) => d.id === "d3")?.highlight, true);
-  const schedule = withSeedFields("schedule", sectionSchemas.schedule.parse(SEED.schedule.filter((r) => r.id !== "s13")), "2026-11-02T10:00:00.000Z");
-  assert.equal(schedule.filter((r) => r.id === "s13").length, 1);
-
-  // A schedule saved after the first batch (say, with spa time deleted) only gets the new one.
-  const noSpa = sectionSchemas.schedule.parse(SEED.schedule.filter((r) => !["s10", "s11", "s13"].includes(r.id)));
-  const after = withSeedFields("schedule", noSpa, "2026-11-01T21:00:00.000Z");
-  assert.equal(after.some((r) => r.title === "Spa time"), false);
-  assert.equal(after.some((r) => r.id === "s13"), true);
+  // A schedule, meals and daily notes saved in the app before this: each gets the change and keeps the rest.
+  const before = "2026-11-03T10:00:00.000Z";
+  const boxed = { id: "s13", date: "2026-11-03", time: "13:30", type: "other", title: "Boxed lunches at the field" };
+  const schedule = withSeedFields(
+    "schedule",
+    sectionSchemas.schedule.parse([
+      ...SEED.schedule.map((r) => ({ ...r, hideCountdown: false })),
+      boxed,
+      { id: "s6", date: "2026-11-03", time: "", type: "meeting", title: "Team meeting" },
+    ]),
+    before,
+  );
+  assert.equal(schedule.some((r) => r.id === "s13"), false);
+  assert.equal(schedule.some((r) => r.date === "2026-11-03" && r.title === "Team meeting"), false);
+  assert.equal(schedule.find((r) => r.id === "s5")?.hideCountdown, true);
+  const dinner = { id: "m11", date: "2026-11-03", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" };
+  const meals = withSeedFields("meals", sectionSchemas.meals.parse([...SEED.meals, dinner]), before);
+  assert.equal(meals.some((m) => m.id === "m11"), false);
+  const daily = withSeedFields("daily", sectionSchemas.daily.parse(SEED.daily.filter((d) => !/^d(4|5|6|7|8|9|1\d)$/.test(d.id))), before);
+  assert.equal(daily.filter((d) => d.date === "2026-11-03").length, 14);
 });

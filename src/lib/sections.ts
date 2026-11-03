@@ -169,6 +169,13 @@ export const SECTIONS: SectionDef[] = [
         help: "The first team listed on the official schedule is home and wears white; the second is away and wears green.",
         showIf: isGame,
       },
+      {
+        key: "hideCountdown",
+        label: "Hide the game countdown",
+        type: "checkbox",
+        help: "For a game day whose own plan is in the daily notes.",
+        showIf: isGame,
+      },
       { key: "notes", label: "Notes", type: "textarea" },
     ],
   },
