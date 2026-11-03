@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { calendar } from "../../src/lib/ics.ts";
 import { parseInline, parsePage } from "../../src/lib/markdown.ts";
 import { telHref, whatsappHref } from "../../src/lib/phone.ts";
-import { defaultDay, entriesFor, fieldLabel, gameCountdown, kitLabel, mealTimeLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
+import { defaultDay, entriesFor, fieldLabel, gameCountdown, highlightsFor, kitLabel, mealTimeLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
 import { GAME_COUNTDOWN, sectionSchemas } from "../../src/lib/schema.ts";
 import { clockRange } from "../../src/lib/time.ts";
 import { SEED, withSeedFields } from "../../src/lib/seed.ts";
@@ -36,7 +36,7 @@ test("a day's plan merges daily notes, the schedule and meals, untimed items las
   const tue = entriesFor(SEED, "2026-11-03");
   assert.deepEqual(
     tue.map((e) => e.title),
-    ["Breakfast", "Lunch", "Ireland vs Italy", "Ireland vs Sweden", "Dinner", "Team meeting"],
+    ["Breakfast", "Ireland vs Italy", "Boxed lunches at the field", "Ireland vs Sweden", "Dinner", "Team meeting"],
   );
 });
 
@@ -197,4 +197,28 @@ test("dinner on 4 Nov is the Villa Tapas Competition at 7 PM, on a meals list sa
   const wed = shown.filter((m) => m.date === "2026-11-04" && m.meal === "Dinner");
   assert.deepEqual(wed.map((m) => [m.time, m.place]), [["19:00", "Villa Tapas Competition"]]);
   assert.equal(shown.length, saved.length);
+});
+
+test("Tuesday 3 Nov: no buffet lunch, boxed lunches between the games, and a highlighted packing note", () => {
+  assert.equal(SEED.meals.some((m) => m.date === "2026-11-03" && m.meal === "Lunch"), false);
+  const [note] = highlightsFor(SEED, "2026-11-03");
+  assert.equal(note.title, "Two games today, and rain is forecast");
+  assert.match(note.details, /both uniforms.*rain gear.*undergarments, socks.*two games/);
+  assert.equal(entriesFor(SEED, "2026-11-03").some((e) => e.id === "d3"), false, "kept out of the timeline");
+  assert.deepEqual(highlightsFor(SEED, "2026-11-02"), []);
+
+  // Saved in the app before these came in: each gets the change and keeps the rest.
+  const lunch = { id: "m10", date: "2026-11-03", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" };
+  const meals = withSeedFields("meals", sectionSchemas.meals.parse([...SEED.meals, lunch]), "2026-11-02T10:00:00.000Z");
+  assert.equal(meals.some((m) => m.id === "m10"), false);
+  const daily = withSeedFields("daily", sectionSchemas.daily.parse(SEED.daily.filter((d) => d.id !== "d3")), "2026-11-02T10:00:00.000Z");
+  assert.equal(daily.find((d) => d.id === "d3")?.highlight, true);
+  const schedule = withSeedFields("schedule", sectionSchemas.schedule.parse(SEED.schedule.filter((r) => r.id !== "s13")), "2026-11-02T10:00:00.000Z");
+  assert.equal(schedule.filter((r) => r.id === "s13").length, 1);
+
+  // A schedule saved after the first batch (say, with spa time deleted) only gets the new one.
+  const noSpa = sectionSchemas.schedule.parse(SEED.schedule.filter((r) => !["s10", "s11", "s13"].includes(r.id)));
+  const after = withSeedFields("schedule", noSpa, "2026-11-01T21:00:00.000Z");
+  assert.equal(after.some((r) => r.title === "Spa time"), false);
+  assert.equal(after.some((r) => r.id === "s13"), true);
 });

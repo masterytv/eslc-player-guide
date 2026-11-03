@@ -220,6 +220,16 @@ test("spa time shows on 4 and 5 Nov, and 2 Nov has no team meeting", async () =>
   await expect(viewer.locator(".tl-item", { hasText: "Sunset swim at the beach" })).toContainText("Meet at Villa A 64");
 });
 
+test("Tuesday's packing note is highlighted at the top, with boxed lunches between the games", async () => {
+  await viewer.goto("/?day=2026-11-03");
+  const note = viewer.locator(".day-highlight");
+  await expect(note).toContainText("Two games today, and rain is forecast");
+  await expect(note).toContainText("Pack both uniforms");
+  const titles = viewer.locator(".tl-item h3");
+  await expect(titles).toContainText(["Breakfast", "Ireland vs Italy", "Boxed lunches at the field", "Ireland vs Sweden"]);
+  await expect(viewer.locator(".tl-item", { hasText: /^Lunch$/ })).toHaveCount(0);
+});
+
 test("every game says whether we're home in white or away in green", async () => {
   await viewer.goto("/schedule");
   await expect(viewer.locator("article", { hasText: "vs Finland" }).locator(".kit")).toHaveText("Away · wear green");

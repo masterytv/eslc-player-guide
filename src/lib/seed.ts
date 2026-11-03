@@ -459,6 +459,7 @@ export const SEED: Guide = {
       details: "Someone from the LOC will be holding an Ireland Lacrosse sign. If you land after 12:30, please secure your own transportation.",
       linkLabel: "Ride options",
       linkUrl: "/venue#getting",
+      highlight: false,
     },
     {
       id: "d2",
@@ -468,6 +469,18 @@ export const SEED: Guide = {
       details: "About 1 to 1.5 hours from the airport, so around 13:30–14:00.",
       linkLabel: "",
       linkUrl: "",
+      highlight: false,
+    },
+    {
+      id: "d3",
+      date: "2026-11-03",
+      time: "",
+      title: "Two games today, and rain is forecast",
+      details:
+        "Pack both uniforms (white and green), rain gear, a change of undergarments, socks, and anything else you need to get through two games.",
+      linkLabel: "",
+      linkUrl: "",
+      highlight: true,
     },
   ],
   schedule: [
@@ -483,6 +496,7 @@ export const SEED: Guide = {
     { id: "s10", date: "2026-11-04", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", notes: "" },
     { id: "s11", date: "2026-11-05", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", notes: "" },
     { id: "s12", date: "2026-11-02", time: "17:30", endTime: "", type: "other", title: "Sunset swim at the beach", opponent: "", opponentCode: "", round: "", field: "Meet at Villa A 64", mapUrl: "", warmup: "", side: "", notes: "" },
+    { id: "s13", date: "2026-11-03", time: "13:30", endTime: "", type: "other", title: "Boxed lunches at the field", opponent: "", opponentCode: "", round: "", field: "", mapUrl: "", warmup: "", side: "", notes: "Boxed lunches will be brought to the field between the two games." },
   ],
   staff: [
     { id: "st1", name: "Maddy Morrissey Buss", role: "Head Coach", phone: "", whatsapp: true, email: "" },
@@ -526,7 +540,6 @@ export const SEED: Guide = {
     { id: "m7", date: "2026-11-02", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m8", date: "2026-11-02", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m9", date: "2026-11-03", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
-    { id: "m10", date: "2026-11-03", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m11", date: "2026-11-03", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m12", date: "2026-11-04", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m13", date: "2026-11-04", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
@@ -847,9 +860,21 @@ export const SEED_FIELDS: Partial<Record<SectionKey, string[]>> = {
  * the Villa Tapas Competition at 19:00. A sunset swim on 2 Nov (meet at Villa A 64, 17:30) was added too. That day players
  * moved from walking to the fields to being shuttled in cars (the venue section's Getting there note).
  */
-export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, { at: string; add: string[]; remove: string[] }>> = {
-  schedule: { at: "2026-11-01T20:30:00.000Z", add: ["s10", "s11", "s12"], remove: ["s4"] },
-  meals: { at: "2026-11-01T20:30:00.000Z", add: ["m31"], remove: ["m14"] },
+export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; add: string[]; remove: string[] }>>> = {
+  schedule: [
+    { at: "2026-11-01T20:30:00.000Z", add: ["s10", "s11", "s12"], remove: ["s4"] },
+    // 2 Nov: boxed lunches at the field between Tuesday's two games.
+    { at: "2026-11-02T17:00:00.000Z", add: ["s13"], remove: [] },
+  ],
+  meals: [
+    { at: "2026-11-01T20:30:00.000Z", add: ["m31"], remove: ["m14"] },
+    // 2 Nov: no buffet lunch on Tuesday 3 Nov (boxed lunches at the field instead).
+    { at: "2026-11-02T17:00:00.000Z", add: [], remove: ["m10"] },
+  ],
+  daily: [
+    // 2 Nov: what to pack for Tuesday's two games, highlighted at the top of the day.
+    { at: "2026-11-02T17:00:00.000Z", add: ["d3"], remove: [] },
+  ],
 };
 
 /**
@@ -869,10 +894,13 @@ export function withSeedFields<K extends SectionKey>(key: K, data: Guide[K], upd
     for (const f of fields) if (!out[f] && from[f]) out[f] = from[f];
     return out;
   });
-  if (!changes || !(Date.parse(updatedAt) < Date.parse(changes.at))) return rows as Guide[K];
-  const kept = rows.filter((r) => !changes.remove.includes(String(r.id)));
-  const have = new Set(kept.map((r) => String(r.id)));
-  for (const id of changes.add) if (!have.has(id) && byId.has(id)) kept.push(byId.get(id)!);
+  let kept = rows;
+  for (const change of changes ?? []) {
+    if (!(Date.parse(updatedAt) < Date.parse(change.at))) continue;
+    kept = kept.filter((r) => !change.remove.includes(String(r.id)));
+    const have = new Set(kept.map((r) => String(r.id)));
+    for (const id of change.add) if (!have.has(id) && byId.has(id)) kept.push(byId.get(id)!);
+  }
   return kept as Guide[K];
 }
 
