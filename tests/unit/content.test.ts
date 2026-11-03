@@ -53,7 +53,6 @@ test("a day's plan merges daily notes, the schedule and meals, untimed items las
       "Ireland vs Sweden",
       "Done, head home",
       "Dinner on your own",
-      "Team meeting",
     ],
   );
 });
@@ -231,10 +230,15 @@ test("Tuesday 3 Nov: the coaches' plan, no countdowns, no buffet lunch or dinner
   const boxed = { id: "s13", date: "2026-11-03", time: "13:30", type: "other", title: "Boxed lunches at the field" };
   const schedule = withSeedFields(
     "schedule",
-    sectionSchemas.schedule.parse([...SEED.schedule.map((r) => ({ ...r, hideCountdown: false })), boxed]),
+    sectionSchemas.schedule.parse([
+      ...SEED.schedule.map((r) => ({ ...r, hideCountdown: false })),
+      boxed,
+      { id: "s6", date: "2026-11-03", time: "", type: "meeting", title: "Team meeting" },
+    ]),
     before,
   );
   assert.equal(schedule.some((r) => r.id === "s13"), false);
+  assert.equal(schedule.some((r) => r.date === "2026-11-03" && r.title === "Team meeting"), false);
   assert.equal(schedule.find((r) => r.id === "s5")?.hideCountdown, true);
   const dinner = { id: "m11", date: "2026-11-03", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" };
   const meals = withSeedFields("meals", sectionSchemas.meals.parse([...SEED.meals, dinner]), before);

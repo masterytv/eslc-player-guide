@@ -502,7 +502,6 @@ export const SEED: Guide = {
     { id: "s2", date: "2026-11-01", time: "", type: "ceremony", title: "Opening Ceremony", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", hideCountdown: false, notes: "" },
     { id: "s3", date: "2026-11-02", time: "14:30", type: "game", title: "", opponent: "Finland", opponentCode: "FIN", round: "Match 005", field: "Field 2", endTime: "", mapUrl: "", warmup: "14:00", side: "away", hideCountdown: false, notes: "" },
     { id: "s5", date: "2026-11-03", time: "12:30", type: "game", title: "", opponent: "Italy", opponentCode: "ITA", round: "Match 012", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", hideCountdown: true, notes: "" },
-    { id: "s6", date: "2026-11-03", time: "", type: "meeting", title: "Team meeting", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", hideCountdown: false, notes: "Time will be posted here and in the group chat." },
     { id: "s7", date: "2026-11-03", time: "15:30", type: "game", title: "", opponent: "Sweden", opponentCode: "SWE", round: "Match 016", field: "Field 1", endTime: "", mapUrl: "", warmup: "15:00", side: "away", hideCountdown: true, notes: "New time: this game was moved up from 17:00." },
     { id: "s8", date: "2026-11-04", time: "", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "", endTime: "", mapUrl: "", warmup: "", side: "", hideCountdown: false, notes: "No game today." },
     { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", hideCountdown: false, notes: "" },
@@ -876,8 +875,8 @@ export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; a
     { at: "2026-11-01T20:30:00.000Z", add: ["s10", "s11", "s12"], remove: ["s4"] },
     // 2 Nov: boxed lunches at the field between Tuesday's two games.
     { at: "2026-11-02T17:00:00.000Z", add: ["s13"], remove: [] },
-    // 3 Nov: lunch is in Tuesday's plan (14:00) instead.
-    { at: "2026-11-03T11:15:00.000Z", add: [], remove: ["s13"] },
+    // 3 Nov: lunch is in Tuesday's plan (14:00) instead, and Tuesday has no team meeting.
+    { at: "2026-11-03T11:15:00.000Z", add: [], remove: ["s13", "s6"] },
   ],
   meals: [
     { at: "2026-11-01T20:30:00.000Z", add: ["m31"], remove: ["m14"] },
