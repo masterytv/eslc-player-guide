@@ -68,7 +68,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
         </div>
 
         {highlights.map((h) => (
-          <div className="alert day-highlight" role="note" key={h.id}>
+          <div className="day-highlight" role="note" key={h.id}>
             <Icon name="warn" />
             <div>
               <b>{with24h(h.title)}</b>
