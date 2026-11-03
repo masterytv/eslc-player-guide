@@ -114,7 +114,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
                         {e.meta ? <p className="meta">{with24h(e.meta)}</p> : null}
                         {e.game ? <Kit game={e.game} /> : null}
                         {e.details ? <p>{with24h(e.details)}</p> : null}
-                        {e.game && c ? <GameCountdown lines={guide.event.gameCountdown} start={e.time} /> : null}
+                        {e.game && c && !e.game.hideCountdown ? <GameCountdown lines={guide.event.gameCountdown} start={e.time} /> : null}
                         {e.link ? (
                           /^https?:/i.test(e.link.href) ? (
                             <a className="txt-link" href={e.link.href} target="_blank" rel="noopener noreferrer">

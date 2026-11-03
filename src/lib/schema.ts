@@ -130,6 +130,8 @@ export const sectionSchemas = {
     warmup: time,
     /** The first team listed is home (white), the second away (green). */
     side: z.enum(["", "home", "away"]).default(""),
+    /** For a game day with its own plan in the daily notes, where the standard countdown would clash. */
+    hideCountdown: bool(false),
     notes: long(500),
   }),
   staff: list({
