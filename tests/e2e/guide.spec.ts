@@ -238,6 +238,8 @@ test("Tuesday shows the packing note, the coaches' plan between the games, and n
 test("Wednesday's practice shows its own timeline in a box", async () => {
   await viewer.goto("/?day=2026-11-04");
   await expect(viewer.locator(".day-highlight.red")).toHaveText("Submit ingredients for tapas to Liz by practice.");
+  await expect(viewer.locator(".tl-item", { has: viewer.locator("h3", { hasText: /^Breakfast$/ }) })).toContainText("Optional");
+  await expect(viewer.locator(".tl-item", { has: viewer.locator("h3", { hasText: /^Lunch$/ }) })).toContainText("Optional");
   const practice = viewer.locator(".tl-item", { hasText: "Practice" });
   const steps = practice.locator(".countdown li");
   await expect(steps).toHaveCount(3);
