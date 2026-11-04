@@ -249,6 +249,8 @@ export const sectionSchemas = {
     label: req("Add a label", 80),
     url: urlReq,
     note: text(120),
+    /** Also listed under Useful information at the top of More. */
+    featured: bool(false),
   }),
   nearby: list({
     category: z.enum(NEARBY_CATEGORIES).default("groceries"),

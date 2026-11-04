@@ -283,3 +283,12 @@ test("Wednesday 4 Nov: breakfast and lunch are marked optional, on a saved meals
   assert.deepEqual(shown.filter((m) => m.date === "2026-11-04").map((m) => m.notes), ["Optional", "Optional", ""]);
   assert.equal(entriesFor(SEED, "2026-11-04").find((e) => e.title === "Breakfast")?.details, "Optional");
 });
+
+test("the photography link is featured under Useful information, on a saved links list too", () => {
+  const photo = SEED.links.find((l) => l.label === "Photography");
+  assert.equal(photo?.url, "https://worldlacrosse.photoshelter.com/galleries/C0000cALTCfJccDw/2026-European-Sixes-Championships-Salou-Spain");
+  assert.equal(photo?.featured, true);
+  assert.deepEqual(SEED.links.filter((l) => l.featured).map((l) => l.label), ["Photography"]);
+  const saved = sectionSchemas.links.parse(SEED.links.filter((l) => l.id !== "l5"));
+  assert.equal(withSeedFields("links", saved, "2026-11-04T05:00:00.000Z").find((l) => l.id === "l5")?.featured, true);
+});

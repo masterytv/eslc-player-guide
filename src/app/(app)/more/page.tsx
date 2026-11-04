@@ -25,6 +25,26 @@ function Item({ href, icon, title, sub, admin }: { href: string; icon: IconName;
   );
 }
 
+/** A link that leaves the guide, opened in a new tab. */
+function ExternalItem({ href, icon, title, sub }: { href: string; icon: IconName; title: string; sub?: string }) {
+  return (
+    <li>
+      <a href={href} target="_blank" rel="noopener noreferrer">
+        <span className="mi">
+          <Icon name={icon} />
+        </span>
+        <span>
+          <span className="mt">{title}</span>
+          {sub ? <span className="ms">{sub}</span> : null}
+        </span>
+        <Icon name="ext" className="chev" />
+      </a>
+    </li>
+  );
+}
+
+const LINK_ICON = (label: string): IconName => (/photo/i.test(label) ? "photo" : "link");
+
 const PAGE_ICON: Record<string, IconName> = { rules: "book", conduct: "shield", "free-time": "map", watch: "tv" };
 
 export default async function MorePage() {
@@ -38,16 +58,18 @@ export default async function MorePage() {
     <>
       <Header title="More" />
       <main className="main">
-        <section className="sec">
-          <h2 className="sec-h">Before you go</h2>
-          <ul className="list menu">
-            <Item href="/more/packing" icon="bag" title="Packing list" sub={`${guide.packing.length} items to tick off`} />
-            <Item href="/venue#getting" icon="plane" title="Flight details" sub="Add yours to the team sheet" />
-            <Item href="/weather" icon="wx-cloudsun" title="Weather" sub="Hour by hour, and a rain map" />
-            <Item href="/more/around-the-resort" icon="map" title="Around the Resort" sub="Groceries, coffee, food and things to do nearby" />
-            {pages("before")}
-          </ul>
-        </section>
+        {guide.links.some((l) => l.featured) ? (
+          <section className="sec">
+            <h2 className="sec-h">Useful information</h2>
+            <ul className="list menu">
+              {guide.links
+                .filter((l) => l.featured)
+                .map((l) => (
+                  <ExternalItem key={l.id} href={l.url} icon={LINK_ICON(l.label)} title={l.label} sub={l.note} />
+                ))}
+            </ul>
+          </section>
+        ) : null}
         {guide.playbook.length ? (
           <section className="sec" id="game-plan">
             <h2 className="sec-h">Game plan</h2>
@@ -76,6 +98,16 @@ export default async function MorePage() {
             </ul>
           </section>
         ) : null}
+        <section className="sec">
+          <h2 className="sec-h">Before you go</h2>
+          <ul className="list menu">
+            <Item href="/more/packing" icon="bag" title="Packing list" sub={`${guide.packing.length} items to tick off`} />
+            <Item href="/venue#getting" icon="plane" title="Flight details" sub="Add yours to the team sheet" />
+            <Item href="/weather" icon="wx-cloudsun" title="Weather" sub="Hour by hour, and a rain map" />
+            <Item href="/more/around-the-resort" icon="map" title="Around the Resort" sub="Groceries, coffee, food and things to do nearby" />
+            {pages("before")}
+          </ul>
+        </section>
         <section className="sec">
           <h2 className="sec-h">This phone</h2>
           <ul className="list menu">

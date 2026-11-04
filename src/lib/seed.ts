@@ -811,10 +811,18 @@ export const SEED: Guide = {
       label: "Full Pool B schedule",
       url: "https://docs.google.com/spreadsheets/d/1w1AZLKIqm7Hn1UoOrIJrpYPv0AghAMeA/edit?usp=sharing",
       note: "Google Sheet",
+      featured: false,
     },
-    { id: "l2", label: "Player bio form", url: "https://irelandlacrosse.ie", note: "irelandlacrosse.ie" },
-    { id: "l3", label: "Salou taxis", url: "https://www.mapilife.com/en/listings/salou-taxis/", note: "Mapilife" },
-    { id: "l4", label: "About the anthem", url: "https://en.wikipedia.org/wiki/Amhr%C3%A1n_na_bhFiann", note: "Wikipedia" },
+    { id: "l2", label: "Player bio form", url: "https://irelandlacrosse.ie", note: "irelandlacrosse.ie", featured: false },
+    { id: "l3", label: "Salou taxis", url: "https://www.mapilife.com/en/listings/salou-taxis/", note: "Mapilife", featured: false },
+    { id: "l4", label: "About the anthem", url: "https://en.wikipedia.org/wiki/Amhr%C3%A1n_na_bhFiann", note: "Wikipedia", featured: false },
+    {
+      id: "l5",
+      label: "Photography",
+      url: "https://worldlacrosse.photoshelter.com/galleries/C0000cALTCfJccDw/2026-European-Sixes-Championships-Salou-Spain",
+      note: "World Lacrosse photos from the championships",
+      featured: true,
+    },
   ],
   nearby: [
     { id: "nb1", category: "groceries", name: "Mercadona", town: "Cambrils", walk: "7 min", hours: "Closed Sun and Mon", rating: "", note: "" },
@@ -892,6 +900,10 @@ export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; a
     { at: "2026-11-02T17:00:00.000Z", add: [], remove: ["m10"] },
     // 3 Nov: dinner on your own on Tuesday.
     { at: "2026-11-03T11:15:00.000Z", add: [], remove: ["m11"] },
+  ],
+  links: [
+    // 4 Nov: World Lacrosse's photo gallery, also under Useful information at the top of More.
+    { at: "2026-11-04T05:50:00.000Z", add: ["l5"], remove: [] },
   ],
   daily: [
     // 2 Nov: what to pack for Tuesday's two games, highlighted at the top of the day.
