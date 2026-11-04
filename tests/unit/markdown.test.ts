@@ -157,7 +157,7 @@ test("a schedule saved before the revised master schedule and practice times giv
   assert.equal(olderThanSeed("venue", "2026-10-19T09:00:00.000Z"), true);
   assert.deepEqual(
     SEED.schedule.filter((s) => s.type === "practice" && s.time).map((s) => [s.date, s.time, s.endTime]),
-    [["2026-10-31", "17:00", "18:30"], ["2026-11-01", "11:00", "12:30"]],
+    [["2026-10-31", "17:00", "18:30"], ["2026-11-01", "11:00", "12:30"], ["2026-11-04", "09:20", "11:00"]],
   );
   assert.ok(SEED.venue.practiceMapUrl.startsWith("https://www.google.com/maps/"));
   const sweden = SEED.schedule.find((s) => s.opponent === "Sweden");

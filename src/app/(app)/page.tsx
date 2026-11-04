@@ -6,6 +6,7 @@ import { EditLink } from "@/components/EditLink";
 import { GameCountdown } from "@/components/GameCountdown";
 import { Header } from "@/components/Header";
 import { Icon } from "@/components/Icon";
+import { ItemSteps } from "@/components/ItemSteps";
 import { Kit } from "@/components/Kit";
 import { TodayWeather } from "@/components/Weather";
 import { loadGuide } from "@/lib/content";
@@ -114,6 +115,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
                         {e.meta ? <p className="meta">{with24h(e.meta)}</p> : null}
                         {e.game ? <Kit game={e.game} /> : null}
                         {e.details ? <p>{with24h(e.details)}</p> : null}
+                        <ItemSteps steps={e.steps} />
                         {e.game && c && !e.game.hideCountdown ? <GameCountdown lines={guide.event.gameCountdown} start={e.time} /> : null}
                         {e.link ? (
                           /^https?:/i.test(e.link.href) ? (

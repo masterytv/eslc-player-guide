@@ -17,6 +17,8 @@ export interface Entry {
   time: string;
   /** Set only for meals with open hours: Today shows the whole range, not a big start time. */
   endTime: string;
+  /** A schedule item's own timeline, shown in a box inside it. */
+  steps: string[];
   kind: ScheduleType | "note" | "meal";
   title: string;
   meta: string;
@@ -134,6 +136,7 @@ export function entriesFor(guide: Guide, date: string): Entry[] {
       date: d.date,
       time: d.time,
       endTime: "",
+      steps: [],
       kind: "note",
       title: d.title,
       meta: "",
@@ -148,6 +151,7 @@ export function entriesFor(guide: Guide, date: string): Entry[] {
       date: s.date,
       time: s.time,
       endTime: "",
+      steps: s.steps,
       kind: s.type,
       title: scheduleTitle(s),
       meta: scheduleMeta(s),
@@ -160,6 +164,7 @@ export function entriesFor(guide: Guide, date: string): Entry[] {
     date: m.date,
     time: m.time,
     endTime: m.endTime,
+    steps: [],
     kind: "meal",
     title: m.meal,
     meta: mealMeta(m),

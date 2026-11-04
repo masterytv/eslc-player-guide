@@ -330,6 +330,7 @@ img { max-width: 100%; }
 .countdown li { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 8px; align-items: baseline; }
 .countdown .cd-t { font-weight: 700; font-variant-numeric: tabular-nums; }
 .countdown .cd-t small { display: block; font-size: 11px; font-weight: 600; color: var(--muted); }
+.countdown li.cd-step { display: block; }
 .countdown li.cd-note { display: block; font-weight: 600; color: var(--red); }
 .meal-row { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 12px 14px; align-items: baseline; }
 .meal-row b { font: 700 17px/1 var(--font-display); text-transform: uppercase; letter-spacing: .03em; }

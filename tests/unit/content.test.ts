@@ -246,3 +246,22 @@ test("Tuesday 3 Nov: the coaches' plan, no countdowns, no buffet lunch or dinner
   const daily = withSeedFields("daily", sectionSchemas.daily.parse(SEED.daily.filter((d) => !/^d(4|5|6|7|8|9|1\d)$/.test(d.id))), before);
   assert.equal(daily.filter((d) => d.date === "2026-11-03").length, 14);
 });
+
+test("Wednesday 4 Nov: practice 9:30–11:00 with its own timeline, replacing the TBC practice", () => {
+  const wed = SEED.schedule.filter((r) => r.date === "2026-11-04" && r.type === "practice");
+  assert.equal(wed.length, 1);
+  assert.deepEqual([wed[0].time, wed[0].endTime], ["09:20", "11:00"]);
+  assert.deepEqual(wed[0].steps, [
+    "9:20 AM | Meet at the front desk entrance (where we arrived on the bus the first day)",
+    "9:20–9:30 AM | Shuttle to practice: Conway's van",
+    "9:30–11:00 AM | Practice",
+  ]);
+  // A schedule saved in the app with the old TBC practice: it's swapped, everything else stays.
+  const old = { id: "s8", date: "2026-11-04", time: "", type: "practice", title: "Practice", notes: "No game today." };
+  const saved = sectionSchemas.schedule.parse([...SEED.schedule.filter((r) => r.id !== "s14"), old]);
+  const shown = withSeedFields("schedule", saved, "2026-11-03T20:00:00.000Z");
+  assert.equal(shown.some((r) => r.id === "s8"), false);
+  assert.equal(shown.find((r) => r.id === "s14")?.steps.length, 3);
+  assert.equal(shown.length, saved.length);
+  assert.deepEqual(entriesFor(SEED, "2026-11-04").find((e) => e.id === "s14")?.steps, wed[0].steps);
+});

@@ -235,6 +235,18 @@ test("Tuesday shows the packing note, the coaches' plan between the games, and n
   await expect(viewer.locator("article", { hasText: "vs Finland" }).locator(".countdown")).toHaveCount(1);
 });
 
+test("Wednesday's practice shows its own timeline in a box", async () => {
+  await viewer.goto("/?day=2026-11-04");
+  const practice = viewer.locator(".tl-item", { hasText: "Practice" });
+  const steps = practice.locator(".countdown li");
+  await expect(steps).toHaveCount(3);
+  await expect(steps.nth(0)).toContainText("9:20 AM");
+  await expect(steps.nth(0)).toContainText("Meet at the front desk entrance (where we arrived on the bus the first day)");
+  await expect(steps.nth(1)).toContainText("Shuttle to practice: Conway's van");
+  await expect(steps.nth(2)).toContainText("9:30–11:00 AM");
+  await expect(practice).toContainText("Until 11:00 AM (11:00)");
+});
+
 test("every game says whether we're home in white or away in green", async () => {
   await viewer.goto("/schedule");
   await expect(viewer.locator("article", { hasText: "vs Finland" }).locator(".kit")).toHaveText("Away · wear green");
