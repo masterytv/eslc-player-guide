@@ -273,9 +273,10 @@ test("Thursday's game shows its own timeline instead of the standard countdown",
   await viewer.goto("/?day=2026-11-05");
   const game = viewer.locator(".tl-item", { hasText: "Ireland vs Switzerland" });
   const steps = game.locator(".countdown li");
-  await expect(steps).toHaveCount(11);
-  await expect(steps.first()).toContainText("11:15 AM");
-  await expect(steps.first()).toContainText("Dynamic stretching on the side field");
+  await expect(steps).toHaveCount(12);
+  await expect(steps.first()).toContainText("11:00 AM");
+  await expect(steps.first()).toContainText("Shuttle to the field · Meet at reception");
+  await expect(steps.nth(1)).toContainText("Dynamic stretching on the side field");
   await expect(steps.last()).toContainText("Locker room and ice baths");
   await expect(game).not.toContainText("Shuttle to the fields");
   await expect(game.locator(".countdown")).toHaveCount(1);
