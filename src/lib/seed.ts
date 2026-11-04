@@ -823,7 +823,7 @@ export const SEED: Guide = {
       note: "World Lacrosse photos from the championships",
       featured: true,
     },
-    { id: "l6", label: "Point Bench Stats", url: "https://worldlacrosse.sport/eslc26-women/", note: "Stats for the women's championship", featured: true },
+    { id: "l6", label: "Point Bench Stats", url: "https://worldlacrosse.sport/eslc26-women/", note: "Stats for ESLC", featured: true },
   ],
   nearby: [
     { id: "nb1", category: "groceries", name: "Mercadona", town: "Cambrils", walk: "7 min", hours: "Closed Sun and Mon", rating: "", note: "" },
