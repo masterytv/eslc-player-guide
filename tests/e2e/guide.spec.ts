@@ -251,6 +251,17 @@ test("Wednesday's practice shows its own timeline in a box", async () => {
   await expect(practice.getByRole("link", { name: /Directions/ })).toHaveAttribute("href", /maps\/search\/\?api=1&query=Mediterranean%20Sports%20Hub%2C%20Via%20de%20Cavet/);
 });
 
+test("More starts with Useful information and the photo gallery, with Before you go further down", async () => {
+  await viewer.goto("/more");
+  await expect(viewer.locator(".sec-h").first()).toHaveText("Useful information");
+  const photos = viewer.getByRole("link", { name: /Photography/ });
+  await expect(photos).toHaveAttribute("href", "https://worldlacrosse.photoshelter.com/galleries/C0000cALTCfJccDw/2026-European-Sixes-Championships-Salou-Spain");
+  await expect(photos).toHaveAttribute("target", "_blank");
+  const headings = await viewer.locator(".sec-h").allTextContents();
+  expect(headings.indexOf("Before you go")).toBeGreaterThan(headings.indexOf("Team"));
+  expect(headings.at(-1)).toBe("This phone");
+});
+
 test("every game says whether we're home in white or away in green", async () => {
   await viewer.goto("/schedule");
   await expect(viewer.locator("article", { hasText: "vs Finland" }).locator(".kit")).toHaveText("Away · wear green");

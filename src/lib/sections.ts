@@ -541,6 +541,7 @@ export const SECTIONS: SectionDef[] = [
       { key: "label", label: "Label", type: "text", required: true },
       { key: "url", label: "Link", type: "url", required: true, placeholder: "https://" },
       { key: "note", label: "Small text under the label", type: "text" },
+      { key: "featured", label: "Show under Useful information", type: "checkbox", help: "Also listed at the top of More." },
     ],
   },
 ];
