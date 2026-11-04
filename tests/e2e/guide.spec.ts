@@ -260,6 +260,10 @@ test("More starts with Useful information and the photo gallery, with Before you
   const stats = viewer.getByRole("link", { name: /Point Bench Stats/ });
   await expect(stats).toHaveAttribute("href", "https://worldlacrosse.sport/eslc26-women/");
   await expect(viewer.locator(".sec").first().locator(".mt")).toHaveText(["Photography", "Point Bench Stats"]);
+  await viewer.getByRole("link", { name: /Laundry/ }).click();
+  await expect(viewer.locator("main")).toContainText("€11");
+  await expect(viewer.locator("main")).toContainText("half a large garbage bag");
+  await viewer.goto("/more");
   const headings = await viewer.locator(".sec-h").allTextContents();
   expect(headings.indexOf("Before you go")).toBeGreaterThan(headings.indexOf("Team"));
   expect(headings.at(-1)).toBe("This phone");

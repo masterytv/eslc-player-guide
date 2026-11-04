@@ -297,3 +297,13 @@ test("the photography link is featured under Useful information, on a saved link
     ["l5", "l6"],
   );
 });
+
+test("a Laundry page under Team: front desk, €11 for half a large bag, €22 for a full one", () => {
+  const page = SEED.pages.find((p) => p.slug === "laundry");
+  assert.equal(page?.group, "team");
+  assert.match(page?.body ?? "", /front desk/);
+  assert.match(page?.body ?? "", /€11\*\*: half a large garbage bag/);
+  assert.match(page?.body ?? "", /€22\*\*: a full large garbage bag/);
+  const saved = sectionSchemas.pages.parse(SEED.pages.filter((p) => p.id !== "pg6"));
+  assert.ok(withSeedFields("pages", saved, "2026-11-04T05:00:00.000Z").some((p) => p.slug === "laundry"));
+});
