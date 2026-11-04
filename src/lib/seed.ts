@@ -555,8 +555,8 @@ export const SEED: Guide = {
     { id: "m7", date: "2026-11-02", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m8", date: "2026-11-02", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m9", date: "2026-11-03", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
-    { id: "m12", date: "2026-11-04", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
-    { id: "m13", date: "2026-11-04", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m12", date: "2026-11-04", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "Optional" },
+    { id: "m13", date: "2026-11-04", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "Optional" },
     { id: "m31", date: "2026-11-04", meal: "Dinner", time: "19:00", endTime: "", place: "Villa Tapas Competition", notes: "" },
     { id: "m15", date: "2026-11-05", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m16", date: "2026-11-05", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
@@ -864,6 +864,8 @@ export const SEED: Guide = {
  */
 export const SEED_FIELDS: Partial<Record<SectionKey, string[]>> = {
   schedule: ["side", "hideCountdown"],
+  // 4 Nov: breakfast and lunch that day are optional.
+  meals: ["notes"],
 };
 
 /**

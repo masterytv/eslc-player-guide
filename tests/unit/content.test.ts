@@ -274,3 +274,12 @@ test("Wednesday 4 Nov: a red note at the top to send tapas ingredients to Liz by
   const saved = sectionSchemas.daily.parse(SEED.daily.filter((d) => d.id !== "d17"));
   assert.equal(withSeedFields("daily", saved, "2026-11-04T05:00:00.000Z").find((d) => d.id === "d17")?.red, true);
 });
+
+test("Wednesday 4 Nov: breakfast and lunch are marked optional, on a saved meals list too", () => {
+  const wed = SEED.meals.filter((m) => m.date === "2026-11-04");
+  assert.deepEqual(wed.map((m) => [m.meal, m.notes]), [["Breakfast", "Optional"], ["Lunch", "Optional"], ["Dinner", ""]]);
+  const saved = sectionSchemas.meals.parse(SEED.meals.map((m) => ({ ...m, notes: "" })));
+  const shown = withSeedFields("meals", saved, "2026-11-04T06:00:00.000Z");
+  assert.deepEqual(shown.filter((m) => m.date === "2026-11-04").map((m) => m.notes), ["Optional", "Optional", ""]);
+  assert.equal(entriesFor(SEED, "2026-11-04").find((e) => e.title === "Breakfast")?.details, "Optional");
+});
