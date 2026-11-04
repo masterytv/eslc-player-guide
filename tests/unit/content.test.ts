@@ -311,9 +311,10 @@ test("a Laundry page under Team: front desk, €11 for half a large bag, €22 f
 test("Thursday 5 Nov: the Switzerland game has its own timeline in place of the countdown", () => {
   const game = SEED.schedule.find((r) => r.id === "s9")!;
   assert.equal(game.opponent, "Switzerland");
-  assert.equal(game.steps[0], "11:15 AM | Dynamic stretching on the side field");
+  assert.equal(game.steps[0], "11:00 AM | Shuttle to the field · Meet at reception");
+  assert.equal(game.steps[1], "11:15 AM | Dynamic stretching on the side field");
   assert.equal(game.steps.at(-1), "2:30 PM | Locker room and ice baths");
-  assert.equal(game.steps.length, 11);
+  assert.equal(game.steps.length, 12);
   // A schedule saved in the app before the timeline existed gets it for that game; other games keep the countdown.
   const saved = sectionSchemas.schedule.parse(SEED.schedule.map((r) => ({ ...r, steps: [] })));
   const shown = withSeedFields("schedule", saved, "2026-11-04T06:00:00.000Z");
