@@ -265,3 +265,12 @@ test("Wednesday 4 Nov: practice 9:30–11:00 with its own timeline, replacing th
   assert.equal(shown.length, saved.length);
   assert.deepEqual(entriesFor(SEED, "2026-11-04").find((e) => e.id === "s14")?.steps, wed[0].steps);
 });
+
+test("Wednesday 4 Nov: a red note at the top to send tapas ingredients to Liz by practice", () => {
+  const [note] = highlightsFor(SEED, "2026-11-04");
+  assert.equal(note.title, "Submit ingredients for tapas to Liz by practice.");
+  assert.equal(note.red, true);
+  assert.equal(highlightsFor(SEED, "2026-11-03")[0].red, false);
+  const saved = sectionSchemas.daily.parse(SEED.daily.filter((d) => d.id !== "d17"));
+  assert.equal(withSeedFields("daily", saved, "2026-11-04T05:00:00.000Z").find((d) => d.id === "d17")?.red, true);
+});

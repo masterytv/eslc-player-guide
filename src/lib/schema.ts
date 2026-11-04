@@ -115,6 +115,8 @@ export const sectionSchemas = {
     linkUrl: url,
     /** Shown at the top of the day on Today, in a highlighted box, rather than in the day's timeline. */
     highlight: bool(false),
+    /** A highlighted note shown in red, for something urgent. */
+    red: bool(false),
   }),
   schedule: list({
     date: dateReq,
