@@ -288,7 +288,22 @@ test("the photography link is featured under Useful information, on a saved link
   const photo = SEED.links.find((l) => l.label === "Photography");
   assert.equal(photo?.url, "https://worldlacrosse.photoshelter.com/galleries/C0000cALTCfJccDw/2026-European-Sixes-Championships-Salou-Spain");
   assert.equal(photo?.featured, true);
-  assert.deepEqual(SEED.links.filter((l) => l.featured).map((l) => l.label), ["Photography"]);
-  const saved = sectionSchemas.links.parse(SEED.links.filter((l) => l.id !== "l5"));
+  assert.deepEqual(SEED.links.filter((l) => l.featured).map((l) => l.label), ["Photography", "Point Bench Stats"]);
+  assert.equal(SEED.links.find((l) => l.label === "Point Bench Stats")?.url, "https://worldlacrosse.sport/eslc26-women/");
+  const saved = sectionSchemas.links.parse(SEED.links.filter((l) => !["l5", "l6"].includes(l.id)));
   assert.equal(withSeedFields("links", saved, "2026-11-04T05:00:00.000Z").find((l) => l.id === "l5")?.featured, true);
+  assert.deepEqual(
+    withSeedFields("links", saved, "2026-11-04T05:00:00.000Z").filter((l) => l.featured).map((l) => l.id),
+    ["l5", "l6"],
+  );
+});
+
+test("a Laundry page under Team: front desk, €11 for half a large bag, €22 for a full one", () => {
+  const page = SEED.pages.find((p) => p.slug === "laundry");
+  assert.equal(page?.group, "team");
+  assert.match(page?.body ?? "", /front desk/);
+  assert.match(page?.body ?? "", /€11\*\*: half a large garbage bag/);
+  assert.match(page?.body ?? "", /€22\*\*: a full large garbage bag/);
+  const saved = sectionSchemas.pages.parse(SEED.pages.filter((p) => p.id !== "pg6"));
+  assert.ok(withSeedFields("pages", saved, "2026-11-04T05:00:00.000Z").some((p) => p.slug === "laundry"));
 });

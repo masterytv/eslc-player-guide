@@ -151,6 +151,15 @@ Family and friends can watch in person at the Mediterranean Sports Hub (Futbol S
 
 > Prices are from the organisers' Team Infobook. Check the World Lacrosse TV page for the latest streaming prices.`;
 
+const laundry = `## Laundry at the resort
+Bring your laundry to the **front desk** at Cambrils Park.
+
+### Cost
+- **€11**: half a large garbage bag
+- **€22**: a full large garbage bag
+
+> Staff only wash uniforms. Anything else goes to the front desk.`;
+
 // The coaches' own words: Justin Warner's offensive principles and Ashley O’Brien's defensive
 // principles, both from 12 Oct 2026, laid out like their slides: a card per slide, its labelled
 // boxes, and its bottom line.
@@ -776,6 +785,7 @@ export const SEED: Guide = {
     { id: "pg2", title: "Conduct & team rules", slug: "conduct", group: "team", summary: "Check in & out, lights out, apparel", body: conduct },
     { id: "pg3", title: "Team activities", slug: "activities", group: "team", summary: "Barcelona trip", body: activities },
     { id: "pg5", title: "Where to watch", slug: "watch", group: "before", summary: "Stream online on World Lacrosse TV, or buy tickets at the venue", body: watch },
+    { id: "pg6", title: "Laundry", slug: "laundry", group: "team", summary: "Front desk: €11 for half a large bag, €22 for a full one", body: laundry },
     { id: "pg4", title: "Free time", slug: "free-time", group: "team", summary: "Salou, Tarragona, Barcelona, Ebro Delta: how far, and how to get there", body: freeTime },
   ],
   playbook: [
@@ -823,6 +833,7 @@ export const SEED: Guide = {
       note: "World Lacrosse photos from the championships",
       featured: true,
     },
+    { id: "l6", label: "Point Bench Stats", url: "https://worldlacrosse.sport/eslc26-women/", note: "Stats for ESLC", featured: true },
   ],
   nearby: [
     { id: "nb1", category: "groceries", name: "Mercadona", town: "Cambrils", walk: "7 min", hours: "Closed Sun and Mon", rating: "", note: "" },
@@ -901,9 +912,15 @@ export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; a
     // 3 Nov: dinner on your own on Tuesday.
     { at: "2026-11-03T11:15:00.000Z", add: [], remove: ["m11"] },
   ],
+  pages: [
+    // 4 Nov: a Laundry page (front desk, €11 for half a large bag, €22 for a full one).
+    { at: "2026-11-04T06:05:00.000Z", add: ["pg6"], remove: [] },
+  ],
   links: [
     // 4 Nov: World Lacrosse's photo gallery, also under Useful information at the top of More.
     { at: "2026-11-04T05:50:00.000Z", add: ["l5"], remove: [] },
+    // 4 Nov: Point Bench Stats for the women's championship, under Useful information too.
+    { at: "2026-11-04T06:00:00.000Z", add: ["l6"], remove: [] },
   ],
   daily: [
     // 2 Nov: what to pack for Tuesday's two games, highlighted at the top of the day.
