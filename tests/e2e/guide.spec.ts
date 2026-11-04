@@ -244,7 +244,8 @@ test("Wednesday's practice shows its own timeline in a box", async () => {
   await expect(steps.nth(0)).toContainText("Meet at the front desk entrance (where we arrived on the bus the first day)");
   await expect(steps.nth(1)).toContainText("Shuttle to practice: Conway's van");
   await expect(steps.nth(2)).toContainText("9:30–11:00 AM");
-  await expect(practice).toContainText("Until 11:00 AM (11:00)");
+  await expect(practice).toContainText("Until 11:00 AM (11:00) · Futbol Salou complex");
+  await expect(practice.getByRole("link", { name: /Directions/ })).toHaveAttribute("href", /maps\/search\/\?api=1&query=Mediterranean%20Sports%20Hub%2C%20Via%20de%20Cavet/);
 });
 
 test("every game says whether we're home in white or away in green", async () => {
