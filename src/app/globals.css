@@ -319,6 +319,7 @@ img { max-width: 100%; }
 .rides details p { font-size: 14px; padding-bottom: 12px; white-space: pre-line; }
 .card.emergency { border-color: var(--red); background: var(--red-soft); }
 .card.emergency .eyebrow { color: var(--red); }
+.day-highlight.red { background: var(--red-soft); color: var(--red); }
 .day-highlight b { display: block; font-size: 16px; }
 .day-highlight p { margin-top: 4px; font-weight: 500; }
 .kit { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; }

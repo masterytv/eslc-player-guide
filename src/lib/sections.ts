@@ -116,6 +116,7 @@ export const SECTIONS: SectionDef[] = [
       { key: "linkLabel", label: "Button label", type: "text", placeholder: "Ride options", help: "Optional button under the note." },
       { key: "linkUrl", label: "Button link", type: "url", placeholder: "https:// or /venue#getting" },
       { key: "highlight", label: "Highlight at the top of the day", type: "checkbox", help: "For what players must know that day, like what to pack." },
+      { key: "red", label: "Show in red", type: "checkbox", help: "For something urgent.", showIf: (r) => r.highlight === true },
     ],
   },
   {
