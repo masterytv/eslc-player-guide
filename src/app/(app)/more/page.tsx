@@ -43,7 +43,7 @@ function ExternalItem({ href, icon, title, sub }: { href: string; icon: IconName
   );
 }
 
-const LINK_ICON = (label: string): IconName => (/photo/i.test(label) ? "photo" : "link");
+const LINK_ICON = (label: string): IconName => (/photo/i.test(label) ? "photo" : /stat/i.test(label) ? "sheet" : "link");
 
 const PAGE_ICON: Record<string, IconName> = { rules: "book", conduct: "shield", "free-time": "map", watch: "tv" };
 

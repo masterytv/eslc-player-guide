@@ -823,6 +823,7 @@ export const SEED: Guide = {
       note: "World Lacrosse photos from the championships",
       featured: true,
     },
+    { id: "l6", label: "Point Bench Stats", url: "https://worldlacrosse.sport/eslc26-women/", note: "Stats for the women's championship", featured: true },
   ],
   nearby: [
     { id: "nb1", category: "groceries", name: "Mercadona", town: "Cambrils", walk: "7 min", hours: "Closed Sun and Mon", rating: "", note: "" },
@@ -904,6 +905,8 @@ export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; a
   links: [
     // 4 Nov: World Lacrosse's photo gallery, also under Useful information at the top of More.
     { at: "2026-11-04T05:50:00.000Z", add: ["l5"], remove: [] },
+    // 4 Nov: Point Bench Stats for the women's championship, under Useful information too.
+    { at: "2026-11-04T06:00:00.000Z", add: ["l6"], remove: [] },
   ],
   daily: [
     // 2 Nov: what to pack for Tuesday's two games, highlighted at the top of the day.
