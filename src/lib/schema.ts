@@ -132,6 +132,8 @@ export const sectionSchemas = {
     side: z.enum(["", "home", "away"]).default(""),
     /** For a game day with its own plan in the daily notes, where the standard countdown would clash. */
     hideCountdown: bool(false),
+    /** A timeline inside the item, one step per line: "9:20–9:30 AM | Shuttle to practice". */
+    steps: lines(12, 200),
     notes: long(500),
   }),
   staff: list({
