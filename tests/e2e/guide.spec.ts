@@ -269,6 +269,18 @@ test("More starts with Useful information and the photo gallery, with Before you
   expect(headings.at(-1)).toBe("This phone");
 });
 
+test("Thursday's game shows its own timeline instead of the standard countdown", async () => {
+  await viewer.goto("/?day=2026-11-05");
+  const game = viewer.locator(".tl-item", { hasText: "Ireland vs Switzerland" });
+  const steps = game.locator(".countdown li");
+  await expect(steps).toHaveCount(11);
+  await expect(steps.first()).toContainText("11:15 AM");
+  await expect(steps.first()).toContainText("Dynamic stretching on the side field");
+  await expect(steps.last()).toContainText("Locker room and ice baths");
+  await expect(game).not.toContainText("Shuttle to the fields");
+  await expect(game.locator(".countdown")).toHaveCount(1);
+});
+
 test("every game says whether we're home in white or away in green", async () => {
   await viewer.goto("/schedule");
   await expect(viewer.locator("article", { hasText: "vs Finland" }).locator(".kit")).toHaveText("Away · wear green");
