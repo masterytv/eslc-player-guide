@@ -326,7 +326,11 @@ test("Thursday 5 Nov: the Switzerland game has its own timeline in place of the 
 
 test("Friday 6 Nov: the 4 PM quarterfinal, lunch at noon, and the plan around it", () => {
   const qf = SEED.schedule.find((r) => r.date === "2026-11-06" && r.type === "game")!;
-  assert.deepEqual([qf.time, qf.field, qf.warmup, qf.side, qf.hideCountdown], ["16:00", "Field 1", "15:30", "away", true]);
+  assert.deepEqual([qf.time, qf.field, qf.warmup, qf.side, qf.hideCountdown], ["16:00", "Field 1", "15:30", "away", false]);
+  assert.deepEqual(
+    gameCountdown(SEED.event.gameCountdown, qf.time).map((s) => s.time || s.offset),
+    ["2:30 PM", "3:00 PM", "3:30 PM", "3:40 PM", "3:45 PM", "3:53 PM", "3:57 PM", "4:00 PM", "+10 min after"],
+  );
   assert.equal(gameLabel(qf), "Playoff");
   assert.equal(gameLabel(SEED.schedule.find((r) => r.id === "s3")!), "Pool play");
   assert.deepEqual(
