@@ -945,6 +945,9 @@ export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; a
     { at: "2026-11-04T05:40:00.000Z", add: ["d17"], remove: [] },
     // 5 Nov: Friday's plan around the 16:00 quarterfinal.
     { at: "2026-11-05T16:45:00.000Z", add: ["d18", "d19", "d20", "d21", "d22", "d23", "d24"], remove: [] },
+    // 5 Nov, evening: again for daily notes saved in the app since (Friday's notes, team meeting & film at 20:00
+    // included). Notes already there aren't added twice.
+    { at: "2026-11-05T18:00:00.000Z", add: ["d18", "d19", "d20", "d21", "d22", "d23", "d24"], remove: [] },
   ],
 };
 
