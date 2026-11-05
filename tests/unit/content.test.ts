@@ -367,3 +367,16 @@ test("Friday 6 Nov: the 4 PM quarterfinal, lunch at noon, and the plan around it
   const schedule = withSeedFields("schedule", sectionSchemas.schedule.parse(SEED.schedule.filter((r) => r.id !== "s15")), before);
   assert.equal(schedule.filter((r) => r.id === "s15").length, 1);
 });
+
+test("Friday's notes reach daily notes saved in the app on Thursday evening, without doubling up", () => {
+  const thursdayMeeting = { id: "x1", date: "2026-11-05", time: "20:30", title: "Team meeting & film" };
+  const savedWithout = sectionSchemas.daily.parse([...SEED.daily.filter((d) => d.date !== "2026-11-06"), thursdayMeeting]);
+  const shown = withSeedFields("daily", savedWithout, "2026-11-05T17:30:00.000Z");
+  assert.deepEqual(
+    shown.filter((d) => d.date === "2026-11-06").map((d) => [d.time, d.title]).find(([t]) => t === "20:00"),
+    ["20:00", "Team meeting & film"],
+  );
+  assert.ok(shown.some((d) => d.id === "x1"));
+  const savedWith = sectionSchemas.daily.parse([...SEED.daily, thursdayMeeting]);
+  assert.equal(withSeedFields("daily", savedWith, "2026-11-05T17:30:00.000Z").length, savedWith.length);
+});
