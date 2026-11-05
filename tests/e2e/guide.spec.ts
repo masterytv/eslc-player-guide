@@ -291,12 +291,13 @@ test("Friday shows the quarterfinal with the plan around it, in order", async ()
     "Leave for the fields",
     "Start warm-up",
     "Take the field",
-    "Quarterfinal",
+    "Ireland vs Czechia",
     "After the game",
     "Team meeting & film",
   ]);
   await expect(viewer.locator(".tl-item", { hasText: "Breakfast on your own" }).locator(".tl-time")).toHaveText("Morning");
-  const qf = viewer.locator(".tl-item", { hasText: "Quarterfinal" });
+  const qf = viewer.locator(".tl-item", { hasText: "Ireland vs Czechia" });
+  await expect(viewer.locator(".tl-item", { has: viewer.locator("h3", { hasText: /^Lunch$/ }) }).locator(".tl-body")).not.toContainText("Arrive");
   await expect(qf.locator(".kit")).toHaveText("Away · wear green");
   await expect(qf.locator(".chip")).toHaveText("Playoff");
   await expect(qf.locator(".countdown")).toHaveCount(0);

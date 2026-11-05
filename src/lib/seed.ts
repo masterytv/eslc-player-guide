@@ -527,7 +527,7 @@ export const SEED: Guide = {
     { id: "s5", date: "2026-11-03", time: "12:30", type: "game", title: "", opponent: "Italy", opponentCode: "ITA", round: "Match 012", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", hideCountdown: true, steps: [], notes: "" },
     { id: "s7", date: "2026-11-03", time: "15:30", type: "game", title: "", opponent: "Sweden", opponentCode: "SWE", round: "Match 016", field: "Field 1", endTime: "", mapUrl: "", warmup: "15:00", side: "away", hideCountdown: true, steps: [], notes: "New time: this game was moved up from 17:00." },
     { id: "s14", date: "2026-11-04", time: "09:20", endTime: "11:00", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/search/?api=1&query=Mediterranean%20Sports%20Hub%2C%20Via%20de%20Cavet%2C%20s%2Fn%2C%2043840%20Salou%2C%20Tarragona%2C%20Spain", warmup: "", side: "", hideCountdown: false, steps: ["9:20 AM | Meet at the front desk entrance (where we arrived on the bus the first day)", "9:20–9:30 AM | Shuttle to practice: Conway's van", "9:30–11:00 AM | Practice"], notes: "" },
-    { id: "s15", date: "2026-11-06", time: "16:00", endTime: "", type: "game", title: "Quarterfinal", opponent: "", opponentCode: "", round: "Quarterfinal · Match 038", field: "Field 1", mapUrl: "", warmup: "15:30", side: "away", hideCountdown: true, steps: [], notes: "Against the winner of Group C." },
+    { id: "s15", date: "2026-11-06", time: "16:00", endTime: "", type: "game", title: "Quarterfinal", opponent: "Czechia", opponentCode: "CZE", round: "Quarterfinal · Match 038", field: "Field 1", mapUrl: "", warmup: "15:30", side: "away", hideCountdown: true, steps: [], notes: "" },
     { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", hideCountdown: false, steps: ["11:00 AM | Shuttle to the field · Meet at reception", "11:15 AM | Dynamic stretching on the side field", "11:30 AM | Shuttles · Goalies warm up", "11:45 AM | Locker room", "12:00 PM | Field opens for warm-up", "12:10 PM | Officials and coaches meet", "12:15 PM | Coin toss", "12:23 PM | Anthem", "12:27 PM | Team line-up", "12:30 PM | Game starts", "+10 min after | Team must leave the field", "2:30 PM | Locker room and ice baths"], notes: "" },
     { id: "s10", date: "2026-11-04", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", hideCountdown: false, steps: [], notes: "" },
     { id: "s11", date: "2026-11-05", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", hideCountdown: false, steps: [], notes: "" },
@@ -581,7 +581,7 @@ export const SEED: Guide = {
     { id: "m15", date: "2026-11-05", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m16", date: "2026-11-05", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m17", date: "2026-11-05", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
-    { id: "m32", date: "2026-11-06", meal: "Lunch", time: "12:00", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m32", date: "2026-11-06", meal: "Lunch", time: "12:00", endTime: "", place: "", notes: "" },
     { id: "m21", date: "2026-11-07", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m22", date: "2026-11-07", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m23", date: "2026-11-07", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
@@ -914,7 +914,7 @@ export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; a
     { at: "2026-11-03T11:15:00.000Z", add: [], remove: ["s13", "s6"] },
     // 4 Nov: Wednesday's practice, 9:30–11:00, with its own timeline (meet at the front desk, Conway's van).
     { at: "2026-11-04T05:25:00.000Z", add: ["s14"], remove: ["s8"] },
-    // 5 Nov: Friday's quarterfinal, 16:00 on Field 1 (Match 038, against the Group C winner).
+    // 5 Nov: Friday's quarterfinal against Czechia, 16:00 on Field 1 (Match 038), away.
     { at: "2026-11-05T16:45:00.000Z", add: ["s15"], remove: [] },
   ],
   meals: [

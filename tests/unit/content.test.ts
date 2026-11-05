@@ -74,7 +74,7 @@ test("finds the next game and the day Today opens on", () => {
   assert.equal(nextGame(SEED, Date.parse("2026-11-02T10:20:00Z"))?.game.opponent, "Finland");
   // 15:00 in Spain: Finland has started, Italy is next.
   assert.equal(nextGame(SEED, Date.parse("2026-11-02T14:00:00Z"))?.game.opponent, "Italy");
-  assert.equal(nextGame(SEED, Date.parse("2026-11-06T10:00:00Z"))?.game.title, "Quarterfinal");
+  assert.equal(nextGame(SEED, Date.parse("2026-11-06T10:00:00Z"))?.game.opponent, "Czechia");
   assert.equal(nextGame(SEED, Date.parse("2026-11-06T16:00:00Z")), null);
   // The same schedule in Toronto (UTC-5 by November): Finland's 14:30 start is 19:30 UTC.
   const toronto = { ...SEED, event: { ...SEED.event, timeZone: "America/Toronto" } };
@@ -160,7 +160,7 @@ test("games say home (white) or away (green), even on a schedule saved before th
     ["Finland", "Away · wear green"],
     ["Italy", "Home · wear white"],
     ["Sweden", "Away · wear green"],
-    ["", "Away · wear green"],
+    ["Czechia", "Away · wear green"],
     ["Switzerland", "Home · wear white"],
   ]);
   // A schedule staff saved in the app: no side yet, and their own ceremony time.
@@ -331,7 +331,7 @@ test("Friday 6 Nov: the 4 PM quarterfinal, lunch at noon, and the plan around it
   assert.equal(gameLabel(SEED.schedule.find((r) => r.id === "s3")!), "Pool play");
   assert.deepEqual(
     SEED.meals.filter((m) => m.date === "2026-11-06").map((m) => [m.meal, mealTimeLabel(m)]),
-    [["Lunch", "Arrive 12:00 PM (12:00)"]],
+    [["Lunch", "12:00 PM (12:00)"]],
   );
   const day = entriesFor(SEED, "2026-11-06");
   assert.deepEqual(day.map((e) => e.title), [
@@ -341,10 +341,11 @@ test("Friday 6 Nov: the 4 PM quarterfinal, lunch at noon, and the plan around it
     "Leave for the fields",
     "Start warm-up",
     "Take the field",
-    "Quarterfinal",
+    "Ireland vs Czechia",
     "After the game",
     "Team meeting & film",
   ]);
+  assert.equal(day.find((e) => e.title === "Lunch")?.meta, "12:00");
   assert.deepEqual(day.filter((e) => e.when).map((e) => e.when), ["Morning", "After"]);
   // Saved in the app before this: each gets Friday's changes and keeps the rest.
   const before = "2026-11-05T12:00:00.000Z";
