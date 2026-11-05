@@ -335,7 +335,7 @@ test("Friday 6 Nov: the 4 PM quarterfinal, lunch at noon, and the plan around it
   assert.equal(gameLabel(SEED.schedule.find((r) => r.id === "s3")!), "Pool play");
   assert.deepEqual(
     SEED.meals.filter((m) => m.date === "2026-11-06").map((m) => [m.meal, mealTimeLabel(m)]),
-    [["Lunch", "12:00 PM (12:00)"]],
+    [["Lunch", "12:00 PM (12:00)"], ["Dinner", "7:00–9:00 PM (19:00–21:00)"]],
   );
   const day = entriesFor(SEED, "2026-11-06");
   assert.deepEqual(day.map((e) => e.title), [
@@ -347,23 +347,26 @@ test("Friday 6 Nov: the 4 PM quarterfinal, lunch at noon, and the plan around it
     "Take the field",
     "Ireland vs Czechia",
     "After the game",
+    "Dinner",
     "Team meeting & film",
   ]);
   assert.equal(day.find((e) => e.title === "Lunch")?.meta, "12:00");
+  assert.equal(day.find((e) => e.title === "Dinner")?.details, "On your own");
+  assert.equal(day.find((e) => e.title === "After the game")?.details, "Ice baths if you signed up");
   assert.deepEqual(day.filter((e) => e.when).map((e) => e.when), ["Morning", "After"]);
   // Saved in the app before this: each gets Friday's changes and keeps the rest.
   const before = "2026-11-05T12:00:00.000Z";
   const meals = withSeedFields(
     "meals",
     sectionSchemas.meals.parse([
-      ...SEED.meals.filter((m) => m.id !== "m32"),
+      ...SEED.meals.filter((m) => !["m32", "m33"].includes(m.id)),
       { id: "m18", date: "2026-11-06", meal: "Breakfast", time: "07:30", endTime: "09:30" },
       { id: "m19", date: "2026-11-06", meal: "Lunch", time: "12:00", endTime: "15:00" },
       { id: "m20", date: "2026-11-06", meal: "Dinner", time: "19:00", endTime: "21:00" },
     ]),
     before,
   );
-  assert.deepEqual(meals.filter((m) => m.date === "2026-11-06").map((m) => m.id), ["m32"]);
+  assert.deepEqual(meals.filter((m) => m.date === "2026-11-06").map((m) => m.id), ["m32", "m33"]);
   const schedule = withSeedFields("schedule", sectionSchemas.schedule.parse(SEED.schedule.filter((r) => r.id !== "s15")), before);
   assert.equal(schedule.filter((r) => r.id === "s15").length, 1);
 });

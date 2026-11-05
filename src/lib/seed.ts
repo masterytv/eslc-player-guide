@@ -516,7 +516,7 @@ export const SEED: Guide = {
     { id: "d20", date: "2026-11-06", time: "14:30", title: "Leave for the fields", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
     { id: "d21", date: "2026-11-06", time: "15:00", title: "Start warm-up", details: "Stretch · shoot · shuttles", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
     { id: "d22", date: "2026-11-06", time: "15:30", title: "Take the field", details: "Finish warm-ups", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
-    { id: "d23", date: "2026-11-06", time: "17:00", title: "After the game", details: "Ice baths if you signed up · Dinner on your own", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "After" },
+    { id: "d25", date: "2026-11-06", time: "17:00", title: "After the game", details: "Ice baths if you signed up", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "After" },
     { id: "d24", date: "2026-11-06", time: "20:00", title: "Team meeting & film", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
   ],
   schedule: [
@@ -582,6 +582,7 @@ export const SEED: Guide = {
     { id: "m16", date: "2026-11-05", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m17", date: "2026-11-05", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m32", date: "2026-11-06", meal: "Lunch", time: "12:00", endTime: "", place: "", notes: "" },
+    { id: "m33", date: "2026-11-06", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "On your own" },
     { id: "m21", date: "2026-11-07", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m22", date: "2026-11-07", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m23", date: "2026-11-07", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
@@ -921,6 +922,8 @@ export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; a
     { at: "2026-11-01T20:30:00.000Z", add: ["m31"], remove: ["m14"] },
     // 5 Nov: Friday, breakfast and dinner on your own, team lunch at 12:00.
     { at: "2026-11-05T16:45:00.000Z", add: ["m32"], remove: ["m18", "m19", "m20"] },
+    // 5 Nov, evening: Friday dinner on your own, with the usual dinner hours (19:00–21:00).
+    { at: "2026-11-05T19:10:00.000Z", add: ["m33"], remove: [] },
     // 2 Nov: no buffet lunch on Tuesday 3 Nov (boxed lunches at the field instead).
     { at: "2026-11-02T17:00:00.000Z", add: [], remove: ["m10"] },
     // 3 Nov: dinner on your own on Tuesday.
@@ -948,6 +951,8 @@ export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; a
     // 5 Nov, evening: again for daily notes saved in the app since (Friday's notes, team meeting & film at 20:00
     // included). Notes already there aren't added twice.
     { at: "2026-11-05T18:00:00.000Z", add: ["d18", "d19", "d20", "d21", "d22", "d23", "d24"], remove: [] },
+    // 5 Nov, evening: dinner has its own item on Friday, so "After the game" just covers ice baths.
+    { at: "2026-11-05T19:10:00.000Z", add: ["d25"], remove: ["d23"] },
   ],
 };
 
