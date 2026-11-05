@@ -300,7 +300,12 @@ test("Friday shows the quarterfinal with the plan around it, in order", async ()
   await expect(viewer.locator(".tl-item", { has: viewer.locator("h3", { hasText: /^Lunch$/ }) }).locator(".tl-body")).not.toContainText("Arrive");
   await expect(qf.locator(".kit")).toHaveText("Away · wear green");
   await expect(qf.locator(".chip")).toHaveText("Playoff");
-  await expect(qf.locator(".countdown")).toHaveCount(0);
+  const steps = qf.locator(".countdown li");
+  await expect(steps).toHaveCount(9);
+  await expect(steps.first()).toContainText("2:30 PM");
+  await expect(steps.first()).toContainText("Shuttle to the fields");
+  await expect(steps.nth(1)).toContainText("3:00 PM");
+  await expect(steps.nth(7)).toContainText("4:00 PM");
 });
 
 test("every game says whether we're home in white or away in green", async () => {
