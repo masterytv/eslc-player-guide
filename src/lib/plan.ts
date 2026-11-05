@@ -19,12 +19,19 @@ export interface Entry {
   endTime: string;
   /** A schedule item's own timeline, shown in a box inside it. */
   steps: string[];
+  /** A daily note's word for when ("Morning"), shown in place of its time. */
+  when: string;
   kind: ScheduleType | "note" | "meal";
   title: string;
   meta: string;
   details: string;
   link: { label: string; href: string } | null;
   game: Row<"schedule"> | null;
+}
+
+/** "Playoff" for a quarterfinal, semifinal, final or placement game, else "Pool play". */
+export function gameLabel(row: Row<"schedule">): string {
+  return /final|place|playoff/i.test(`${row.round} ${row.title}`) ? "Playoff" : TYPE_LABEL.game;
 }
 
 export function gameTitle(row: Row<"schedule">): string {
@@ -137,6 +144,7 @@ export function entriesFor(guide: Guide, date: string): Entry[] {
       time: d.time,
       endTime: "",
       steps: [],
+      when: d.when,
       kind: "note",
       title: d.title,
       meta: "",
@@ -152,6 +160,7 @@ export function entriesFor(guide: Guide, date: string): Entry[] {
       time: s.time,
       endTime: "",
       steps: s.steps,
+      when: "",
       kind: s.type,
       title: scheduleTitle(s),
       meta: scheduleMeta(s),
@@ -165,6 +174,7 @@ export function entriesFor(guide: Guide, date: string): Entry[] {
     time: m.time,
     endTime: m.endTime,
     steps: [],
+    when: "",
     kind: "meal",
     title: m.meal,
     meta: mealMeta(m),

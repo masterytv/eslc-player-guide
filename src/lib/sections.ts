@@ -111,6 +111,13 @@ export const SECTIONS: SectionDef[] = [
     fields: [
       { key: "date", label: "Day", type: "date", required: true },
       { key: "time", label: "Time", type: "time", help: "Leave blank if the time isn't set yet. Players see TBC." },
+      {
+        key: "when",
+        label: "Show instead of the time",
+        type: "text",
+        placeholder: "Morning",
+        help: "Optional, for something with no set time, like Morning or After. The time above still sets its place in the day.",
+      },
       { key: "title", label: "What's happening", type: "text", required: true, placeholder: "Team breakfast" },
       { key: "details", label: "Details", type: "textarea" },
       { key: "linkLabel", label: "Button label", type: "text", placeholder: "Ride options", help: "Optional button under the note." },

@@ -117,6 +117,8 @@ export const sectionSchemas = {
     highlight: bool(false),
     /** A highlighted note shown in red, for something urgent. */
     red: bool(false),
+    /** Shown in place of the time ("Morning", "After"); the time still sets where it sits in the day. */
+    when: text(20),
   }),
   schedule: list({
     date: dateReq,
