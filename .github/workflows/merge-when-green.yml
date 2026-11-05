@@ -1,0 +1,45 @@
+name: Merge when green
+
+# Merges a pull request as soon as CI passes on it, so updates go live without
+# anyone pressing the button. Draft pull requests are left alone: open one as a
+# draft (or convert it) to hold it back.
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge:
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge the pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          PRS: ${{ toJson(github.event.workflow_run.pull_requests) }}
+        run: |
+          for n in $(echo "$PRS" | jq -r '.[].number'); do
+            pr=$(gh api "repos/$REPO/pulls/$n")
+            state=$(echo "$pr" | jq -r '.state')
+            draft=$(echo "$pr" | jq -r '.draft')
+            base=$(echo "$pr" | jq -r '.base.ref')
+            head=$(echo "$pr" | jq -r '.head.sha')
+            if [ "$state" != open ] || [ "$draft" = true ] || [ "$base" != main ]; then
+              echo "#$n: skipped (state $state, draft $draft, base $base)"
+              continue
+            fi
+            # Only merge the commit CI just passed, not a newer push still being checked.
+            if [ "$head" != "$HEAD_SHA" ]; then
+              echo "#$n: skipped (newer commits since this CI run)"
+              continue
+            fi
+            gh api -X PUT "repos/$REPO/pulls/$n/merge" -f merge_method=squash -f sha="$HEAD_SHA"
+            echo "#$n: merged"
+          done
