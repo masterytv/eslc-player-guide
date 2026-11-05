@@ -8,7 +8,7 @@ import { Kit } from "@/components/Kit";
 import { Icon } from "@/components/Icon";
 import { Tickets } from "@/components/Tickets";
 import { loadGuide } from "@/lib/content";
-import { byTime, fieldLabel, TYPE_LABEL, untilLabel } from "@/lib/plan";
+import { byTime, fieldLabel, gameLabel, TYPE_LABEL, untilLabel } from "@/lib/plan";
 import type { Row } from "@/lib/schema";
 import { clock, clockLabel, dayLabel, with24h, zonedNow } from "@/lib/time";
 
@@ -94,7 +94,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
                         </div>
                       )}
                       <div className="ev-main">
-                        <span className={`chip ${r.type}`}>{TYPE_LABEL[r.type]}</span>
+                        <span className={`chip ${r.type}`}>{isGame ? gameLabel(r) : TYPE_LABEL[r.type]}</span>
                         <h4>
                           {isGame ? `vs ${r.opponent || "TBC"}` : with24h(r.title) || TYPE_LABEL[r.type]}
                           {isGame && r.opponentCode ? <span className="code">{r.opponentCode}</span> : null}

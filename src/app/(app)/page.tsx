@@ -10,7 +10,7 @@ import { ItemSteps } from "@/components/ItemSteps";
 import { Kit } from "@/components/Kit";
 import { TodayWeather } from "@/components/Weather";
 import { loadGuide } from "@/lib/content";
-import { defaultDay, entriesFor, highlightsFor, isGameDay, nextGame, tripDays, TYPE_LABEL } from "@/lib/plan";
+import { defaultDay, entriesFor, gameLabel, highlightsFor, isGameDay, nextGame, tripDays, TYPE_LABEL } from "@/lib/plan";
 import { clock, clockRange, countdown, dayLabel, dayParts, daysBetween, timeZoneLabel, toMinutes, with24h, zonedNow } from "@/lib/time";
 
 /** A time in a big display font, with its 24-hour version small underneath. */
@@ -94,7 +94,9 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
                   const past = isToday && mins != null && mins < minutes;
                   return (
                     <li key={e.id} className={past ? "tl-item past" : "tl-item"}>
-                      {range ? (
+                      {e.when ? (
+                        <div className="tl-time tbc">{e.when}</div>
+                      ) : range ? (
                         // Meals show their whole serving time at the same size, so players see when they can go.
                         <div className="tl-time range">
                           <span>{range.hm}</span>
@@ -110,7 +112,7 @@ export default async function TodayPage({ searchParams }: { searchParams: Search
                         <div className="tl-time tbc">{e.kind === "meal" ? "TBD" : "TBC"}</div>
                       )}
                       <div className="tl-body">
-                        {e.kind !== "note" ? <span className={`chip ${e.kind}`}>{TYPE_LABEL[e.kind]}</span> : null}
+                        {e.kind !== "note" ? <span className={`chip ${e.kind}`}>{e.game ? gameLabel(e.game) : TYPE_LABEL[e.kind]}</span> : null}
                         <h3>{with24h(e.title)}</h3>
                         {e.meta ? <p className="meta">{with24h(e.meta)}</p> : null}
                         {e.game ? <Kit game={e.game} /> : null}

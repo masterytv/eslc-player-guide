@@ -470,6 +470,7 @@ export const SEED: Guide = {
       linkUrl: "/venue#getting",
       highlight: false,
       red: false,
+      when: "",
     },
     {
       id: "d2",
@@ -481,6 +482,7 @@ export const SEED: Guide = {
       linkUrl: "",
       highlight: false,
       red: false,
+      when: "",
     },
     {
       id: "d3",
@@ -493,21 +495,29 @@ export const SEED: Guide = {
       linkUrl: "",
       highlight: true,
       red: false,
+      when: "",
     },
-    { id: "d4", date: "2026-11-03", time: "08:30", title: "Breakfast pick-up loops", details: "At A64", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d5", date: "2026-11-03", time: "09:00", title: "Walkthrough", details: "30 minutes", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d6", date: "2026-11-03", time: "10:30", title: "Meet at A64", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d7", date: "2026-11-03", time: "10:45", title: "Pick-up for the field", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d8", date: "2026-11-03", time: "11:00", title: "Arrive at the field", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d9", date: "2026-11-03", time: "11:20", title: "Start stretching and moving", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d10", date: "2026-11-03", time: "11:30", title: "Warm-up", details: "Past Field 2 (north)", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d11", date: "2026-11-03", time: "12:00", title: "Take the field", details: "Finish the warm-up · 4v3 box (10–15 minutes)", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d12", date: "2026-11-03", time: "14:00", title: "Game and singing done", details: "Change, regroup and eat lunch (boxed lunches at the field)", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d13", date: "2026-11-03", time: "14:45", title: "Start moving and stretching", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d14", date: "2026-11-03", time: "15:00", title: "Take the field", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d15", date: "2026-11-03", time: "17:00", title: "Done, head home", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d16", date: "2026-11-03", time: "", title: "Dinner on your own", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false },
-    { id: "d17", date: "2026-11-04", time: "", title: "Submit ingredients for tapas to Liz by practice.", details: "", linkLabel: "", linkUrl: "", highlight: true, red: true },
+    { id: "d4", date: "2026-11-03", time: "08:30", title: "Breakfast pick-up loops", details: "At A64", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d5", date: "2026-11-03", time: "09:00", title: "Walkthrough", details: "30 minutes", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d6", date: "2026-11-03", time: "10:30", title: "Meet at A64", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d7", date: "2026-11-03", time: "10:45", title: "Pick-up for the field", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d8", date: "2026-11-03", time: "11:00", title: "Arrive at the field", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d9", date: "2026-11-03", time: "11:20", title: "Start stretching and moving", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d10", date: "2026-11-03", time: "11:30", title: "Warm-up", details: "Past Field 2 (north)", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d11", date: "2026-11-03", time: "12:00", title: "Take the field", details: "Finish the warm-up · 4v3 box (10–15 minutes)", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d12", date: "2026-11-03", time: "14:00", title: "Game and singing done", details: "Change, regroup and eat lunch (boxed lunches at the field)", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d13", date: "2026-11-03", time: "14:45", title: "Start moving and stretching", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d14", date: "2026-11-03", time: "15:00", title: "Take the field", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d15", date: "2026-11-03", time: "17:00", title: "Done, head home", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d16", date: "2026-11-03", time: "", title: "Dinner on your own", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d17", date: "2026-11-04", time: "", title: "Submit ingredients for tapas to Liz by practice.", details: "", linkLabel: "", linkUrl: "", highlight: true, red: true, when: "" },
+    { id: "d18", date: "2026-11-06", time: "07:00", title: "Breakfast on your own", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "Morning" },
+    { id: "d19", date: "2026-11-06", time: "13:00", title: "Walkthrough", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d20", date: "2026-11-06", time: "14:30", title: "Leave for the fields", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d21", date: "2026-11-06", time: "15:00", title: "Start warm-up", details: "Stretch · shoot · shuttles", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d22", date: "2026-11-06", time: "15:30", title: "Take the field", details: "Finish warm-ups", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
+    { id: "d23", date: "2026-11-06", time: "17:00", title: "After the game", details: "Ice baths if you signed up · Dinner on your own", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "After" },
+    { id: "d24", date: "2026-11-06", time: "20:00", title: "Team meeting & film", details: "", linkLabel: "", linkUrl: "", highlight: false, red: false, when: "" },
   ],
   schedule: [
     { id: "s0", date: "2026-10-31", time: "17:00", endTime: "18:30", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/place//data=!4m2!3m1!1s0x12a15a379ea2b289:0x18d4c7a7a2ab6a69", warmup: "", side: "", hideCountdown: false, steps: [], notes: "" },
@@ -517,6 +527,7 @@ export const SEED: Guide = {
     { id: "s5", date: "2026-11-03", time: "12:30", type: "game", title: "", opponent: "Italy", opponentCode: "ITA", round: "Match 012", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", hideCountdown: true, steps: [], notes: "" },
     { id: "s7", date: "2026-11-03", time: "15:30", type: "game", title: "", opponent: "Sweden", opponentCode: "SWE", round: "Match 016", field: "Field 1", endTime: "", mapUrl: "", warmup: "15:00", side: "away", hideCountdown: true, steps: [], notes: "New time: this game was moved up from 17:00." },
     { id: "s14", date: "2026-11-04", time: "09:20", endTime: "11:00", type: "practice", title: "Practice", opponent: "", opponentCode: "", round: "", field: "Futbol Salou complex", mapUrl: "https://www.google.com/maps/search/?api=1&query=Mediterranean%20Sports%20Hub%2C%20Via%20de%20Cavet%2C%20s%2Fn%2C%2043840%20Salou%2C%20Tarragona%2C%20Spain", warmup: "", side: "", hideCountdown: false, steps: ["9:20 AM | Meet at the front desk entrance (where we arrived on the bus the first day)", "9:20–9:30 AM | Shuttle to practice: Conway's van", "9:30–11:00 AM | Practice"], notes: "" },
+    { id: "s15", date: "2026-11-06", time: "16:00", endTime: "", type: "game", title: "Quarterfinal", opponent: "", opponentCode: "", round: "Quarterfinal · Match 038", field: "Field 1", mapUrl: "", warmup: "15:30", side: "away", hideCountdown: true, steps: [], notes: "Against the winner of Group C." },
     { id: "s9", date: "2026-11-05", time: "12:30", type: "game", title: "", opponent: "Switzerland", opponentCode: "SUI", round: "Match 028", field: "Field 2", endTime: "", mapUrl: "", warmup: "12:00", side: "home", hideCountdown: false, steps: ["11:00 AM | Shuttle to the field · Meet at reception", "11:15 AM | Dynamic stretching on the side field", "11:30 AM | Shuttles · Goalies warm up", "11:45 AM | Locker room", "12:00 PM | Field opens for warm-up", "12:10 PM | Officials and coaches meet", "12:15 PM | Coin toss", "12:23 PM | Anthem", "12:27 PM | Team line-up", "12:30 PM | Game starts", "+10 min after | Team must leave the field", "2:30 PM | Locker room and ice baths"], notes: "" },
     { id: "s10", date: "2026-11-04", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", hideCountdown: false, steps: [], notes: "" },
     { id: "s11", date: "2026-11-05", time: "16:00", endTime: "17:00", type: "other", title: "Spa time", opponent: "", opponentCode: "", round: "", field: "Spa, Cambrils Park", mapUrl: "", warmup: "", side: "", hideCountdown: false, steps: [], notes: "" },
@@ -570,9 +581,7 @@ export const SEED: Guide = {
     { id: "m15", date: "2026-11-05", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m16", date: "2026-11-05", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m17", date: "2026-11-05", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
-    { id: "m18", date: "2026-11-06", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
-    { id: "m19", date: "2026-11-06", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
-    { id: "m20", date: "2026-11-06", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
+    { id: "m32", date: "2026-11-06", meal: "Lunch", time: "12:00", endTime: "", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m21", date: "2026-11-07", meal: "Breakfast", time: "07:30", endTime: "09:30", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m22", date: "2026-11-07", meal: "Lunch", time: "12:00", endTime: "15:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
     { id: "m23", date: "2026-11-07", meal: "Dinner", time: "19:00", endTime: "21:00", place: "Buffet Masia · Cambrils Park Resort", notes: "" },
@@ -905,9 +914,13 @@ export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; a
     { at: "2026-11-03T11:15:00.000Z", add: [], remove: ["s13", "s6"] },
     // 4 Nov: Wednesday's practice, 9:30–11:00, with its own timeline (meet at the front desk, Conway's van).
     { at: "2026-11-04T05:25:00.000Z", add: ["s14"], remove: ["s8"] },
+    // 5 Nov: Friday's quarterfinal, 16:00 on Field 1 (Match 038, against the Group C winner).
+    { at: "2026-11-05T16:45:00.000Z", add: ["s15"], remove: [] },
   ],
   meals: [
     { at: "2026-11-01T20:30:00.000Z", add: ["m31"], remove: ["m14"] },
+    // 5 Nov: Friday, breakfast and dinner on your own, team lunch at 12:00.
+    { at: "2026-11-05T16:45:00.000Z", add: ["m32"], remove: ["m18", "m19", "m20"] },
     // 2 Nov: no buffet lunch on Tuesday 3 Nov (boxed lunches at the field instead).
     { at: "2026-11-02T17:00:00.000Z", add: [], remove: ["m10"] },
     // 3 Nov: dinner on your own on Tuesday.
@@ -930,6 +943,8 @@ export const SEED_ITEM_CHANGES: Partial<Record<SectionKey, Array<{ at: string; a
     { at: "2026-11-03T11:15:00.000Z", add: ["d4", "d5", "d6", "d7", "d8", "d9", "d10", "d11", "d12", "d13", "d14", "d15", "d16"], remove: [] },
     // 4 Nov: tapas ingredients to Liz by practice, in red at the top of Wednesday.
     { at: "2026-11-04T05:40:00.000Z", add: ["d17"], remove: [] },
+    // 5 Nov: Friday's plan around the 16:00 quarterfinal.
+    { at: "2026-11-05T16:45:00.000Z", add: ["d18", "d19", "d20", "d21", "d22", "d23", "d24"], remove: [] },
   ],
 };
 

@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { calendar } from "../../src/lib/ics.ts";
 import { parseInline, parsePage } from "../../src/lib/markdown.ts";
 import { telHref, whatsappHref } from "../../src/lib/phone.ts";
-import { defaultDay, entriesFor, fieldLabel, gameCountdown, highlightsFor, kitLabel, mealTimeLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
+import { defaultDay, entriesFor, fieldLabel, gameCountdown, gameLabel, highlightsFor, kitLabel, mealTimeLabel, nextGame, tripDays } from "../../src/lib/plan.ts";
 import { GAME_COUNTDOWN, sectionSchemas } from "../../src/lib/schema.ts";
 import { clockRange } from "../../src/lib/time.ts";
 import { SEED, withSeedFields } from "../../src/lib/seed.ts";
@@ -74,7 +74,8 @@ test("finds the next game and the day Today opens on", () => {
   assert.equal(nextGame(SEED, Date.parse("2026-11-02T10:20:00Z"))?.game.opponent, "Finland");
   // 15:00 in Spain: Finland has started, Italy is next.
   assert.equal(nextGame(SEED, Date.parse("2026-11-02T14:00:00Z"))?.game.opponent, "Italy");
-  assert.equal(nextGame(SEED, Date.parse("2026-11-06T10:00:00Z")), null);
+  assert.equal(nextGame(SEED, Date.parse("2026-11-06T10:00:00Z"))?.game.title, "Quarterfinal");
+  assert.equal(nextGame(SEED, Date.parse("2026-11-06T16:00:00Z")), null);
   // The same schedule in Toronto (UTC-5 by November): Finland's 14:30 start is 19:30 UTC.
   const toronto = { ...SEED, event: { ...SEED.event, timeZone: "America/Toronto" } };
   assert.equal(nextGame(toronto, Date.parse("2026-11-02T14:00:00Z"))?.at.toISOString(), "2026-11-02T19:30:00.000Z");
@@ -159,6 +160,7 @@ test("games say home (white) or away (green), even on a schedule saved before th
     ["Finland", "Away · wear green"],
     ["Italy", "Home · wear white"],
     ["Sweden", "Away · wear green"],
+    ["", "Away · wear green"],
     ["Switzerland", "Home · wear white"],
   ]);
   // A schedule staff saved in the app: no side yet, and their own ceremony time.
@@ -219,7 +221,7 @@ test("dinner on 4 Nov is the Villa Tapas Competition at 7 PM, on a meals list sa
 test("Tuesday 3 Nov: the coaches' plan, no countdowns, no buffet lunch or dinner, and the packing note", () => {
   assert.deepEqual(SEED.meals.filter((m) => m.date === "2026-11-03").map((m) => m.meal), ["Breakfast"]);
   assert.equal(SEED.schedule.some((r) => r.id === "s13"), false);
-  assert.deepEqual(SEED.schedule.filter((r) => r.type === "game" && r.hideCountdown).map((r) => r.opponent), ["Italy", "Sweden"]);
+  assert.deepEqual(SEED.schedule.filter((r) => r.date === "2026-11-03" && r.hideCountdown).map((r) => r.opponent), ["Italy", "Sweden"]);
   const [note] = highlightsFor(SEED, "2026-11-03");
   assert.equal(note.title, "Two games today, and rain is forecast");
   const lunch = SEED.daily.find((d) => d.id === "d12");
@@ -320,4 +322,43 @@ test("Thursday 5 Nov: the Switzerland game has its own timeline in place of the 
   const shown = withSeedFields("schedule", saved, "2026-11-04T06:00:00.000Z");
   assert.deepEqual(shown.find((r) => r.id === "s9")?.steps, game.steps);
   assert.deepEqual(shown.find((r) => r.id === "s3")?.steps, []);
+});
+
+test("Friday 6 Nov: the 4 PM quarterfinal, lunch at noon, and the plan around it", () => {
+  const qf = SEED.schedule.find((r) => r.date === "2026-11-06" && r.type === "game")!;
+  assert.deepEqual([qf.time, qf.field, qf.warmup, qf.side, qf.hideCountdown], ["16:00", "Field 1", "15:30", "away", true]);
+  assert.equal(gameLabel(qf), "Playoff");
+  assert.equal(gameLabel(SEED.schedule.find((r) => r.id === "s3")!), "Pool play");
+  assert.deepEqual(
+    SEED.meals.filter((m) => m.date === "2026-11-06").map((m) => [m.meal, mealTimeLabel(m)]),
+    [["Lunch", "Arrive 12:00 PM (12:00)"]],
+  );
+  const day = entriesFor(SEED, "2026-11-06");
+  assert.deepEqual(day.map((e) => e.title), [
+    "Breakfast on your own",
+    "Lunch",
+    "Walkthrough",
+    "Leave for the fields",
+    "Start warm-up",
+    "Take the field",
+    "Quarterfinal",
+    "After the game",
+    "Team meeting & film",
+  ]);
+  assert.deepEqual(day.filter((e) => e.when).map((e) => e.when), ["Morning", "After"]);
+  // Saved in the app before this: each gets Friday's changes and keeps the rest.
+  const before = "2026-11-05T12:00:00.000Z";
+  const meals = withSeedFields(
+    "meals",
+    sectionSchemas.meals.parse([
+      ...SEED.meals.filter((m) => m.id !== "m32"),
+      { id: "m18", date: "2026-11-06", meal: "Breakfast", time: "07:30", endTime: "09:30" },
+      { id: "m19", date: "2026-11-06", meal: "Lunch", time: "12:00", endTime: "15:00" },
+      { id: "m20", date: "2026-11-06", meal: "Dinner", time: "19:00", endTime: "21:00" },
+    ]),
+    before,
+  );
+  assert.deepEqual(meals.filter((m) => m.date === "2026-11-06").map((m) => m.id), ["m32"]);
+  const schedule = withSeedFields("schedule", sectionSchemas.schedule.parse(SEED.schedule.filter((r) => r.id !== "s15")), before);
+  assert.equal(schedule.filter((r) => r.id === "s15").length, 1);
 });

@@ -282,6 +282,26 @@ test("Thursday's game shows its own timeline instead of the standard countdown",
   await expect(game.locator(".countdown")).toHaveCount(1);
 });
 
+test("Friday shows the quarterfinal with the plan around it, in order", async () => {
+  await viewer.goto("/?day=2026-11-06");
+  await expect(viewer.locator(".tl-item h3")).toHaveText([
+    "Breakfast on your own",
+    "Lunch",
+    "Walkthrough",
+    "Leave for the fields",
+    "Start warm-up",
+    "Take the field",
+    "Quarterfinal",
+    "After the game",
+    "Team meeting & film",
+  ]);
+  await expect(viewer.locator(".tl-item", { hasText: "Breakfast on your own" }).locator(".tl-time")).toHaveText("Morning");
+  const qf = viewer.locator(".tl-item", { hasText: "Quarterfinal" });
+  await expect(qf.locator(".kit")).toHaveText("Away · wear green");
+  await expect(qf.locator(".chip")).toHaveText("Playoff");
+  await expect(qf.locator(".countdown")).toHaveCount(0);
+});
+
 test("every game says whether we're home in white or away in green", async () => {
   await viewer.goto("/schedule");
   await expect(viewer.locator("article", { hasText: "vs Finland" }).locator(".kit")).toHaveText("Away · wear green");
@@ -323,7 +343,7 @@ test("staff add a daily note and players see it straight away", async () => {
   await admin.goto("/admin/daily?day=2026-11-06");
   await admin.getByRole("button", { name: /Add a note for Fri 6 Nov/ }).click();
   await admin.getByLabel("What's happening").last().fill("Team lunch at the villas");
-  await admin.getByLabel("Time").last().fill("12:15");
+  await admin.getByLabel("Time", { exact: true }).last().fill("12:15");
   await save(admin);
 
   await viewer.goto("/?day=2026-11-06");
@@ -449,7 +469,7 @@ test("players can add games to their calendar", async () => {
   expect(one.headers()["content-type"]).toContain("text/calendar");
   expect(await one.text()).toContain("SUMMARY:Ireland vs Finland");
   const all = await viewer.request.get("/cal/games");
-  expect((await all.text()).match(/BEGIN:VEVENT/g)).toHaveLength(4);
+  expect((await all.text()).match(/BEGIN:VEVENT/g)).toHaveLength(5);
 });
 
 test("the guide still opens with no signal", async () => {
