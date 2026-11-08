@@ -75,7 +75,9 @@ test("finds the next game and the day Today opens on", () => {
   // 15:00 in Spain: Finland has started, Italy is next.
   assert.equal(nextGame(SEED, Date.parse("2026-11-02T14:00:00Z"))?.game.opponent, "Italy");
   assert.equal(nextGame(SEED, Date.parse("2026-11-06T10:00:00Z"))?.game.opponent, "Czechia");
-  assert.equal(nextGame(SEED, Date.parse("2026-11-06T16:00:00Z")), null);
+  // After Friday's quarterfinal, Monday's game against Italy (11:00 in Spain) is next.
+  assert.equal(nextGame(SEED, Date.parse("2026-11-06T16:00:00Z"))?.at.toISOString(), "2026-11-09T10:00:00.000Z");
+  assert.equal(nextGame(SEED, Date.parse("2026-11-09T10:30:00Z")), null);
   // The same schedule in Toronto (UTC-5 by November): Finland's 14:30 start is 19:30 UTC.
   const toronto = { ...SEED, event: { ...SEED.event, timeZone: "America/Toronto" } };
   assert.equal(nextGame(toronto, Date.parse("2026-11-02T14:00:00Z"))?.at.toISOString(), "2026-11-02T19:30:00.000Z");
@@ -162,6 +164,7 @@ test("games say home (white) or away (green), even on a schedule saved before th
     ["Sweden", "Away · wear green"],
     ["Czechia", "Away · wear green"],
     ["Switzerland", "Home · wear white"],
+    ["Italy", "Home · wear white"],
   ]);
   // A schedule staff saved in the app: no side yet, and their own ceremony time.
   const saved = sectionSchemas.schedule.parse(
@@ -382,4 +385,32 @@ test("Friday's notes reach daily notes saved in the app on Thursday evening, wit
   assert.ok(shown.some((d) => d.id === "x1"));
   const savedWith = sectionSchemas.daily.parse([...SEED.daily, thursdayMeeting]);
   assert.equal(withSeedFields("daily", savedWith, "2026-11-05T17:30:00.000Z").length, savedWith.length);
+});
+
+test("Monday 9 Nov: Italy at 11:00 on Field 1, home in white, with its own timeline", () => {
+  const game = SEED.schedule.find((r) => r.id === "s16")!;
+  assert.deepEqual([game.date, game.time, game.opponent, game.field, game.warmup, kitLabel(game)], [
+    "2026-11-09",
+    "11:00",
+    "Italy",
+    "Field 1",
+    "10:30",
+    "Home · wear white",
+  ]);
+  assert.deepEqual(game.steps.map((s) => s.split(" | ")[0]), [
+    "9:30 AM",
+    "10:00 AM",
+    "10:30 AM",
+    "10:40 AM",
+    "10:45 AM",
+    "10:53 AM",
+    "10:57 AM",
+    "11:00 AM",
+    "+10 min after",
+  ]);
+  assert.equal(game.steps[1], "10:00 AM | Start warm-ups");
+  // A schedule saved in the app before today gets the game once; one saved after keeps its own list.
+  const saved = sectionSchemas.schedule.parse(SEED.schedule.filter((r) => r.id !== "s16"));
+  assert.equal(withSeedFields("schedule", saved, "2026-11-08T12:00:00.000Z").filter((r) => r.id === "s16").length, 1);
+  assert.equal(withSeedFields("schedule", saved, "2026-11-08T17:00:00.000Z").filter((r) => r.id === "s16").length, 0);
 });
