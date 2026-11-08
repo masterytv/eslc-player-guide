@@ -231,7 +231,7 @@ test("Tuesday shows the packing note, the coaches' plan between the games, and n
   await expect(viewer.locator(".tl-item h3", { hasText: /^Boxed lunches at the field$/ })).toHaveCount(0);
   await expect(viewer.locator(".countdown")).toHaveCount(0);
   await viewer.goto("/schedule");
-  await expect(viewer.locator("article", { hasText: "vs Italy" }).locator(".countdown")).toHaveCount(0);
+  await expect(viewer.locator("article", { hasText: "Match 012" }).locator(".countdown")).toHaveCount(0);
   await expect(viewer.locator("article", { hasText: "vs Finland" }).locator(".countdown")).toHaveCount(1);
 });
 
@@ -310,10 +310,23 @@ test("Friday shows the quarterfinal with the plan around it, in order", async ()
   await expect(steps.nth(7)).toContainText("4:00 PM");
 });
 
+test("Monday's Italy game shows its own timeline from the 9:30 shuttle", async () => {
+  await viewer.goto("/?day=2026-11-09");
+  const game = viewer.locator(".tl-item", { hasText: "Ireland vs Italy" });
+  await expect(game.locator(".kit")).toHaveText("Home · wear white");
+  const steps = game.locator(".countdown li");
+  await expect(steps).toHaveCount(9);
+  await expect(steps.first()).toContainText("9:30 AM");
+  await expect(steps.first()).toContainText("Shuttle to the field");
+  await expect(steps.nth(1)).toContainText("Start warm-ups");
+  await expect(steps.nth(2)).toContainText("10:30 AM");
+  await expect(steps.nth(7)).toContainText("11:00 AM");
+});
+
 test("every game says whether we're home in white or away in green", async () => {
   await viewer.goto("/schedule");
   await expect(viewer.locator("article", { hasText: "vs Finland" }).locator(".kit")).toHaveText("Away · wear green");
-  await expect(viewer.locator("article", { hasText: "vs Italy" }).locator(".kit")).toHaveText("Home · wear white");
+  await expect(viewer.locator("article", { hasText: "Match 012" }).locator(".kit")).toHaveText("Home · wear white");
   await viewer.goto("/?day=2026-11-03");
   await expect(viewer.locator(".tl-item", { hasText: "Ireland vs Sweden" }).locator(".kit")).toHaveText("Away · wear green");
 });
